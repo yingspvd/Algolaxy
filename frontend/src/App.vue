@@ -5,9 +5,20 @@
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap");
 
+:root {
+  --blue: #17435c;
+  --dark-blue: #062b41;
+  --pink: #f26780;
+  --white: ##e3e8eb;
+}
+
 html,
 body {
   font-family: "Roboto Mono", monospace;
+}
+
+body {
+  background-color: var(--blue);
 }
 
 #app {
