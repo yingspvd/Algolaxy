@@ -17,7 +17,6 @@
       <ul class="navbar-nav mr-auto">
         <li class="nav-item dropdown">
           <a
-            @click="clickDropDown"
             class="nav-link dropdown-toggle"
             href="#"
             id="dropdown04"
@@ -70,25 +69,18 @@
 export default {
   name: "Navbar",
   data() {
-    return {
-      dropDownSelect: false,
-    };
-  },
-  methods: {
-    clickDropDown() {
-      this.dropDownSelect = !this.dropDownSelect;
-    },
+    return {};
   },
 };
 </script>
 
 <style>
 .bg-color {
-  background: #584f84;
+  background: var(--blue);
 }
 
 .img-signin {
-  height: 45px;
+  height: 50px;
 }
 
 .img-moon {
@@ -97,22 +89,30 @@ export default {
 }
 
 .dropdown-menu {
-  background: #4e4775;
+  background: #e3e8eb;
   border-radius: 10px;
   margin-top: 10px;
 }
 .dropdown-item {
-  color: white;
+  color: var(--blue);
+  font-weight: 500;
 }
 .dropdown-item:hover {
-  background: #ff768f;
+  background: var(--pink);
+  border-radius: 5px;
+}
+.nav-link {
+  font-weight: bold;
 }
 .nav-link:hover {
-  background: #ff768f;
+  background: var(--pink);
   border-radius: 10px;
 }
-.active>.nav-link, .nav-link.active, .nav-link.show, .show>.nav-link {
-  background: #ff768f;
+.active > .nav-link,
+.nav-link.active,
+.nav-link.show,
+.show > .nav-link {
+  background: var(--pink);
   border-radius: 10px;
 }
 .navbar-expand-md .navbar-nav .nav-link {
@@ -122,9 +122,5 @@ export default {
 .navbar-brand {
   margin-left: 40px;
   margin-right: 40px;
-}
-
-.aria-expanded {
-  background: #ff768f;
 }
 </style>
