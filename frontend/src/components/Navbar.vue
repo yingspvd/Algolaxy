@@ -1,6 +1,17 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-dark bg-color">
-    <a class="navbar-brand" href="#">Algolaxy</a>
+    <a class="navbar-brand" href="#" style=" letter-spacing: 5px;">
+      <img
+        src="../assets/logo.svg"
+        height="15px"
+        style="margin: 0 -12px 4px 0"
+      />
+      LGOLAXY
+      <a style=" margin-left:-6px; margin-right:60px; letter-spacing: -4px;"
+        >II</a
+      >
+    </a>
+
     <button
       class="navbar-toggler"
       type="button"
@@ -58,7 +69,7 @@
       </ul>
       <form class="form-inline my-2 my-md-0">
         <a href="#" style="margin-right:40px;">
-          <img class="img-signin" src="../assets/Signin.png" alt="" />
+          <img class="img-signin" src="../assets/signin.svg" alt="" />
         </a>
       </form>
     </div>
@@ -68,6 +79,7 @@
 <script>
 export default {
   name: "Navbar",
+
   data() {
     return {};
   },
@@ -75,6 +87,7 @@ export default {
 </script>
 
 <style>
+
 .bg-color {
   background: var(--blue);
 }
@@ -115,6 +128,13 @@ export default {
   background: var(--pink);
   border-radius: 10px;
 }
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
 .navbar-expand-md .navbar-nav .nav-link {
   margin-right: 40px;
 }
