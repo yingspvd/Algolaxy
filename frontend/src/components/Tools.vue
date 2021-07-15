@@ -1,12 +1,13 @@
 <template>
-  <div class="flex-shrink-0 p-3 overflow-auto">
-    <ul class="list-unstyled ps-0">
+  <div id="sidebar" class="flex-shrink-0 p-3">
+    <ul v-show="sidebar" class="list-unstyled ps-0">
       <li class="mb-1">
         <button
           class="btn btn-toggle align-items-center rounded collapsed"
           data-bs-toggle="collapse"
           data-bs-target="#terminator-collapse"
           aria-expanded="true"
+          style="margin-top:15px"
         >
           Terminator
         </button>
@@ -32,6 +33,7 @@
           data-bs-toggle="collapse"
           data-bs-target="#inout-collapse"
           aria-expanded="true"
+          style="margin-top:15px"
         >
           Input / Output
         </button>
@@ -47,7 +49,7 @@
                 </div>
               </div>
             </div>
-            <div class="parallelogram" style="margin-bottom:10px">
+            <div class="parallelogram">
               <div class="not-skew">
                 <div class="place" style="margin-left: 10px;">
                   Print
@@ -67,12 +69,32 @@
           data-bs-toggle="collapse"
           data-bs-target="#display-collapse"
           aria-expanded="true"
+          style="margin-top:15px"
         >
           Display
         </button>
         <div class="collapse show" id="display-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a href="#" class="link-dark rounded">New</a></li>
+            <div class="display">
+              <div class="square-round">
+                <div
+                  class="triangle-left"
+                  style="margin-left: -40px; margin-top: 0"
+                ></div>
+                <div
+                  class="square-textbox"
+                  style=" width: 120px; margin-top: -40px"
+                ></div>
+              </div>
+            </div>
+            <!-- <div class="display">
+              <img
+                src="../assets/display.svg"
+                width="200px"
+                style="margin-top:10px;"
+              />
+              <div class="square-textbox" style=" width: 120px;"></div>
+            </div> -->
           </ul>
         </div>
       </li>
@@ -83,13 +105,13 @@
           data-bs-toggle="collapse"
           data-bs-target="#account-collapse"
           aria-expanded="true"
-          style="font-size: 14px"
+          style="margin-top:15px; font-size: 14px"
         >
           Declare / Assign Variable
         </button>
         <div class="collapse show" id="account-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <div class="square-box-orange">
+            <div class="square-box-long" style="background:#ffae74">
               Set
               <div class="square-textbox"></div>
               =
@@ -98,7 +120,7 @@
               </div>
             </div>
 
-            <div class="square-box-orange">
+            <div class="square-box-long" style="background:#ffae74">
               Set
               <div class="square-textbox"></div>
               =
@@ -107,7 +129,7 @@
               </div>
             </div>
 
-            <div class="square-box-orange">
+            <div class="square-box-long" style="background:#ffae74">
               Set
               <div class="square-textbox"></div>
               =
@@ -116,7 +138,7 @@
               </div>
             </div>
 
-            <div class="square-box-purple">
+            <div class="square-box-long" style="background:#c6b8ff">
               <div class="dropdown-box" style="width: 40px;">
                 <div class="triangle-down"></div>
               </div>
@@ -132,7 +154,7 @@
               <div class="square-textbox">0</div>
             </div>
 
-            <div class="square-box-purple">
+            <div class="square-box-long" style="background:#c6b8ff">
               <div class="dropdown-box" style="width: 40px;">
                 <div class="triangle-down"></div>
               </div>
@@ -149,7 +171,7 @@
                 " "
               </div>
             </div>
-            <div class="square-box-purple" style="margin-bottom:10px">
+            <div class="square-box-long" style="background:#c6b8ff;">
               <div class="dropdown-box" style="width: 40px;">
                 <div class="triangle-down"></div>
               </div>
@@ -176,6 +198,7 @@
           data-bs-toggle="collapse"
           data-bs-target="#condition-collapse"
           aria-expanded="true"
+          style="margin-top:15px"
         >
           Condition
         </button>
@@ -183,12 +206,13 @@
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
             <div class="diamond-square-box">
               <div class="diamond-item">
-                <div class="dropdown-box" style="width: 40px;">
+                <div class="dropdown-box" style="width: 40px; height:30px">
                   <div class="triangle-down"></div>
                 </div>
+
                 <div
                   class="dropdown-box"
-                  style="border-radius: 10px; width: 40px;"
+                  style="border-radius: 13px; width: 40px; height:30px; margin: 15px;"
                 >
                   <div
                     class="triangle-down"
@@ -196,7 +220,10 @@
                   ></div>
                 </div>
 
-                <div class="dropdown-box"></div>
+                <div
+                  class="square-textbox"
+                  style="width: 40px; height: 30px"
+                ></div>
               </div>
             </div>
           </ul>
@@ -209,17 +236,155 @@
           data-bs-toggle="collapse"
           data-bs-target="#function-collapse"
           aria-expanded="true"
+          style="margin-top:15px"
         >
           Function
         </button>
         <div class="collapse show" id="function-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <div class="square-round">
+            <div
+              class="square-box-long"
+              style="background:#6181f3; border-radius: 50px;"
+            >
               <div class="square-textbox" style=" width: 120px; ">
                 " Function "
               </div>
             </div>
-            <div class="square-dark-purple"></div>
+            <div
+              class="square-box-long"
+              style="background:#6181f3;justify-content: space-between;"
+            >
+              <div class="square-box-short"></div>
+              <div
+                class="square-textbox"
+                style="justify-content:flex-end; width: 120px; "
+              >
+                <div
+                  class="triangle-down"
+                  style=" border-top: 6px solid var(--dark-blue); "
+                ></div>
+              </div>
+              <div class="square-box-short"></div>
+            </div>
+          </ul>
+        </div>
+      </li>
+
+      <li class="mb-1">
+        <button
+          class="btn btn-toggle align-items-center rounded collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#connector-collapse"
+          aria-expanded="true"
+          style="margin-top:15px"
+        >
+          Connector
+        </button>
+        <div class="collapse show" id="connector-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <div class="circle"></div>
+          </ul>
+        </div>
+      </li>
+
+      <img src="../assets/ufo.svg" height="20px" style="margin-top:25px" />
+
+      <li class="mb-1">
+        <button
+          class="btn btn-toggle align-items-center rounded collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#text-collapse"
+          aria-expanded="true"
+          style="margin-top:25px"
+        >
+          Text / Variable
+        </button>
+        <div class="collapse show" id="text-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <div class="flowchart">
+              <div
+                class="square-textbox"
+                style="margin:10px 10px 0 10px; height:30px; width:60px"
+              >
+                " "
+              </div>
+              <div
+                class="square-textbox"
+                style="justify-content:flex-end; margin:10px 0 0 10px; height:30px;  width:60px"
+              >
+                A
+                <div class="triangle-down" style="margin-left:15px"></div>
+              </div>
+            </div>
+          </ul>
+        </div>
+      </li>
+
+      <li class="mb-1">
+        <button
+          class="btn btn-toggle align-items-center rounded collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#operator-collapse"
+          aria-expanded="true"
+          style="margin-top:15px"
+        >
+          Operator
+        </button>
+        <div class="collapse show" id="operator-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <div class="sub-heading" style="color:white; margin-top:10px;">
+              Statement
+            </div>
+            <div class="flowchart">
+              <div
+                class="dropdown-box"
+                style="border-radius: 25px; width: 60px; height:30px; margin-right:20px;"
+              >
+                <div style="margin-right:15px">+</div>
+                <div
+                  class="triangle-down"
+                  style=" border-top: 6px solid #5D9D83; "
+                ></div>
+              </div>
+
+              <div
+                class="dropdown-box"
+                style="border-radius: 25px; width: 60px; height:30px;"
+              >
+                <div style="margin-right:15px">=</div>
+                <div
+                  class="triangle-down"
+                  style=" border-top: 6px solid #E4AD6A; "
+                ></div>
+              </div>
+            </div>
+
+            <div class="sub-heading" style="color:white; margin-top:10px;">
+              Condition
+            </div>
+            <div class="flowchart">
+              <div
+                class="dropdown-box"
+                style="border-radius: 25px; width: 60px; height:30px; margin-right:20px;"
+              >
+                <div style="margin-right:10px">==</div>
+                <div
+                  class="triangle-down"
+                  style=" border-top: 6px solid #5D83CA; "
+                ></div>
+              </div>
+
+              <div
+                class="dropdown-box"
+                style="border-radius: 25px; width: 60px; height:30px;"
+              >
+                <div style="margin-right:10px">AND</div>
+                <div
+                  class="triangle-down"
+                  style=" border-top: 6px solid #DA566E; "
+                ></div>
+              </div>
+            </div>
           </ul>
         </div>
       </li>
@@ -228,13 +393,43 @@
 </template>
 
 <script>
-export default {};
+// const Tool = require("../JS/tools.js");
+export default {
+  name: "Tools",
+  props: ["sidebar"],
+  watch: {
+    sidebar: function() {
+      this.closeSidebar();
+    },
+  },
+  methods: {
+    closeSidebar() {
+      if (this.sidebar == false) {
+        this.closeNav();
+      } else {
+        this.openNav();
+      }
+    },
+
+    closeNav() {
+      document.getElementById("sidebar").style.width = "75px";
+    },
+
+    openNav() {
+      document.getElementById("sidebar").style.width = "280px";
+    },
+  },
+};
 </script>
 
 <style>
 body {
   /* min-height: 80vh; */
   min-height: -webkit-fill-available;
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Likely future */
 }
 
 html {
@@ -251,11 +446,13 @@ main {
   overflow-y: hidden;
 }
 .flex-shrink-0 {
+  overflow: auto;
   width: 280px;
   height: 86vh;
   border-radius: 0 30px 30px 0;
   margin-top: -4px;
   background-color: var(--dark-blue);
+  transition: 0.5s;
 }
 .b-example-divider {
   flex-shrink: 0;
@@ -324,7 +521,11 @@ main {
 }
 
 .scrollarea {
-  overflow-y: auto;
+  overflow-y: scroll;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 0px;
 }
 
 .fw-semibold {
@@ -347,7 +548,9 @@ main {
   min-width: 100px;
   margin-top: 10px;
 }
-
+.sub-heading {
+  padding-right: 50px;
+}
 .terminator {
   align-items: flex-start;
   background-color: var(--pink);
@@ -376,7 +579,7 @@ main {
   margin-top: 10px;
 }
 
-.square-box-orange {
+.square-box-long {
   width: 200px;
   height: 35px;
   background: #ffae74;
@@ -393,47 +596,62 @@ main {
 .square-box-purple {
   width: 200px;
   height: 35px;
-  background: #c6b8ff;
+  background: #6181f3;
   min-width: 180px;
   display: flex;
-  justify-content: space-evenly;
-  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px 0 10px;
   margin-top: 10px;
   font-weight: 500;
+  color: var(--dark-blue);
+}
+
+.square-box-short {
+  width: 3px;
+  height: 35px;
+  background: var(--dark-blue);
 }
 
 .diamond-square-box {
-  width: 130px;
-  height: 130px;
+  width: 140px;
+  height: 140px;
   margin: 10px 0 10px 0;
   background-color: #ff9fc2;
   transform: rotateX(45deg) rotateZ(45deg);
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .diamond-item {
   transform: rotateX(0deg) rotateZ(-45deg);
-}
-
-.square-round {
-  align-items: flex-start;
-  background-color: #6181f3;
-  border-radius: 50px;
-  height: 35px;
-  width: 200px;
-  margin-top: 10px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  font-weight: 500;
 }
 
-.square-dark-purple {
-  align-items: flex-start;
-  background-color: #6181f3;
-  height: 35px;
-  width: 200px;
-  margin-top: 10px;
-  justify-content: flex-end;
+.circle {
+  width: 40px;
+  height: 40px;
+  background: #ffc700;
+  border-radius: 50%;
+  margin: 10px 0 0 0;
+}
+
+.triangle-left {
+  width: 0;
+  height: 0;
+  border-top: 20px solid transparent;
+  border-right: 40px solid #89cd83;
+  border-bottom: 20px solid transparent;
+  margin: 10px 0 10px 0;
+}
+
+.square-round {
+  width: 150px;
+  height: 40px;
+  border-radius: 0 50px 50px 0;
+  background: #89cd83;
+  margin: 10px 0 10px 0;
 }
 
 .place {
@@ -486,5 +704,12 @@ main {
   background: #ffffff;
   border-radius: 3px;
   color: var(--dark-blue);
+}
+.display {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
