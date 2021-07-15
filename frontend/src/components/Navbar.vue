@@ -54,9 +54,9 @@
             >Edit</a
           >
           <div class="dropdown-menu" aria-labelledby="dropdown04">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <a class="dropdown-item" href="#">Undo</a>
+            <a class="dropdown-item" href="#">Redo</a>
+            <a class="dropdown-item" href="#">Delete</a>
           </div>
         </li>
 
@@ -93,7 +93,7 @@ export default {
 }
 
 .img-signin {
-  height: 50px;
+  height: 40px;
 }
 
 .img-moon {
@@ -106,6 +106,7 @@ export default {
   border-radius: 10px;
   margin-top: 10px;
 }
+
 .dropdown-item {
   color: var(--blue);
   font-weight: 500;
@@ -131,6 +132,7 @@ export default {
 
 .navbar {
   position: fixed;
+  z-index: 10;
   top: 0;
   width: 100%;
 }
