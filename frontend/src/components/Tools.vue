@@ -439,9 +439,9 @@ html {
 main {
   display: flex;
   flex-wrap: nowrap;
-  height: 100vh;
+  /* height: 100vh; */
   height: -webkit-fill-available;
-  max-height: 100vh;
+  /* max-height: 100vh; */
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -457,7 +457,7 @@ main {
 .b-example-divider {
   flex-shrink: 0;
   width: 1.5rem;
-  height: 100vh;
+  /* height: 100vh; */
   background-color: rgba(0, 0, 0, 0.1);
   border: solid rgba(0, 0, 0, 0.15);
   border-width: 1px 0;
