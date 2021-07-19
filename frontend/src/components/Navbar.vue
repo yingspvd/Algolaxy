@@ -68,6 +68,9 @@
         </li>
       </ul>
       <form class="form-inline my-2 my-md-0">
+        <a href="#" style="margin-right:30px;">
+          <img class="img-folder" src="../assets/folder.svg" alt="" />
+        </a>
         <a href="#" style="margin-right:40px;">
           <img class="img-signin" src="../assets/signin.svg" alt="" />
         </a>
@@ -90,6 +93,10 @@ export default {
 
 .bg-color {
   background: var(--blue);
+}
+
+.img-folder {
+  height: 25px;
 }
 
 .img-signin {
