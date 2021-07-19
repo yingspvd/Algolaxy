@@ -9,7 +9,8 @@
   --blue: #17435c;
   --dark-blue: #062b41;
   --pink: #f26780;
-  --white: ##e3e8eb;
+  --white-gray: #e3e8eb;
+  --gray: #858585;
 }
 
 html,
