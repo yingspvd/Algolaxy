@@ -34,5 +34,14 @@ export default {};
 .tool-bottom {
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  background-color: var(--dark-blue-1);
+  border-radius: 5px;
+  box-shadow: 0px -3px 20px #91A0A5;
+}
+button {
+  height: 40px;
 }
 </style>
