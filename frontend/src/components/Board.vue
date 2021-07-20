@@ -1,21 +1,29 @@
 <template>
   <div id="container" style="box-shadow: 0px 5px 10px #91A0A5;">
-    <a href="#">
-      <i class="fas fa-undo-alt"></i>
-    </a>
-    <a href="#">
-      <i class="fas fa-redo-alt"></i>
-    </a>
+    <div class="tool-container">
+      <div class="top-toolbar">
+        <a style="cursor:pointer;">
+          <i class="fas fa-undo-alt"></i>
+        </a>
+        <a style="cursor:pointer;">
+          <i class="fas fa-redo-alt"></i>
+        </a>
+      </div>
+    </div>
 
+    <!-- <div id="board" class="board" @dragover.prevent @drop.prevent="drop"></div> -->
+
+    <div class="side-toolbar-container">
+      <div class="side-toolbar">
+        <a style="cursor:pointer;">
+          <i class="far fa-trash-alt"></i>
+        </a>
+        <a style="cursor:pointer; margin-top:5px">
+          <i class="fas fa-file-export"></i>
+        </a>
+      </div>
+    </div>
     
-    <div id="board" class="board" @dragover.prevent @drop.prevent="drop"></div>
-
-    <a href="#">
-      <i class="far fa-trash-alt"></i>
-    </a>
-    <a href="#">
-      <i class="fas fa-file-export"></i>
-    </a>
     
   </div>
 </template>
@@ -51,14 +59,39 @@ export default {
 <style scoped>
 #container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   height: 600px;
   width: 500px;
   /* margin-left: 65px; */
   border-radius: 5px;
   background-color: var(--white-gray);
 }
-
+.tool-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.top-toolbar {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  background-color: var(--dark-blue-1);
+  border-radius: 5px;
+  box-shadow: 0px -3px 20px #91A0A5;
+}
+.side-toolbar-container {
+  display: flex;
+  justify-content: flex-end;
+}
+.side-toolbar {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
 .board {
   height: 600px;
   width: 200px;
@@ -72,13 +105,22 @@ export default {
   width: 20px;
   margin: 10px 0 0 10px;
 }
+.fa-undo-alt:hover,
+.fa-redo-alt:hover {
+  color: white;
+}
+
 .fa-trash-alt,
 .fa-file-export {
   color: var(--gray);
-  width: 50px;
-  margin: 10px 0 0 10px;
+  margin-right: 10px;
 }
-
+.fa-trash-alt:hover {
+  color: red;
+}
+.fa-file-export:hover {
+  color: green;
+}
 .test {
   color: green;
 }

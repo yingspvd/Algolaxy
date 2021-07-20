@@ -1,7 +1,7 @@
 <template>
   <div id="container" style="box-shadow: 0px 5px 10px #91A0A5;">
-    <div class="tool-box">
-      <div class="tool-bottom">
+    <div class="tool-container">
+      <div class="bottom-toolbar">
         <button>back</button>
         <button>stop</button>
         <button>play</button>
@@ -24,14 +24,14 @@ export default {};
   border-radius: 5px;
   background-color: var(--white-gray);
 }
-.tool-box {
+.tool-container {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: flex-end;
 }
-.tool-bottom {
+.bottom-toolbar {
   display: flex;
   justify-content: space-around;
   align-items: center;
