@@ -7,14 +7,16 @@
       <i class="fas fa-redo-alt"></i>
     </a>
 
-    <a href="#">
-      <i class="far fa-file-export"></i>
-    </a>
-    <div id="board" class="board" @dragover.prevent @drop.prevent="drop"></div>
     
+    <div id="board" class="board" @dragover.prevent @drop.prevent="drop"></div>
+
     <a href="#">
       <i class="far fa-trash-alt"></i>
     </a>
+    <a href="#">
+      <i class="fas fa-file-export"></i>
+    </a>
+    
   </div>
 </template>
 
@@ -70,9 +72,10 @@ export default {
   width: 20px;
   margin: 10px 0 0 10px;
 }
-.fa-trash-alt {
+.fa-trash-alt,
+.fa-file-export {
   color: var(--gray);
-  width: 30px;
+  width: 50px;
   margin: 10px 0 0 10px;
 }
 
