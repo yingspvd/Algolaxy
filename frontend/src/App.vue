@@ -10,17 +10,13 @@
   --dark-blue-1: #17435c;
   --dark-blue-2: #062b41;
   --pink: #f26780;
-  --white-gray: #e3e8eb;
+  --white-gray: #ffffff;
   --gray: #858585;
 }
 
 html,
 body {
   font-family: "Roboto Mono", monospace;
-}
-
-body {
-  background-color: var(--blue);
 }
 
 #app {
