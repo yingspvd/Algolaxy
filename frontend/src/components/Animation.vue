@@ -32,7 +32,6 @@ export default {};
   align-items: flex-end;
 }
 .tool-bottom {
-  background-color: var(--dark-blue-1);
   display: flex;
   justify-content: space-around;
 }
