@@ -15,31 +15,38 @@
       clickMode="push"
     >
     </vue-particles> -->
+
     <Navbar />
-    
-    <a @click="closeSidebar()">
+    <a @click="closeSidebar()" style="margin-top:120px">
       <img
         :src="require(`../assets/${btnColor}.svg`)"
         height="65px"
-        style="margin:50px 0 0 260px; position:fixed; cursor:pointer"
+        style="margin:50px 0 0 250px; position:fixed; cursor:pointer; "
         id="sidebarBtn"
       />
     </a>
+    <Tools :sidebar="sidebar" style="margin-top:120px" />
 
-    <Tools :sidebar="sidebar" style="margin:120px 0 0 0;"/>
+    <div class="workspace">
+      <Board />
+      <Animation />
+    </div>
   </div>
 </template>
 
 <script>
 import Navbar from "../components/Navbar.vue";
 import Tools from "../components/Tools.vue";
+import Board from "../components/Board.vue";
+import Animation from "../components/Animation.vue";
 
 export default {
   name: "Home",
   components: {
     Navbar,
     Tools,
-    // Workspace,
+    Board,
+    Animation,
   },
   data() {
     return {
@@ -58,28 +65,34 @@ export default {
         document.getElementById("sidebarBtn").style.marginLeft = "50px";
       } else {
         this.btnColor = "sidebar-yellow";
-        document.getElementById("sidebarBtn").style.marginLeft = "260px";
+        document.getElementById("sidebarBtn").style.marginLeft = "255px";
       }
     },
   },
 };
 </script>
 
-<style scoped>
+<style>
 body {
   overflow: hidden;
-  display: flex;
 }
 
 html,
 body {
-  background: var(--blue);
+  background: #bacdd3;
 }
 
 .home {
   height: 100vh;
+  display: flex;
+  /* padding-top: 120px; */
 }
-
+.workspace {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  margin-top: 120px;
+}
 #sidebarBtn,
 #astronaut {
   transition: 0.5s;

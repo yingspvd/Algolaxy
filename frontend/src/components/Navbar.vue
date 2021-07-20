@@ -89,10 +89,9 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped>
 .bg-color {
-  background: var(--blue);
+  background: var(--dark-blue-1);
 }
 
 .img-folder {
@@ -109,13 +108,13 @@ export default {
 }
 
 .dropdown-menu {
-  background: #e3e8eb;
+  background: var(--dark-blue-1);
   border-radius: 10px;
   margin-top: 10px;
 }
 
 .dropdown-item {
-  color: var(--blue);
+  color: #ffffff;
   font-weight: 500;
 }
 .dropdown-item:hover {
@@ -150,6 +149,6 @@ export default {
 
 .navbar-brand {
   margin-left: 40px;
-  margin-right: 40px;
+  margin-right: 50px;
 }
 </style>

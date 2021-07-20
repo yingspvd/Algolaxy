@@ -416,15 +416,15 @@
         </li>
       </ul>
     </div>
-    <Board />
+    <!-- <Board /> -->
   </div>
 </template>
 
 <script>
-import Board from "./Board.vue";
+// import Board from "./Board.vue";
 
 export default {
-  components: { Board },
+  // components: { Board },
   name: "Tools",
   props: ["sidebar"],
   watch: {
@@ -488,11 +488,10 @@ main {
 .flex-shrink-0 {
   overflow: auto;
   /* width: 280px; */
-  border-radius: 0 30px 30px 0;
-  margin-top: -4px;
+  border-radius: 0 30px 0 0;
   background-color: var(--dark-blue-2);
   transition: 0.5s;
-  height: 86vh;
+  height: 100%;
 }
 .b-example-divider {
   flex-shrink: 0;
