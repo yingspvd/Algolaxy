@@ -1,37 +1,32 @@
 <template>
   <div class="home">
     <!-- <vue-particles
-        color="#dedede"
-        :particleOpacity="0.7"
-        :particlesNumber="100"
-        shapeType="circle"
-        :particleSize="3"
-        :lineLinked="false"
-        :moveSpeed="1.5"
-        :hoverEffect="false"
-        hoverMode="grab"
-        :clickEffect="true"
-        clickMode="push"
-      >
-      </vue-particles> -->
+      style="position: absolute; width: 100%;"
+      color="#dedede"
+      :particleOpacity="0.7"
+      :particlesNumber="100"
+      shapeType="circle"
+      :particleSize="3"
+      :lineLinked="false"
+      :moveSpeed="1.5"
+      :hoverEffect="false"
+      hoverMode="grab"
+      :clickEffect="true"
+      clickMode="push"
+    >
+    </vue-particles> -->
     <Navbar />
-    <img
-      src="../assets/astronaut.svg"
-      height="45px"
-      style="margin:80px 0 0 30px;"
-      id="astronaut"
-    />
-
+    
     <a @click="closeSidebar()">
       <img
         :src="require(`../assets/${btnColor}.svg`)"
         height="65px"
-        style="margin:175px 0 0 175px; position:fixed; cursor:pointer"
+        style="margin:50px 0 0 260px; position:fixed; cursor:pointer"
         id="sidebarBtn"
       />
     </a>
 
-    <Tools :sidebar="sidebar" />
+    <Tools :sidebar="sidebar" style="margin:120px 0 0 0;"/>
   </div>
 </template>
 
@@ -44,6 +39,7 @@ export default {
   components: {
     Navbar,
     Tools,
+    // Workspace,
   },
   data() {
     return {
@@ -59,21 +55,20 @@ export default {
     checkCloseSidebar() {
       if (this.sidebar == false) {
         this.btnColor = "sidebar-green";
-        document.getElementById("astronaut").style.marginLeft = "10px";
-        document.getElementById("sidebarBtn").style.marginLeft = "-5px";
+        document.getElementById("sidebarBtn").style.marginLeft = "50px";
       } else {
         this.btnColor = "sidebar-yellow";
-        document.getElementById("astronaut").style.marginLeft = "30px";
-        document.getElementById("sidebarBtn").style.marginLeft = "175px";
+        document.getElementById("sidebarBtn").style.marginLeft = "260px";
       }
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 body {
   overflow: hidden;
+  display: flex;
 }
 
 html,

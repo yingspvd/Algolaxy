@@ -1,1 +1,15 @@
-<svg id="Space" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 167.89 246.32"><defs><style>.cls-1{fill:#17435c;}.cls-2{fill:#e7b16b;}.cls-3{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:7px;}</style></defs><path class="cls-1" d="M167.89,123.06a83.56,83.56,0,0,0-15.44-48.49L158.87,0h-59C91.64,25.36,49.24,46.56,47.56,47.39l0,0,0,0h0a84,84,0,0,0,.19,151.35l-.19.12s44,21.55,52.41,47.42h59l-6.43-74.75A83.54,83.54,0,0,0,167.89,123.06Z"/><circle class="cls-2" cx="110.36" cy="122.72" r="57.53"/><polyline class="cls-3" points="123.58 97.18 94.31 123.16 123.58 149.14"/></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Space" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 167.9 246.3" style="enable-background:new 0 0 167.9 246.3;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#BACDD3;}
+	.st1{fill:#E7B16B;}
+	.st2{fill:none;stroke:#FFFFFF;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;}
+</style>
+<path class="st0" d="M167.9,123.1c0-17.4-5.4-34.3-15.4-48.5L158.9,0h-59c-8.2,25.4-50.6,46.6-52.3,47.4l0,0l0,0l0,0
+	C5.8,67.6-11.7,117.8,8.5,159.6c8.3,17.1,22.1,30.9,39.3,39.2l-0.2,0.1c0,0,44,21.6,52.4,47.4h59l-6.4-74.8
+	C162.6,157.4,167.9,140.4,167.9,123.1z"/>
+<circle class="st1" cx="110.4" cy="122.7" r="57.5"/>
+<polyline class="st2" points="123.6,97.2 94.3,123.2 123.6,149.1 "/>
+</svg>
