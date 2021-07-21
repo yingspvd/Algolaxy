@@ -105,4 +105,15 @@ export default {};
   background-color: var(--white-gray);
 }
 }
+@media screen and (max-width: 1210px) {
+  #container {
+  display: flex;
+  flex-direction: column;
+  width: 375px;
+  height: 650px;
+  /* margin-left: 65px; */
+  border-radius: 5px;
+  background-color: var(--white-gray);
+}
+}
 </style>

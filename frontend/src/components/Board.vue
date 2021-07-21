@@ -158,14 +158,14 @@ export default {
   #container {
   display: flex;
   flex-direction: column;
-  width: 475px;
+  width: 500px;
   height: 650px;
   /* margin-left: 65px; */
   border-radius: 5px;
   background-color: var(--white-gray);
 }
 }
-@media screen and (max-width: 1310px) {
+@media screen and (max-width: 1315px) {
   #container {
   display: flex;
   flex-direction: column;
@@ -181,6 +181,17 @@ export default {
   display: flex;
   flex-direction: column;
   width: 425px;
+  height: 650px;
+  /* margin-left: 65px; */
+  border-radius: 5px;
+  background-color: var(--white-gray);
+}
+}
+@media screen and (max-width: 1210px) {
+  #container {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
   height: 650px;
   /* margin-left: 65px; */
   border-radius: 5px;
