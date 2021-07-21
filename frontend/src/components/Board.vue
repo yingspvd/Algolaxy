@@ -2,19 +2,27 @@
   <div id="container" style="box-shadow: 0px 5px 10px #91A0A5;">
     <div class="tool-container">
       <div class="top-toolbar">
-        <a style="cursor:pointer;">
-          <i class="fas fa-undo-alt"></i>
-        </a>
-        <a style="cursor:pointer;">
-          <i class="fas fa-redo-alt"></i>
-        </a>
+        <div>
+          <a style="cursor:pointer;">
+            <i class="fas fa-undo-alt"></i>
+          </a>
+          <a style="cursor:pointer;">
+            <i class="fas fa-redo-alt"></i>
+          </a>
+        </div>
+        <div>
+          <a style="cursor:pointer;">
+            <i class="fas fa-compress"></i>
+            <i class="fas fa-expand"></i>
+          </a>
+        </div>
       </div>
     </div>
 
     <!-- <div id="board" class="board" @dragover.prevent @drop.prevent="drop"></div> -->
 
     <div class="side-toolbar-container">
-      <div class="side-toolbar">
+      <div class="side-toolbar" >
         <a style="cursor:pointer;">
           <i class="far fa-trash-alt"></i>
         </a>
@@ -60,8 +68,8 @@ export default {
 #container {
   display: flex;
   flex-direction: column;
-  height: 600px;
-  width: 500px;
+  width: 550px;
+  height: 700px;
   /* margin-left: 65px; */
   border-radius: 5px;
   background-color: var(--white-gray);
@@ -75,8 +83,9 @@ export default {
 }
 .top-toolbar {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  padding: 0 10px 0 10px;
   width: 100%;
   height: 50px;
   background-color: var(--dark-blue-1);
@@ -100,14 +109,18 @@ export default {
 }
 
 .fa-undo-alt,
-.fa-redo-alt {
-  color: var(--gray);
+.fa-redo-alt,
+.fa-compress,
+.fa-expand {
+  color: #ffffff;
   width: 20px;
-  margin: 10px 0 0 10px;
+  margin: 0 0 0 10px;
 }
 .fa-undo-alt:hover,
-.fa-redo-alt:hover {
-  color: white;
+.fa-redo-alt:hover,
+.fa-compress:hover,
+.fa-expand:hover {
+  color: var(--gray);
 }
 
 .fa-trash-alt,
@@ -139,5 +152,39 @@ export default {
   color: var(--dark-blue-2);
   text-align: center;
   font-weight: 500;
+}
+
+@media screen and (max-width: 1439px) {
+  #container {
+  display: flex;
+  flex-direction: column;
+  width: 475px;
+  height: 650px;
+  /* margin-left: 65px; */
+  border-radius: 5px;
+  background-color: var(--white-gray);
+}
+}
+@media screen and (max-width: 1310px) {
+  #container {
+  display: flex;
+  flex-direction: column;
+  width: 450px;
+  height: 650px;
+  /* margin-left: 65px; */
+  border-radius: 5px;
+  background-color: var(--white-gray);
+}
+}
+@media screen and (max-width: 1280px) {
+  #container {
+  display: flex;
+  flex-direction: column;
+  width: 425px;
+  height: 650px;
+  /* margin-left: 65px; */
+  border-radius: 5px;
+  background-color: var(--white-gray);
+}
 }
 </style>
