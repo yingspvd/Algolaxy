@@ -1,21 +1,41 @@
 <template>
   <div id="container" style="box-shadow: 0px 5px 10px #91A0A5;">
     <div class="tool-container">
-      <div class="bottom-toolbar" >
+      <div class="bottom-toolbar">
         <a>
-          <img class="img-control-back" src="../assets/back.svg" alt="" >
+          <img
+            class="img-control-back"
+            src="../assets/controlMedia/back.svg"
+            alt=""
+          />
         </a>
         <a>
-          <img class="img-control" src="../assets/stop.svg" alt="" >
+          <img
+            class="img-control"
+            src="../assets/controlMedia/stop.svg"
+            alt=""
+          />
         </a>
         <a>
-          <img class="img-control" src="../assets/play.svg" alt="" >
+          <img
+            class="img-control"
+            src="../assets/controlMedia/play.svg"
+            alt=""
+          />
         </a>
         <a>
-          <img class="img-control" src="../assets/pause.svg" alt="" >
+          <img
+            class="img-control"
+            src="../assets/controlMedia/pause.svg"
+            alt=""
+          />
         </a>
         <a>
-          <img class="img-control-next" src="../assets/next.svg" alt="" >
+          <img
+            class="img-control-next"
+            src="../assets/controlMedia/next.svg"
+            alt=""
+          />
         </a>
       </div>
     </div>
@@ -49,71 +69,71 @@ export default {};
   height: 80px;
   background-color: var(--dark-blue-1);
   border-radius: 5px;
-  box-shadow: 0px -3px 20px #91A0A5;
+  box-shadow: 0px -3px 20px #91a0a5;
 }
-.bottom-toolbar a{
+.bottom-toolbar a {
   cursor: pointer;
   /* box-shadow: 0px 5px 10px #123346; */
 }
-.bottom-toolbar a:hover{
+.bottom-toolbar a:hover {
   cursor: pointer;
   height: 33px;
   /* box-shadow: 0px 0px 2px #6F8F9E; */
 }
-.img-control{
+.img-control {
   height: 30px;
 }
-.img-control-back{
+.img-control-back {
   height: 30px;
   margin-left: 60px;
 }
-.img-control-next{
+.img-control-next {
   height: 30px;
   margin-right: 60px;
 }
 
 @media screen and (max-width: 1439px) {
   #container {
-  display: flex;
-  flex-direction: column;
-  width: 450px;
-  height: 650px;
-  /* margin-left: 65px; */
-  border-radius: 5px;
-  background-color: var(--white-gray);
-}
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+    height: 650px;
+    /* margin-left: 65px; */
+    border-radius: 5px;
+    background-color: var(--white-gray);
+  }
 }
 @media screen and (max-width: 1310px) {
   #container {
-  display: flex;
-  flex-direction: column;
-  width: 425px;
-  height: 650px;
-  /* margin-left: 65px; */
-  border-radius: 5px;
-  background-color: var(--white-gray);
-}
+    display: flex;
+    flex-direction: column;
+    width: 425px;
+    height: 650px;
+    /* margin-left: 65px; */
+    border-radius: 5px;
+    background-color: var(--white-gray);
+  }
 }
 @media screen and (max-width: 1280px) {
   #container {
-  display: flex;
-  flex-direction: column;
-  width: 400px;
-  height: 650px;
-  /* margin-left: 65px; */
-  border-radius: 5px;
-  background-color: var(--white-gray);
-}
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: 650px;
+    /* margin-left: 65px; */
+    border-radius: 5px;
+    background-color: var(--white-gray);
+  }
 }
 @media screen and (max-width: 1210px) {
   #container {
-  display: flex;
-  flex-direction: column;
-  width: 375px;
-  height: 650px;
-  /* margin-left: 65px; */
-  border-radius: 5px;
-  background-color: var(--white-gray);
-}
+    display: flex;
+    flex-direction: column;
+    width: 375px;
+    height: 650px;
+    /* margin-left: 65px; */
+    border-radius: 5px;
+    background-color: var(--white-gray);
+  }
 }
 </style>
