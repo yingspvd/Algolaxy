@@ -17,9 +17,12 @@
           </a>
         </div>
       </div>
+      <div id="board" class="board" @dragover.prevent @drop.prevent="drop">
+        <div class="terminator-f" style="margin-top:10px">
+          <div class="text-f">START</div>
+        </div>
+      </div>
     </div>
-
-    <div id="board" class="board" @dragover.prevent @drop.prevent="drop"></div>
 
     <div class="side-toolbar-container">
       <div class="side-toolbar">
@@ -40,7 +43,10 @@ export default {
   data() {
     return {
       arrow: 0,
-      terminator: 0,
+      terminator: 1,
+      read: 0,
+      print: 0,
+      read_value: ["dog", "cat", "parrot", "rabbit"],
     };
   },
 
@@ -49,13 +55,15 @@ export default {
       var data = e.dataTransfer.getData("object_id");
       var board = document.getElementById("board");
 
-      if (
-        (data == "start" && this.terminator == 0) ||
-        (data == "end" && this.terminator == 1)
-      ) {
-        this.terminator += 1;
-        this.style_terminator(board, data);
+      if (data != "" && data != "start" && data != "end") {
         this.style_arrow(board);
+      }
+      if (data == "end" && this.terminator == 1) {
+        this.style_arrow(board);
+        this.style_terminator(board, data);
+      }
+      if (data == "read" || data == "print") {
+        this.style_parallelogram(board, data);
       }
     },
 
@@ -65,20 +73,62 @@ export default {
       span.id = "arrow" + this.arrow;
       board.appendChild(span);
       span.innerHTML = "&#8595";
-      document.getElementById(span.id).classList.add("arrow");
+      document.getElementById(span.id).classList.add("arrow-f");
     },
 
     style_terminator(board, data) {
+      this.terminator += 1;
       var div = document.createElement("div");
-      div.id = "Terminator" + this.terminator;
+      div.id = "terminator" + this.terminator;
       board.appendChild(div);
-      document.getElementById(div.id).classList.add("terminator");
+      document.getElementById(div.id).classList.add("terminator-f");
 
       var div2 = document.createElement("div");
-      div2.id = "textTerminator";
+      div2.id = "text";
       div.appendChild(div2);
-      document.getElementById(div2.id).classList.add("terminator-text");
+      document.getElementById(div2.id).classList.add("text-f");
       div2.innerHTML = data.toUpperCase();
+    },
+
+    style_parallelogram(board, data) {
+      var temp = 0;
+      if (data == "read") {
+        this.read += 1;
+        temp = this.read;
+      } else {
+        this.print += 1;
+        temp = this.print;
+      }
+
+      var div = document.createElement("div");
+      div.id = data + temp;
+      board.appendChild(div);
+      document.getElementById(div.id).classList.add("parallelogram-f");
+
+      var div2 = document.createElement("div");
+      div2.id = "notSkew" + data + temp;
+      div.appendChild(div2);
+      document.getElementById(div2.id).classList.add("not-skew-f");
+
+      var select = document.createElement("select");
+      select.id = "select" + data + temp;
+
+      for (const val of this.read_value) {
+        var option = document.createElement("option");
+        option.value = val;
+        option.text = val.charAt(0).toUpperCase() + val.slice(1);
+        select.appendChild(option);
+      }
+
+      var label = document.createElement("label");
+      label.innerHTML = data[0].toUpperCase() + data.substring(1) + "   ";
+
+      document
+        .getElementById(div2.id)
+        .appendChild(label)
+        .appendChild(select);
+
+      document.getElementById(select.id).classList.add("dropdown-f");
     },
   },
 };
@@ -100,6 +150,7 @@ export default {
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: flex-start;
 }
@@ -123,9 +174,15 @@ export default {
   flex-direction: column;
   margin-bottom: 10px;
 }
+
 .board {
-  height: 600px;
-  width: 200px;
+  /* height: 600px;
+  width: 200px; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   border-radius: 10px;
   background-color: var(--white-gray);
 }
@@ -157,7 +214,6 @@ export default {
 .fa-file-export:hover {
   color: green;
 }
-
 @media screen and (max-width: 1439px) {
   #container {
     display: flex;

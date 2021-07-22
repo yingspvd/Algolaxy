@@ -1,8 +1,8 @@
-.arrow {
+.arrow-f {
   font-size: 50px;
 }
 
-.terminator {
+.terminator-f {
   background-color: var(--pink);
   border-radius: 50px;
   height: 35px;
@@ -12,25 +12,34 @@
   align-items: center;
 }
 
-.terminator-text {
+.text-f {
   color: var(--dark-blue-2);
   text-align: center;
   font-weight: 500;
 }
 
-.parallelogram {
+.parallelogram-f {
   width: 200px;
-  height: 35px;
+  height: 40px;
   transform: skew(-20deg);
   background: #86e2ff;
   min-width: 180px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-top: 10px;
+  align-items: flex-end;
 }
 
-.not-skew {
+.not-skew-f {
   transform: skew(20deg);
+  color: var(--dark-blue-2);
+  text-align: center;
+  font-weight: 500;
   display: flex;
+  justify-content: center;
+  padding-top: 5px;
+}
+
+.dropdown-f {
+  border-radius: 5px;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1);
 }

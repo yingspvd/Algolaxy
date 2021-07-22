@@ -71,7 +71,13 @@
           </button>
           <div class="collapse show" id="inout-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <div class="parallelogram">
+              <div
+                id="read"
+                class="parallelogram"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+              >
                 <div class="not-skew">
                   <div class="place" style="margin-left: 10px;">
                     Read
@@ -81,7 +87,13 @@
                   </div>
                 </div>
               </div>
-              <div class="parallelogram">
+              <div
+                id="print"
+                class="parallelogram"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+              >
                 <div class="not-skew">
                   <div class="place" style="margin-left: 10px;">
                     Print
@@ -121,7 +133,7 @@
               </div>
               <!-- <div class="display">
               <img
-                src="../assets/display.svg"
+                src="../assets/sidebar/display.svg"
                 width="200px"
                 style="margin-top:10px;"
               />
@@ -143,7 +155,7 @@
           </button>
           <div class="collapse show" id="account-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <div class="square-box-long" style="background:#ffae74">
+              <div class="square-box-long" style="background:#FFA05B">
                 Set
                 <div class="square-textbox"></div>
                 =
@@ -152,7 +164,7 @@
                 </div>
               </div>
 
-              <div class="square-box-long" style="background:#ffae74">
+              <div class="square-box-long" style="background:#FFA05B">
                 Set
                 <div class="square-textbox"></div>
                 =
@@ -161,7 +173,7 @@
                 </div>
               </div>
 
-              <div class="square-box-long" style="background:#ffae74">
+              <div class="square-box-long" style="background:#FFA05B">
                 Set
                 <div class="square-textbox"></div>
                 =
@@ -170,7 +182,7 @@
                 </div>
               </div>
 
-              <div class="square-box-long" style="background:#c6b8ff">
+              <div class="square-box-long" style="background:#B09CFF">
                 <div class="dropdown-box" style="width: 40px;">
                   <div class="triangle-down"></div>
                 </div>
@@ -186,7 +198,7 @@
                 <div class="square-textbox">0</div>
               </div>
 
-              <div class="square-box-long" style="background:#c6b8ff">
+              <div class="square-box-long" style="background:#B09CFF">
                 <div class="dropdown-box" style="width: 40px;">
                   <div class="triangle-down"></div>
                 </div>
@@ -203,7 +215,7 @@
                   " "
                 </div>
               </div>
-              <div class="square-box-long" style="background:#c6b8ff;">
+              <div class="square-box-long" style="background:#B09CFF;">
                 <div class="dropdown-box" style="width: 40px;">
                   <div class="triangle-down"></div>
                 </div>
@@ -319,7 +331,11 @@
           </div>
         </li>
 
-        <img src="../assets/ufo.svg" height="20px" style="margin-top:25px" />
+        <img
+          src="../assets/sidebar/ufo.svg"
+          height="20px"
+          style="margin-top:25px"
+        />
 
         <li class="mb-1">
           <button
@@ -470,10 +486,6 @@ export default {
 body {
   /* min-height: 80vh; */
   min-height: -webkit-fill-available;
-  /* -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none; */
 }
 
 html {
@@ -625,7 +637,7 @@ main {
 .square-box-long {
   width: 200px;
   height: 35px;
-  background: #ffae74;
+  background: #ffa05b;
   min-width: 180px;
   display: flex;
   justify-content: space-evenly;
@@ -709,6 +721,7 @@ main {
 .not-skew {
   transform: skew(20deg);
   display: flex;
+  align-items: flex-start;
 }
 
 .dropdown-box {
