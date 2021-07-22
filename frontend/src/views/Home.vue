@@ -19,7 +19,7 @@
     <Navbar />
     <a @click="closeSidebar()" style="margin-top:120px">
       <img
-        :src="require(`../assets/${btnColor}.svg`)"
+        :src="require(`../assets/sidebar/${btnColor}.svg`)"
         height="65px"
         style="margin:50px 0 0 250px; position:fixed; cursor:pointer; "
         id="sidebarBtn"
@@ -75,6 +75,10 @@ export default {
 <style>
 body {
   overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 html,
