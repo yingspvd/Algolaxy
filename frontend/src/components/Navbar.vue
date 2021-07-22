@@ -71,8 +71,12 @@
         <a href="#" style="margin-right:30px;">
           <img class="img-folder" src="../assets/folder.svg" alt="" />
         </a>
-        <a href="#" style="margin-right:40px;">
-          <img class="img-signin" src="../assets/signin.svg" alt="" />
+        <a href="#" style="margin-right:40px; text-decoration:none;">
+          <div class="signin">
+            <div class="signin-text">
+              Sign in
+            </div>
+          </div>
         </a>
       </form>
     </div>
@@ -102,6 +106,21 @@ export default {
   height: 40px;
 }
 
+.signin {
+  background-color: #da566e;
+  border-radius: 50px;
+  height: 35px;
+  min-width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.signin-text {
+  color: white;
+  text-align: center;
+  font-weight: 500;
+}
+
 .img-moon {
   width: 15px;
   height: 15px;
@@ -111,6 +130,7 @@ export default {
   background: var(--dark-blue-1);
   border-radius: 10px;
   margin-top: 10px;
+  border: 0px solid rgb(0 0 0 / 0%)
 }
 
 .dropdown-item {
