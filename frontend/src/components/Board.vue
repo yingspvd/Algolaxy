@@ -19,20 +19,18 @@
       </div>
     </div>
 
-    <!-- <div id="board" class="board" @dragover.prevent @drop.prevent="drop"></div> -->
+    <div id="board" class="board" @dragover.prevent @drop.prevent="drop"></div>
 
     <div class="side-toolbar-container">
-      <div class="side-toolbar" >
+      <div class="side-toolbar">
         <a style="cursor:pointer;">
           <i class="far fa-trash-alt"></i>
         </a>
-        <a style="cursor:pointer; margin-top:5px">
+        <a style="cursor:pointer; margin-top:15px">
           <i class="fas fa-file-export"></i>
         </a>
       </div>
     </div>
-    
-    
   </div>
 </template>
 
@@ -40,31 +38,55 @@
 export default {
   name: "board",
   data() {
-    return {};
+    return {
+      arrow: 0,
+      terminator: 0,
+    };
   },
-  created() {},
+
   methods: {
-    drop: (e) => {
+    drop(e) {
       var data = e.dataTransfer.getData("object_id");
       var board = document.getElementById("board");
 
-      // For Copy Element
-      // var newObject = document.getElementById(data).cloneNode(true);
-      // board.insertBefore(newObject, board.childNodes[0]);
-
-      if (data == "start") {
-        let div = document.createElement("div");
-        div.id = "startTerminaor";
-        div.innerHTML = "CreateElement example";
-        board.appendChild(div);
-        document.getElementById("startTerminaor").classList.add("test");
+      if (
+        (data == "start" && this.terminator == 0) ||
+        (data == "end" && this.terminator == 1)
+      ) {
+        this.terminator += 1;
+        this.style_terminator(board, data);
+        this.style_arrow(board);
       }
+    },
+
+    style_arrow(board) {
+      this.arrow += 1;
+      var span = document.createElement("span");
+      span.id = "arrow" + this.arrow;
+      board.appendChild(span);
+      span.innerHTML = "&#8595";
+      document.getElementById(span.id).classList.add("arrow");
+    },
+
+    style_terminator(board, data) {
+      var div = document.createElement("div");
+      div.id = "Terminator" + this.terminator;
+      board.appendChild(div);
+      document.getElementById(div.id).classList.add("terminator");
+
+      var div2 = document.createElement("div");
+      div2.id = "textTerminator";
+      div.appendChild(div2);
+      document.getElementById(div2.id).classList.add("terminator-text");
+      div2.innerHTML = data.toUpperCase();
     },
   },
 };
 </script>
 
 <style scoped>
+@import "../css/flowchartSign.css";
+
 #container {
   display: flex;
   flex-direction: column;
@@ -90,7 +112,7 @@ export default {
   height: 50px;
   background-color: var(--dark-blue-1);
   border-radius: 5px;
-  box-shadow: 0px -3px 20px #91A0A5;
+  box-shadow: 0px -3px 20px #91a0a5;
 }
 .side-toolbar-container {
   display: flex;
@@ -127,6 +149,7 @@ export default {
 .fa-file-export {
   color: var(--gray);
   margin-right: 10px;
+  font-size: 25px;
 }
 .fa-trash-alt:hover {
   color: red;
@@ -134,68 +157,49 @@ export default {
 .fa-file-export:hover {
   color: green;
 }
-.test {
-  color: green;
-}
-
-.terminator {
-  background-color: var(--pink);
-  border-radius: 50px;
-  height: 35px;
-  min-width: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.terminator-text {
-  color: var(--dark-blue-2);
-  text-align: center;
-  font-weight: 500;
-}
 
 @media screen and (max-width: 1439px) {
   #container {
-  display: flex;
-  flex-direction: column;
-  width: 500px;
-  height: 650px;
-  /* margin-left: 65px; */
-  border-radius: 5px;
-  background-color: var(--white-gray);
-}
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    height: 650px;
+    /* margin-left: 65px; */
+    border-radius: 5px;
+    background-color: var(--white-gray);
+  }
 }
 @media screen and (max-width: 1315px) {
   #container {
-  display: flex;
-  flex-direction: column;
-  width: 450px;
-  height: 650px;
-  /* margin-left: 65px; */
-  border-radius: 5px;
-  background-color: var(--white-gray);
-}
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+    height: 650px;
+    /* margin-left: 65px; */
+    border-radius: 5px;
+    background-color: var(--white-gray);
+  }
 }
 @media screen and (max-width: 1280px) {
   #container {
-  display: flex;
-  flex-direction: column;
-  width: 425px;
-  height: 650px;
-  /* margin-left: 65px; */
-  border-radius: 5px;
-  background-color: var(--white-gray);
-}
+    display: flex;
+    flex-direction: column;
+    width: 425px;
+    height: 650px;
+    /* margin-left: 65px; */
+    border-radius: 5px;
+    background-color: var(--white-gray);
+  }
 }
 @media screen and (max-width: 1210px) {
   #container {
-  display: flex;
-  flex-direction: column;
-  width: 400px;
-  height: 650px;
-  /* margin-left: 65px; */
-  border-radius: 5px;
-  background-color: var(--white-gray);
-}
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: 650px;
+    /* margin-left: 65px; */
+    border-radius: 5px;
+    background-color: var(--white-gray);
+  }
 }
 </style>

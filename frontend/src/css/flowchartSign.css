@@ -1,0 +1,36 @@
+.arrow {
+  font-size: 50px;
+}
+
+.terminator {
+  background-color: var(--pink);
+  border-radius: 50px;
+  height: 35px;
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.terminator-text {
+  color: var(--dark-blue-2);
+  text-align: center;
+  font-weight: 500;
+}
+
+.parallelogram {
+  width: 200px;
+  height: 35px;
+  transform: skew(-20deg);
+  background: #86e2ff;
+  min-width: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.not-skew {
+  transform: skew(20deg);
+  display: flex;
+}

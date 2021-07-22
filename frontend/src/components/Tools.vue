@@ -43,7 +43,13 @@
                   </div>
                 </div>
 
-                <div class="terminator">
+                <div
+                  id="end"
+                  class="terminator"
+                  draggable="true"
+                  @dragstart="dragStart"
+                  @dragover.stop
+                >
                   <div class="terminator-text">
                     END
                   </div>
