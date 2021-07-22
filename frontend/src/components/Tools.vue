@@ -119,7 +119,13 @@
           </button>
           <div class="collapse show" id="display-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <div class="display">
+              <!-- <div
+                id="display"
+                class="display"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+              >
                 <div class="square-round">
                   <div
                     class="triangle-left"
@@ -130,15 +136,15 @@
                     style=" width: 120px; margin-top: -40px"
                   ></div>
                 </div>
+              </div> -->
+              <div draggable="true" @dragstart="dragStart" @dragover.stop>
+                <img
+                  id="display"
+                  src="../assets/sidebar/display.svg"
+                  width="200px"
+                  style="margin-top:10px;"
+                />
               </div>
-              <!-- <div class="display">
-              <img
-                src="../assets/sidebar/display.svg"
-                width="200px"
-                style="margin-top:10px;"
-              />
-              <div class="square-textbox" style=" width: 120px;"></div>
-            </div> -->
             </ul>
           </div>
         </li>
@@ -155,7 +161,14 @@
           </button>
           <div class="collapse show" id="account-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <div class="square-box-long" style="background:#FFA05B">
+              <div
+                id="declare_int"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#FFA05B"
+              >
                 Set
                 <div class="square-textbox"></div>
                 =
@@ -476,6 +489,7 @@ export default {
     },
 
     dragStart: (e) => {
+      console.log("s ", e.target.id);
       e.dataTransfer.setData("object_id", e.target.id);
     },
   },

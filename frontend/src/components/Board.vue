@@ -47,6 +47,8 @@ export default {
       read: 0,
       print: 0,
       read_value: ["dog", "cat", "parrot", "rabbit"],
+      display: 0,
+      declare_int: 0,
     };
   },
 
@@ -54,7 +56,7 @@ export default {
     drop(e) {
       var data = e.dataTransfer.getData("object_id");
       var board = document.getElementById("board");
-
+      console.log("data", data);
       if (data != "" && data != "start" && data != "end") {
         this.style_arrow(board);
       }
@@ -64,6 +66,12 @@ export default {
       }
       if (data == "read" || data == "print") {
         this.style_parallelogram(board, data);
+      }
+      if (data == "display") {
+        this.style_display(board, data);
+      }
+      if (data == "declare_int") {
+        this.style_declare_test(board, data);
       }
     },
 
@@ -129,6 +137,67 @@ export default {
         .appendChild(select);
 
       document.getElementById(select.id).classList.add("dropdown-f");
+    },
+
+    style_display(board, data) {
+      this.display += 1;
+      var div = document.createElement("div");
+      div.id = data + this.display;
+      board.appendChild(div);
+
+      var img = document.createElement("img");
+      img.id = "img" + this.display;
+      img.setAttribute("src", "../assets/sidebar/display.svg");
+      img.setAttribute("width", "200px");
+      div.appendChild(img);
+    },
+
+    style_declare(board, data) {
+      this.declare_int += 1;
+      var div = document.createElement("div");
+      div.id = data + this.declare_int;
+      board.appendChild(div);
+      document.getElementById(div.id).classList.add("square-box-long-f");
+
+      var p1 = document.createElement("p");
+      p1.id = "p1_" + this.declare_int;
+      div.appendChild(p1);
+      p1.innerHTML = "Set";
+      document.getElementById(p1.id).classList.add("text");
+
+      var inputVar = document.createElement("INPUT");
+      inputVar.id = "inputVar" + this.declare_int;
+      div.appendChild(inputVar);
+      document.getElementById(inputVar.id).classList.add("square-textbox-f");
+
+      var p2 = document.createElement("p");
+      p2.id = "p2_" + this.declare_int;
+      div.appendChild(p2);
+      p2.innerHTML = "=";
+      document.getElementById(p2.id).classList.add("text");
+
+      var inputInt = document.createElement("INPUT");
+      inputInt.id = "inputInt" + this.declare_int;
+      div.appendChild(inputInt);
+      document.getElementById(inputInt.id).classList.add("square-textbox-f");
+      inputInt.setAttribute("type", "number");
+      document.getElementById(inputInt.id).placeholder = "0";
+    },
+
+    style_declare_test(board, data) {
+      this.declare_int += 1;
+      var div = document.createElement("div");
+      div.id = data + this.declare_int;
+      board.appendChild(div);
+      document.getElementById(div.id).classList.add("square-box-long-f");
+
+      var span = document.createElement("span");
+      span.id = data + this.declare_int;
+      div.appendChild(span);
+      document.getElementById(span.id).classList.add("input");
+      document.getElementById(span.id).contentEditable = "true";
+      span.setAttribute("role", "textbox");
+      span.innerHTML = "0";
     },
   },
 };
