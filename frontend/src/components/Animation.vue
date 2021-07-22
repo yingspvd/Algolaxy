@@ -1,5 +1,21 @@
 <template>
   <div id="container" style="box-shadow: 0px 5px 10px #91A0A5;">
+    <div class="animation" style="margin-top:10px">
+      test
+      <span 
+        class="input" 
+        role="textbox" 
+        aria-placeholder="0"
+        contenteditable>
+          
+      </span>
+      <span 
+        class="input" 
+        role="textbox" 
+        contenteditable>
+          0
+      </span>
+    </div>
     <div class="tool-container">
       <div class="bottom-toolbar">
         <a>
@@ -50,6 +66,9 @@ export default {};
 #container {
   width: 500px;
   height: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   /* margin-left: 20px; */
   border-radius: 5px;
   background-color: var(--white-gray);
@@ -96,6 +115,7 @@ export default {};
   #container {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 450px;
     height: 650px;
     /* margin-left: 65px; */
@@ -107,6 +127,7 @@ export default {};
   #container {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 425px;
     height: 650px;
     /* margin-left: 65px; */
@@ -118,6 +139,7 @@ export default {};
   #container {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 400px;
     height: 650px;
     /* margin-left: 65px; */
@@ -129,6 +151,7 @@ export default {};
   #container {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 375px;
     height: 650px;
     /* margin-left: 65px; */
