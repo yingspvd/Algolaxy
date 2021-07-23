@@ -30,32 +30,21 @@
           <div class="collapse show" id="terminator-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
               <div class="flowchart">
-                
                 <div
-                  class="terminator"
                   style="margin-right:10px"
                   draggable="true"
                   @dragstart="dragStart"
                   @dragover.stop
                 >
                   <img
-                  id="start"
-                  src="../assets/sidebar/start.svg"
-                  width="90px"
-                  style="margin-top:10px;"
-                />
+                    id="start"
+                    src="../assets/sidebar/start.svg"
+                    width="90px"
+                  />
                 </div>
 
-                <div
-                  id="end"
-                  class="terminator"
-                  draggable="true"
-                  @dragstart="dragStart"
-                  @dragover.stop
-                >
-                  <div class="terminator-text">
-                    END
-                  </div>
+                <div draggable="true" @dragstart="dragStart" @dragover.stop>
+                  <img id="end" src="../assets/sidebar/end.svg" width="90px" />
                 </div>
               </div>
             </ul>
@@ -75,36 +64,24 @@
           <div class="collapse show" id="inout-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
               <div
-                id="read"
-                class="parallelogram"
+                style="margin-top:10px"
                 draggable="true"
                 @dragstart="dragStart"
                 @dragover.stop
               >
-                <div class="not-skew">
-                  <div class="place" style="margin-left: 10px;">
-                    Read
-                  </div>
-                  <div class="dropdown-box" style="margin-left: 10px">
-                    <div class="triangle-down"></div>
-                  </div>
-                </div>
+                <img id="read" src="../assets/sidebar/read.svg" width="200px" />
               </div>
               <div
-                id="print"
-                class="parallelogram"
+                style="margin-top:10px"
                 draggable="true"
                 @dragstart="dragStart"
                 @dragover.stop
               >
-                <div class="not-skew">
-                  <div class="place" style="margin-left: 10px;">
-                    Print
-                  </div>
-                  <div class="dropdown-box" style="margin-left: 10px">
-                    <div class="triangle-down"></div>
-                  </div>
-                </div>
+                <img
+                  id="print"
+                  src="../assets/sidebar/print.svg"
+                  width="200px"
+                />
               </div>
             </ul>
           </div>
@@ -294,7 +271,6 @@
                   style="margin-top:10px;"
                 />
               </div>
-              
             </ul>
           </div>
         </li>
@@ -324,6 +300,10 @@
                 </div>
               </div>
               <div
+                id="call_function"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
                 class="square-box-long"
                 style="background:#6181f3;justify-content: space-between;"
               >
@@ -355,7 +335,14 @@
           </button>
           <div class="collapse show" id="connector-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <div class="circle"></div>
+              <div draggable="true" @dragstart="dragStart" @dragover.stop>
+                <img
+                  id="connector"
+                  src="../assets/sidebar/connector.svg"
+                  width="40px"
+                  style="margin-top:10px;"
+                />
+              </div>
             </ul>
           </div>
         </li>
@@ -501,7 +488,6 @@ export default {
     },
 
     dragStart: (e) => {
-      console.log("s ", e.target.id);
       e.dataTransfer.setData("object_id", e.target.id);
     },
   },
@@ -704,23 +690,12 @@ main {
 }
 .diamond {
   display: flex;
-  /* flex-direction: column; */
   justify-content: center;
   align-items: center;
 }
 .diamond-item {
-  /* transform: rotateX(0deg) rotateZ(-45deg); */
   display: flex;
-  /* justify-content: space-evenly; */
   align-items: center;
-}
-
-.circle {
-  width: 40px;
-  height: 40px;
-  background: #ffc700;
-  border-radius: 50%;
-  margin: 10px 0 0 0;
 }
 
 .triangle-left {

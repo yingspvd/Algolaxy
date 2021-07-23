@@ -17,21 +17,26 @@
           </a>
         </div>
       </div>
-      <div id="board" class="board" @dragover.prevent @drop.prevent="drop">
-        <div class="terminator-f" style="margin-top:10px">
+
+      <div
+        id="board"
+        class="board scrollarea"
+        @dragover.prevent
+        @drop.prevent="drop"
+      >
+        <div class="terminator-f" style="margin:10px 0 10px 0">
           <div class="text-f">START</div>
         </div>
-      </div>
-    </div>
-
-    <div class="side-toolbar-container">
-      <div class="side-toolbar">
-        <a style="cursor:pointer;">
-          <i class="far fa-trash-alt"></i>
-        </a>
-        <a style="cursor:pointer; margin-top:15px">
-          <i class="fas fa-file-export"></i>
-        </a>
+        <div class="side-toolbar-container">
+          <div class="side-toolbar">
+            <a style="cursor:pointer;">
+              <i class="far fa-trash-alt"></i>
+            </a>
+            <a style="cursor:pointer; margin-top:15px">
+              <i class="fas fa-file-export"></i>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -40,8 +45,8 @@
 <script>
 const displayPic = require("../assets/sidebar/display-green.svg");
 const conditionPic = require("../assets/sidebar/condition.svg");
-const op_calculate = ["+", "-", "*", "/", "%", "^"];
-// const op_assign = ["=", "++", "--"];
+// const op_calculate = ["+", "-", "*", "/", "%", "^"];
+const op_assign = ["=", "++", "--"];
 // const op_compare = ["==", "<", ">","!="];
 // const op_connect = ["and","or","not"];
 
@@ -50,10 +55,11 @@ export default {
   data() {
     return {
       arrow: 0,
+      variable: ["x", "y", "z"],
+      function: ["function", "function", "function"],
       terminator: 1,
       read: 0,
       print: 0,
-      variable: ["x", "y", "z"],
       display: 0,
       declare_int: 0,
       declare_string: 0,
@@ -62,6 +68,9 @@ export default {
       assign_string: 0,
       assign_array: 0,
       condition: 0,
+      declareFunc: 0,
+      callFunc: 0,
+      connector: 0,
     };
   },
 
@@ -69,7 +78,7 @@ export default {
     drop(e) {
       var data = e.dataTransfer.getData("object_id");
       var board = document.getElementById("board");
-      console.log("data", data);
+
       if (data != "" && data != "start" && data != "end") {
         this.style_arrow(board);
       }
@@ -99,6 +108,15 @@ export default {
       }
       if (data == "condition") {
         this.style_condition(board, data);
+      }
+      if (data == "declare_function") {
+        this.style_function(board, data);
+      }
+      if (data == "call_function") {
+        this.style_callFunction(board, data);
+      }
+      if (data == "connector") {
+        this.style_connector(board, data);
       }
     },
 
@@ -202,7 +220,7 @@ export default {
       } else {
         this.declare_array += 1;
         temp = this.declare_array;
-        text = "[]";
+        text = "[ ]";
       }
 
       var div = document.createElement("div");
@@ -254,7 +272,7 @@ export default {
       } else {
         this.assign_array += 1;
         temp = this.assign_array;
-        text = "[]";
+        text = "[ ]";
       }
 
       var div = document.createElement("div");
@@ -262,6 +280,11 @@ export default {
       board.appendChild(div);
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#B09CFF";
+
+      var drop1 = document.createElement("div");
+      drop1.id = "drop1_" + data + temp;
+      div.appendChild(drop1);
+      document.getElementById(drop1.id).classList.add("custom-select-f");
 
       var select = document.createElement("select");
       select.id = "select_" + data + temp;
@@ -271,19 +294,34 @@ export default {
         option.text = val;
         select.appendChild(option);
       }
-      document.getElementById(div.id).appendChild(select);
+      document.getElementById(drop1.id).appendChild(select);
       document.getElementById(select.id).classList.add("dropdown-f");
+
+      var tri1 = document.createElement("div");
+      tri1.id = "tri1_" + data + temp;
+      drop1.appendChild(tri1);
+      document.getElementById(tri1.id).classList.add("triangle-purple");
+
+      var drop2 = document.createElement("div");
+      drop2.id = "drop2_" + data + temp;
+      div.appendChild(drop2);
+      document.getElementById(drop2.id).classList.add("custom-select-f");
 
       var select2 = document.createElement("select");
       select2.id = "select2_" + data + temp;
-      for (const val of op_calculate) {
+      for (const val of op_assign) {
         var option2 = document.createElement("option");
         option2.value = val;
         option2.text = val;
         select2.appendChild(option2);
       }
-      document.getElementById(div.id).appendChild(select2);
+      document.getElementById(drop2.id).appendChild(select2);
       document.getElementById(select2.id).classList.add("dropdown-f");
+
+      var tri2 = document.createElement("div");
+      tri2.id = "tri2_" + data + temp;
+      drop2.appendChild(tri2);
+      document.getElementById(tri2.id).classList.add("triangle-yellow");
 
       var span = document.createElement("span");
       span.id = "span_" + data + temp;
@@ -297,20 +335,26 @@ export default {
     style_condition(board, data) {
       this.condition += 1;
       var div = document.createElement("div");
-      div.id = data + this.display;
+      div.id = data + this.condition;
       board.appendChild(div);
       document.getElementById(div.id).classList.add("display-f");
 
       var img = document.createElement("img");
-      img.id = "img" + this.display;
+      img.id = "img" + this.condition;
       img.src = conditionPic;
       img.setAttribute("width", "200px");
       div.appendChild(img);
 
       var div2 = document.createElement("div");
-      div2.id = "item" + this.display;
+      div2.id = "item" + this.condition;
       div.appendChild(div2);
       document.getElementById(div2.id).classList.add("diamond-item-f");
+
+      // Dropdown
+      var drop1 = document.createElement("div");
+      drop1.id = "drop1_" + data + this.condition;
+      div2.appendChild(drop1);
+      document.getElementById(drop1.id).classList.add("custom-select-f");
 
       var select = document.createElement("select");
       select.id = "select_" + data + this.condition;
@@ -320,9 +364,15 @@ export default {
         option.text = val;
         select.appendChild(option);
       }
-      document.getElementById(div2.id).appendChild(select);
+      document.getElementById(drop1.id).appendChild(select);
       document.getElementById(select.id).classList.add("dropdown-f");
 
+      var tri1 = document.createElement("div");
+      tri1.id = "tri1_" + data + this.condition;
+      drop1.appendChild(tri1);
+      document.getElementById(tri1.id).classList.add("triangle-purple");
+
+      // Dropdown
       var select2 = document.createElement("select");
       select2.id = "select2_" + data + this.condition;
       for (const val of this.variable) {
@@ -341,6 +391,63 @@ export default {
       document.getElementById(span.id).contentEditable = "true";
       span.setAttribute("role", "textbox");
       span.innerHTML = "text";
+    },
+
+    style_function(board, data) {
+      this.declareFunc += 1;
+      var div = document.createElement("div");
+      div.id = data + this.declareFunc;
+      board.appendChild(div);
+      document.getElementById(div.id).classList.add("square-box-long-f");
+      document.getElementById(div.id).style.background = "#6181f3";
+      document.getElementById(div.id).style.borderRadius = "50px";
+
+      var span = document.createElement("span");
+      span.id = "span_" + data + this.declareFunc;
+      div.appendChild(span);
+      document.getElementById(span.id).classList.add("input-f");
+      document.getElementById(span.id).contentEditable = "true";
+      span.setAttribute("role", "textbox");
+      span.innerHTML = "Function";
+    },
+
+    style_callFunction(board, data) {
+      this.callFunc += 1;
+
+      var div = document.createElement("div");
+      div.id = data + this.callFunc;
+      board.appendChild(div);
+      document.getElementById(div.id).classList.add("square-box-long-f");
+      document.getElementById(div.id).style.background = "#6181f3";
+      document.getElementById(div.id).style.justifyContent = "space-between";
+
+      var div2 = document.createElement("div");
+      div2.id = "div2_" + this.callFunc;
+      div.appendChild(div2);
+      document.getElementById(div2.id).classList.add("square-box-short-f");
+
+      var select = document.createElement("select");
+      select.id = "select_" + data + this.callFunc;
+      for (const val of this.function) {
+        var option = document.createElement("option");
+        option.value = val;
+        option.text = val;
+        select.appendChild(option);
+      }
+      document.getElementById(div.id).appendChild(select);
+      document.getElementById(select.id).classList.add("dropdown-f");
+
+      var div3 = document.createElement("div");
+      div3.id = "div3_" + this.callFunc;
+      div.appendChild(div3);
+      document.getElementById(div3.id).classList.add("square-box-short-f");
+    },
+
+    style_connector(board, data) {
+      var div = document.createElement("div");
+      div.id = data + this.connector;
+      board.appendChild(div);
+      document.getElementById(div.id).classList.add("circle-f");
     },
   },
 };
@@ -378,13 +485,13 @@ export default {
   box-shadow: 0px -3px 20px #91a0a5;
 }
 .side-toolbar-container {
-  display: flex;
-  justify-content: flex-end;
+  position: absolute;
 }
 .side-toolbar {
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  /* position: absolute; */
 }
 
 .board {
@@ -426,6 +533,30 @@ export default {
 .fa-file-export:hover {
   color: green;
 }
+
+.scrollarea {
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #7ca3b2;
+  width: 1px;
+  border-radius: 10px;
+}
+
+.fw-semibold {
+  font-weight: 600;
+}
+.lh-tight {
+  line-height: 1.25;
+}
+
 @media screen and (max-width: 1439px) {
   #container {
     display: flex;

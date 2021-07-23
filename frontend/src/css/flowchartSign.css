@@ -3,7 +3,7 @@
 }
 
 .terminator-f {
-  background-color: var(--pink);
+  background-color: #ff839f;
   border-radius: 50px;
   height: 35px;
   width: 100px;
@@ -38,11 +38,76 @@
   justify-content: center;
   padding-top: 5px;
 }
-
+.custom-select-f {
+  position: relative;
+}
 .dropdown-f {
   border-radius: 5px;
   border-color: transparent transparent rgba(0, 0, 0, 0.1);
   margin-left: 5px;
+  appearance: none;
+  padding: 0 15px 0 10px;
+  position: relative;
+}
+
+.triangle-purple {
+  width: 0;
+  height: 0;
+  position: absolute;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 6px solid #584f84;
+  top: 45%;
+  right: 10%;
+  pointer-events: none;
+}
+
+.triangle-green {
+  width: 0;
+  height: 0;
+  position: absolute;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 6px solid #5d9d83;
+  top: 45%;
+  right: 10%;
+  pointer-events: none;
+}
+
+.triangle-yellow {
+  width: 0;
+  height: 0;
+  position: absolute;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 6px solid #e7b16b;
+  top: 45%;
+  right: 10%;
+  pointer-events: none;
+}
+
+.triangle-blue {
+  width: 0;
+  height: 0;
+  position: absolute;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 6px solid #5d83ca;
+  top: 45%;
+  right: 10%;
+  pointer-events: none;
+}
+
+.triangle-pink {
+  width: 0;
+  height: 0;
+  position: absolute;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 6px solid #da566e;
+  top: 45%;
+  right: 10%;
+  pointer-events: none;
 }
 
 .display-f {
@@ -64,6 +129,12 @@
   margin-top: 10px;
   font-weight: 500;
   color: var(--dark-blue-2);
+}
+
+.square-box-short-f {
+  width: 3px;
+  height: 35px;
+  background: white;
 }
 
 .square-textbox-f {
@@ -92,6 +163,15 @@
   border-radius: 3px;
   position: absolute;
 }
+
 .diamond-item-f {
   position: absolute;
+}
+
+.circle-f {
+  width: 40px;
+  height: 40px;
+  background: #ffc700;
+  border-radius: 50%;
+  margin: 10px 0 0 0;
 }
