@@ -38,6 +38,13 @@
 </template>
 
 <script>
+const displayPic = require("../assets/sidebar/display-green.svg");
+const conditionPic = require("../assets/sidebar/condition.svg");
+const op_calculate = ["+", "-", "*", "/", "%", "^"];
+// const op_assign = ["=", "++", "--"];
+// const op_compare = ["==", "<", ">","!="];
+// const op_connect = ["and","or","not"];
+
 export default {
   name: "board",
   data() {
@@ -46,9 +53,15 @@ export default {
       terminator: 1,
       read: 0,
       print: 0,
-      read_value: ["dog", "cat", "parrot", "rabbit"],
+      variable: ["x", "y", "z"],
       display: 0,
       declare_int: 0,
+      declare_string: 0,
+      declare_array: 0,
+      assign_int: 0,
+      assign_string: 0,
+      assign_array: 0,
+      condition: 0,
     };
   },
 
@@ -70,8 +83,22 @@ export default {
       if (data == "display") {
         this.style_display(board, data);
       }
-      if (data == "declare_int") {
-        this.style_declare_test(board, data);
+      if (
+        data == "declare_int" ||
+        data == "declare_string" ||
+        data == "declare_array"
+      ) {
+        this.style_declare(board, data);
+      }
+      if (
+        data == "assign_int" ||
+        data == "assign_string" ||
+        data == "assign_array"
+      ) {
+        this.style_assign(board, data);
+      }
+      if (data == "condition") {
+        this.style_condition(board, data);
       }
     },
 
@@ -121,10 +148,10 @@ export default {
       var select = document.createElement("select");
       select.id = "select" + data + temp;
 
-      for (const val of this.read_value) {
+      for (const val of this.variable) {
         var option = document.createElement("option");
         option.value = val;
-        option.text = val.charAt(0).toUpperCase() + val.slice(1);
+        option.text = val;
         select.appendChild(option);
       }
 
@@ -144,60 +171,176 @@ export default {
       var div = document.createElement("div");
       div.id = data + this.display;
       board.appendChild(div);
+      document.getElementById(div.id).classList.add("display-f");
 
       var img = document.createElement("img");
       img.id = "img" + this.display;
-      img.setAttribute("src", "../assets/sidebar/display.svg");
+      img.src = displayPic;
       img.setAttribute("width", "200px");
       div.appendChild(img);
+
+      var span = document.createElement("span");
+      span.id = "span" + this.display;
+      div.appendChild(span);
+      document.getElementById(span.id).classList.add("input-display-f");
+      document.getElementById(span.id).contentEditable = "true";
+      span.setAttribute("role", "textbox");
+      span.innerHTML = "x";
     },
 
     style_declare(board, data) {
-      this.declare_int += 1;
+      var temp = 0;
+      var text = "";
+      if (data == "declare_int") {
+        this.declare_int += 1;
+        temp = this.declare_int;
+        text = "0";
+      } else if (data == "declare_string") {
+        this.declare_string += 1;
+        temp = this.declare_string;
+        text = "&#8220&#8221;";
+      } else {
+        this.declare_array += 1;
+        temp = this.declare_array;
+        text = "[]";
+      }
+
       var div = document.createElement("div");
-      div.id = data + this.declare_int;
+      div.id = data + temp;
       board.appendChild(div);
       document.getElementById(div.id).classList.add("square-box-long-f");
 
-      var p1 = document.createElement("p");
-      p1.id = "p1_" + this.declare_int;
-      div.appendChild(p1);
-      p1.innerHTML = "Set";
-      document.getElementById(p1.id).classList.add("text");
-
-      var inputVar = document.createElement("INPUT");
-      inputVar.id = "inputVar" + this.declare_int;
-      div.appendChild(inputVar);
-      document.getElementById(inputVar.id).classList.add("square-textbox-f");
-
-      var p2 = document.createElement("p");
-      p2.id = "p2_" + this.declare_int;
-      div.appendChild(p2);
-      p2.innerHTML = "=";
-      document.getElementById(p2.id).classList.add("text");
-
-      var inputInt = document.createElement("INPUT");
-      inputInt.id = "inputInt" + this.declare_int;
-      div.appendChild(inputInt);
-      document.getElementById(inputInt.id).classList.add("square-textbox-f");
-      inputInt.setAttribute("type", "number");
-      document.getElementById(inputInt.id).placeholder = "0";
-    },
-
-    style_declare_test(board, data) {
-      this.declare_int += 1;
-      var div = document.createElement("div");
-      div.id = data + this.declare_int;
-      board.appendChild(div);
-      document.getElementById(div.id).classList.add("square-box-long-f");
+      var div2 = document.createElement("div");
+      div2.id = "div2_" + data + temp;
+      div.appendChild(div2);
+      div2.innerHTML = "Set";
+      document.getElementById(div2.id).classList.add("text-f");
 
       var span = document.createElement("span");
-      span.id = data + this.declare_int;
+      span.id = "span_" + data + temp;
       div.appendChild(span);
-      document.getElementById(span.id).classList.add("input");
+      document.getElementById(span.id).classList.add("input-f");
       document.getElementById(span.id).contentEditable = "true";
       span.setAttribute("role", "textbox");
-      span.innerHTML = "0";
+      span.innerHTML = "x";
+
+      var div3 = document.createElement("div");
+      div3.id = "div3_" + data + temp;
+      div.appendChild(div3);
+      div3.innerHTML = "=";
+      document.getElementById(div3.id).classList.add("text-f");
+
+      var span2 = document.createElement("span");
+      span2.id = "span2_" + data + temp;
+      div.appendChild(span2);
+      document.getElementById(span2.id).classList.add("input-f");
+      document.getElementById(span2.id).contentEditable = "true";
+      span2.setAttribute("role", "textbox");
+      span2.innerHTML = text;
+    },
+
+    style_assign(board, data) {
+      var temp = 0;
+      var text = "";
+
+      if (data == "assign_int") {
+        this.assign_int += 1;
+        temp = this.assign_int;
+        text = "0";
+      } else if (data == "assign_string") {
+        this.assign_string += 1;
+        temp = this.assign_string;
+        text = "&#8220&#8221;";
+      } else {
+        this.assign_array += 1;
+        temp = this.assign_array;
+        text = "[]";
+      }
+
+      var div = document.createElement("div");
+      div.id = data + temp;
+      board.appendChild(div);
+      document.getElementById(div.id).classList.add("square-box-long-f");
+      document.getElementById(div.id).style.background = "#B09CFF";
+
+      var select = document.createElement("select");
+      select.id = "select_" + data + temp;
+      for (const val of this.variable) {
+        var option = document.createElement("option");
+        option.value = val;
+        option.text = val;
+        select.appendChild(option);
+      }
+      document.getElementById(div.id).appendChild(select);
+      document.getElementById(select.id).classList.add("dropdown-f");
+
+      var select2 = document.createElement("select");
+      select2.id = "select2_" + data + temp;
+      for (const val of op_calculate) {
+        var option2 = document.createElement("option");
+        option2.value = val;
+        option2.text = val;
+        select2.appendChild(option2);
+      }
+      document.getElementById(div.id).appendChild(select2);
+      document.getElementById(select2.id).classList.add("dropdown-f");
+
+      var span = document.createElement("span");
+      span.id = "span_" + data + temp;
+      div.appendChild(span);
+      document.getElementById(span.id).classList.add("input-f");
+      document.getElementById(span.id).contentEditable = "true";
+      span.setAttribute("role", "textbox");
+      span.innerHTML = text;
+    },
+
+    style_condition(board, data) {
+      this.condition += 1;
+      var div = document.createElement("div");
+      div.id = data + this.display;
+      board.appendChild(div);
+      document.getElementById(div.id).classList.add("display-f");
+
+      var img = document.createElement("img");
+      img.id = "img" + this.display;
+      img.src = conditionPic;
+      img.setAttribute("width", "200px");
+      div.appendChild(img);
+
+      var div2 = document.createElement("div");
+      div2.id = "item" + this.display;
+      div.appendChild(div2);
+      document.getElementById(div2.id).classList.add("diamond-item-f");
+
+      var select = document.createElement("select");
+      select.id = "select_" + data + this.condition;
+      for (const val of this.variable) {
+        var option = document.createElement("option");
+        option.value = val;
+        option.text = val;
+        select.appendChild(option);
+      }
+      document.getElementById(div2.id).appendChild(select);
+      document.getElementById(select.id).classList.add("dropdown-f");
+
+      var select2 = document.createElement("select");
+      select2.id = "select2_" + data + this.condition;
+      for (const val of this.variable) {
+        var option2 = document.createElement("option");
+        option2.value = val;
+        option2.text = val;
+        select2.appendChild(option2);
+      }
+      document.getElementById(div2.id).appendChild(select2);
+      document.getElementById(select2.id).classList.add("dropdown-f");
+
+      var span = document.createElement("span");
+      span.id = "span_" + data + this.condition;
+      div2.appendChild(span);
+      document.getElementById(span.id).classList.add("input-f");
+      document.getElementById(span.id).contentEditable = "true";
+      span.setAttribute("role", "textbox");
+      span.innerHTML = "text";
     },
   },
 };

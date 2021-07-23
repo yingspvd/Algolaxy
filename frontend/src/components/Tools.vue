@@ -30,17 +30,20 @@
           <div class="collapse show" id="terminator-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
               <div class="flowchart">
+                
                 <div
-                  id="start"
                   class="terminator"
                   style="margin-right:10px"
                   draggable="true"
                   @dragstart="dragStart"
                   @dragover.stop
                 >
-                  <div class="terminator-text">
-                    START
-                  </div>
+                  <img
+                  id="start"
+                  src="../assets/sidebar/start.svg"
+                  width="90px"
+                  style="margin-top:10px;"
+                />
                 </div>
 
                 <div
@@ -119,28 +122,10 @@
           </button>
           <div class="collapse show" id="display-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <!-- <div
-                id="display"
-                class="display"
-                draggable="true"
-                @dragstart="dragStart"
-                @dragover.stop
-              >
-                <div class="square-round">
-                  <div
-                    class="triangle-left"
-                    style="margin-left: -40px; margin-top: 0"
-                  ></div>
-                  <div
-                    class="square-textbox"
-                    style=" width: 120px; margin-top: -40px"
-                  ></div>
-                </div>
-              </div> -->
               <div draggable="true" @dragstart="dragStart" @dragover.stop>
                 <img
                   id="display"
-                  src="../assets/sidebar/display.svg"
+                  src="../assets/sidebar/display-white.svg"
                   width="200px"
                   style="margin-top:10px;"
                 />
@@ -177,7 +162,14 @@
                 </div>
               </div>
 
-              <div class="square-box-long" style="background:#FFA05B">
+              <div
+                id="declare_string"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#FFA05B"
+              >
                 Set
                 <div class="square-textbox"></div>
                 =
@@ -186,7 +178,14 @@
                 </div>
               </div>
 
-              <div class="square-box-long" style="background:#FFA05B">
+              <div
+                id="declare_array"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#FFA05B"
+              >
                 Set
                 <div class="square-textbox"></div>
                 =
@@ -195,7 +194,14 @@
                 </div>
               </div>
 
-              <div class="square-box-long" style="background:#B09CFF">
+              <div
+                id="assign_int"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#B09CFF"
+              >
                 <div class="dropdown-box" style="width: 40px;">
                   <div class="triangle-down"></div>
                 </div>
@@ -211,7 +217,14 @@
                 <div class="square-textbox">0</div>
               </div>
 
-              <div class="square-box-long" style="background:#B09CFF">
+              <div
+                id="assign_string"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#B09CFF"
+              >
                 <div class="dropdown-box" style="width: 40px;">
                   <div class="triangle-down"></div>
                 </div>
@@ -228,7 +241,14 @@
                   " "
                 </div>
               </div>
-              <div class="square-box-long" style="background:#B09CFF;">
+              <div
+                id="assign_array"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#B09CFF;"
+              >
                 <div class="dropdown-box" style="width: 40px;">
                   <div class="triangle-down"></div>
                 </div>
@@ -261,28 +281,20 @@
           </button>
           <div class="collapse show" id="condition-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <div class="diamond-square-box">
-                <div class="diamond-item">
-                  <div class="dropdown-box" style="width: 40px; height:30px">
-                    <div class="triangle-down"></div>
-                  </div>
-
-                  <div
-                    class="dropdown-box"
-                    style="border-radius: 13px; width: 40px; height:30px; margin: 15px;"
-                  >
-                    <div
-                      class="triangle-down"
-                      style=" border-top: 6px solid #E4AD6A; "
-                    ></div>
-                  </div>
-
-                  <div
-                    class="square-textbox"
-                    style="width: 40px; height: 30px"
-                  ></div>
-                </div>
+              <div
+                class="diamond"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+              >
+                <img
+                  id="condition"
+                  src="../assets/sidebar/condition1.svg"
+                  width="200px"
+                  style="margin-top:10px;"
+                />
               </div>
+              
             </ul>
           </div>
         </li>
@@ -300,6 +312,10 @@
           <div class="collapse show" id="function-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
               <div
+                id="declare_function"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
                 class="square-box-long"
                 style="background:#6181f3; border-radius: 50px;"
               >
@@ -451,15 +467,11 @@
         </li>
       </ul>
     </div>
-    <!-- <Board /> -->
   </div>
 </template>
 
 <script>
-// import Board from "./Board.vue";
-
 export default {
-  // components: { Board },
   name: "Tools",
   props: ["sidebar"],
   watch: {
@@ -690,11 +702,16 @@ main {
   display: flex;
   justify-content: space-evenly;
 }
-
-.diamond-item {
-  transform: rotateX(0deg) rotateZ(-45deg);
+.diamond {
   display: flex;
-  justify-content: space-evenly;
+  /* flex-direction: column; */
+  justify-content: center;
+  align-items: center;
+}
+.diamond-item {
+  /* transform: rotateX(0deg) rotateZ(-45deg); */
+  display: flex;
+  /* justify-content: space-evenly; */
   align-items: center;
 }
 

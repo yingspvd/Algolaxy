@@ -42,35 +42,18 @@
 .dropdown-f {
   border-radius: 5px;
   border-color: transparent transparent rgba(0, 0, 0, 0.1);
+  margin-left: 5px;
 }
 
 .display-f {
-  margin-top: 20px;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
 }
 
-.square-round-f {
-  width: 150px;
-  height: 40px;
-  border-radius: 0 50px 50px 0;
-  background: #89cd83;
-  margin: 10px 0 10px 0;
-}
-
-.triangle-left-f {
-  width: 0;
-  height: 0;
-  border-top: 20px solid transparent;
-  border-right: 40px solid #89cd83;
-  border-bottom: 20px solid transparent;
-  margin: 10px 0 10px 0;
-}
-
 .square-box-long-f {
-  width: 200px;
+  width: auto;
   height: 35px;
   background: #ffa05b;
   min-width: 180px;
@@ -93,4 +76,22 @@
   border: 0 !important;
   border-radius: 8px;
   color: var(--dark-blue-2);
+}
+
+.input-f {
+  background-color: white;
+  padding: 0 5px;
+  border-radius: 3px;
+  margin: 0 5px;
+}
+
+.input-display-f {
+  background-color: white;
+  padding: 0 5px;
+  margin: 0 5px;
+  border-radius: 3px;
+  position: absolute;
+}
+.diamond-item-f {
+  position: absolute;
 }
