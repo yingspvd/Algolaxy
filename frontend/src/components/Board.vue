@@ -24,18 +24,18 @@
         @dragover.prevent
         @drop.prevent="drop"
       >
-        <div class="terminator-f" style="margin:10px 0 10px 0">
+        <div class="terminator-f" style="margin:10px 0 0 0">
           <div class="text-f">START</div>
         </div>
-        <div class="side-toolbar-container">
-          <div class="side-toolbar">
-            <a style="cursor:pointer;">
-              <i class="far fa-trash-alt"></i>
-            </a>
-            <a style="cursor:pointer; margin-top:15px">
-              <i class="fas fa-file-export"></i>
-            </a>
-          </div>
+      </div>
+      <div class="side-toolbar-container">
+        <div class="side-toolbar">
+          <a style="cursor:pointer;">
+            <i class="far fa-trash-alt"></i>
+          </a>
+          <a style="cursor:pointer; margin-top:15px">
+            <i class="fas fa-file-export"></i>
+          </a>
         </div>
       </div>
     </div>
@@ -45,6 +45,8 @@
 <script>
 const displayPic = require("../assets/sidebar/display-green.svg");
 const conditionPic = require("../assets/sidebar/condition.svg");
+const arrow = require("../assets/arrow.svg");
+
 // const op_calculate = ["+", "-", "*", "/", "%", "^"];
 const op_assign = ["=", "++", "--"];
 // const op_compare = ["==", "<", ">","!="];
@@ -54,7 +56,9 @@ export default {
   name: "board",
   data() {
     return {
+      divSet: 0,
       arrow: 0,
+      allSet:[],
       variable: ["x", "y", "z"],
       function: ["function", "function", "function"],
       terminator: 1,
@@ -79,6 +83,10 @@ export default {
       var data = e.dataTransfer.getData("object_id");
       var board = document.getElementById("board");
 
+      this.create_div(board);
+      var set = "set" + this.divSet;
+      var divSet = document.getElementById(set);
+
       if (data != "" && data != "start" && data != "end") {
         this.style_arrow(board);
       }
@@ -86,6 +94,11 @@ export default {
         this.style_arrow(board);
         this.style_terminator(board, data);
       }
+      this.choose_style(board, data, divSet);
+    },
+
+    choose_style(board, data, divSet) {
+      console.log(divSet);
       if (data == "read" || data == "print") {
         this.style_parallelogram(board, data);
       }
@@ -120,15 +133,36 @@ export default {
       }
     },
 
-    style_arrow(board) {
-      this.arrow += 1;
-      var span = document.createElement("span");
-      span.id = "arrow" + this.arrow;
-      board.appendChild(span);
-      span.innerHTML = "&#8595";
-      document.getElementById(span.id).classList.add("arrow-f");
+    create_div(board) {
+      this.divSet += 1;
+      var div = document.createElement("div");
+      div.id = "set" + this.divSet;
+      board.appendChild(div);
     },
 
+    style_arrow(divSet) {
+      this.arrow += 1;
+      var img = document.createElement("img");
+      img.id = "arrow" + this.arrow;
+      img.src = arrow;
+      img.setAttribute("height", "30px");
+      divSet.appendChild(img);
+    },
+
+    // style_arrow(board) {
+    //   // var set = "set" + this.div;
+    //   // var div = document.getElementById("board");
+    //   this.arrow += 1;
+    //   var img = document.createElement("img");
+    //   img.id = "arrow" + this.arrow;
+    //   img.src = arrow;
+    //   img.setAttribute("height", "30px");
+    //   board.appendChild(img);
+    // },
+
+    test() {
+      console.log("TEST : ");
+    },
     style_terminator(board, data) {
       this.terminator += 1;
       var div = document.createElement("div");
@@ -157,6 +191,10 @@ export default {
       div.id = data + temp;
       board.appendChild(div);
       document.getElementById(div.id).classList.add("parallelogram-f");
+      div.setAttribute("draggable", "true");
+      div.ondragstart = function(event) {
+        console.log(event.target.id);
+      };
 
       var div2 = document.createElement("div");
       div2.id = "notSkew" + data + temp;
@@ -209,19 +247,27 @@ export default {
     style_declare(board, data) {
       var temp = 0;
       var text = "";
+      var bText = "";
+      var aText = "";
       if (data == "declare_int") {
         this.declare_int += 1;
         temp = this.declare_int;
         text = "0";
+        bText = "&nbsp";
+        aText = "&nbsp";
       } else if (data == "declare_string") {
         this.declare_string += 1;
         temp = this.declare_string;
-        text = "&#8220&#8221;";
+        bText = "&#8220";
+        aText = "&#8221";
       } else {
         this.declare_array += 1;
         temp = this.declare_array;
-        text = "[ ]";
+        bText = "[";
+        aText = "]";
       }
+      console.log(bText);
+      console.log(aText);
 
       var div = document.createElement("div");
       div.id = data + temp;
@@ -242,37 +288,57 @@ export default {
       span.setAttribute("role", "textbox");
       span.innerHTML = "x";
 
-      var div3 = document.createElement("div");
-      div3.id = "div3_" + data + temp;
-      div.appendChild(div3);
-      div3.innerHTML = "=";
-      document.getElementById(div3.id).classList.add("text-f");
+      if (data == "declare_int" || data == "declare_string") {
+        var div3 = document.createElement("div");
+        div3.id = "div3_" + data + temp;
+        div.appendChild(div3);
+        div3.innerHTML = "=";
+        document.getElementById(div3.id).classList.add("text-f");
+      }
+
+      var div4 = document.createElement("div");
+      div4.id = "div4_" + data + temp;
+      div.appendChild(div4);
+      div4.innerHTML = bText;
+      document.getElementById(div4.id).classList.add("text-declare-before-f");
 
       var span2 = document.createElement("span");
       span2.id = "span2_" + data + temp;
       div.appendChild(span2);
-      document.getElementById(span2.id).classList.add("input-f");
+      document.getElementById(span2.id).classList.add("input-declare-f");
       document.getElementById(span2.id).contentEditable = "true";
       span2.setAttribute("role", "textbox");
       span2.innerHTML = text;
+
+      var div5 = document.createElement("div");
+      div5.id = "div5_" + data + temp;
+      div.appendChild(div5);
+      div5.innerHTML = aText;
+      document.getElementById(div5.id).classList.add("text-declare-after-f");
     },
 
     style_assign(board, data) {
       var temp = 0;
       var text = "";
+      var bText = "";
+      var aText = "";
 
       if (data == "assign_int") {
         this.assign_int += 1;
         temp = this.assign_int;
         text = "0";
+        bText = "&nbsp";
+        aText = "&nbsp";
       } else if (data == "assign_string") {
         this.assign_string += 1;
         temp = this.assign_string;
-        text = "&#8220&#8221;";
+        bText = "&#8220";
+        aText = "&#8221";
       } else {
         this.assign_array += 1;
         temp = this.assign_array;
-        text = "[ ]";
+        bText = "[";
+        aText = "]";
       }
 
       var div = document.createElement("div");
@@ -280,6 +346,14 @@ export default {
       board.appendChild(div);
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#B09CFF";
+
+      if (data == "assign_array") {
+        var store = document.createElement("div");
+        store.id = "store_" + data + temp;
+        div.appendChild(store);
+        store.innerHTML = "Store";
+        document.getElementById(store.id).classList.add("text-f");
+      }
 
       var drop1 = document.createElement("div");
       drop1.id = "drop1_" + data + temp;
@@ -302,6 +376,28 @@ export default {
       drop1.appendChild(tri1);
       document.getElementById(tri1.id).classList.add("triangle-purple");
 
+      if (data == "assign_array") {
+        var div4 = document.createElement("div");
+        div4.id = "div4_" + data + temp;
+        div.appendChild(div4);
+        div4.innerHTML = bText;
+        document.getElementById(div4.id).classList.add("text-declare-before-f");
+
+        var span1 = document.createElement("span");
+        span1.id = "span1_" + data + temp;
+        div.appendChild(span1);
+        document.getElementById(span1.id).classList.add("input-declare-f");
+        document.getElementById(span1.id).contentEditable = "true";
+        span1.setAttribute("role", "textbox");
+        span1.innerHTML = text;
+
+        var div5 = document.createElement("div");
+        div5.id = "div5_" + data + temp;
+        div.appendChild(div5);
+        div5.innerHTML = aText;
+        document.getElementById(div5.id).classList.add("text-declare-after-f");
+      }
+
       var drop2 = document.createElement("div");
       drop2.id = "drop2_" + data + temp;
       div.appendChild(drop2);
@@ -323,13 +419,35 @@ export default {
       drop2.appendChild(tri2);
       document.getElementById(tri2.id).classList.add("triangle-yellow");
 
-      var span = document.createElement("span");
-      span.id = "span_" + data + temp;
-      div.appendChild(span);
-      document.getElementById(span.id).classList.add("input-f");
-      document.getElementById(span.id).contentEditable = "true";
-      span.setAttribute("role", "textbox");
-      span.innerHTML = text;
+      if (data == "assign_int" || data == "assign_string") {
+        var div2 = document.createElement("div");
+        div2.id = "div2_" + data + temp;
+        div.appendChild(div2);
+        div2.innerHTML = bText;
+        document.getElementById(div2.id).classList.add("text-declare-before-f");
+
+        var span = document.createElement("span");
+        span.id = "span_" + data + temp;
+        div.appendChild(span);
+        document.getElementById(span.id).classList.add("input-declare-f");
+        document.getElementById(span.id).contentEditable = "true";
+        span.setAttribute("role", "textbox");
+        span.innerHTML = text;
+
+        var div3 = document.createElement("div");
+        div3.id = "div3_" + data + temp;
+        div.appendChild(div3);
+        div3.innerHTML = aText;
+        document.getElementById(div3.id).classList.add("text-declare-after-f");
+      } else {
+        var span2 = document.createElement("span");
+        span2.id = "span2_" + data + temp;
+        div.appendChild(span2);
+        document.getElementById(span2.id).classList.add("input-f");
+        document.getElementById(span2.id).contentEditable = "true";
+        span2.setAttribute("role", "textbox");
+        span2.innerHTML = text;
+      }
     },
 
     style_condition(board, data) {
@@ -472,6 +590,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  position: relative;
 }
 .top-toolbar {
   display: flex;
@@ -486,6 +605,8 @@ export default {
 }
 .side-toolbar-container {
   position: absolute;
+  top: 87%;
+  left: 92%;
 }
 .side-toolbar {
   display: flex;

@@ -273,55 +273,7 @@
               </div>
             </ul>
           </div>
-        </li>
-
-        <li class="mb-1">
-          <button
-            class="btn btn-toggle align-items-center rounded collapsed"
-            data-bs-toggle="collapse"
-            data-bs-target="#function-collapse"
-            aria-expanded="true"
-            style="margin-top:15px"
-          >
-            Function
-          </button>
-          <div class="collapse show" id="function-collapse">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <div
-                id="declare_function"
-                draggable="true"
-                @dragstart="dragStart"
-                @dragover.stop
-                class="square-box-long"
-                style="background:#6181f3; border-radius: 50px;"
-              >
-                <div class="square-textbox" style=" width: 120px; ">
-                  " Function "
-                </div>
-              </div>
-              <div
-                id="call_function"
-                draggable="true"
-                @dragstart="dragStart"
-                @dragover.stop
-                class="square-box-long"
-                style="background:#6181f3;justify-content: space-between;"
-              >
-                <div class="square-box-short"></div>
-                <div
-                  class="square-textbox"
-                  style="justify-content:flex-end; width: 120px; "
-                >
-                  <div
-                    class="triangle-down"
-                    style=" border-top: 6px solid var(--dark-blue-2); "
-                  ></div>
-                </div>
-                <div class="square-box-short"></div>
-              </div>
-            </ul>
-          </div>
-        </li>
+        </li>      
 
         <li class="mb-1">
           <button
@@ -347,11 +299,11 @@
           </div>
         </li>
 
-        <img
+        <!-- <img
           src="../assets/sidebar/ufo.svg"
           height="20px"
           style="margin-top:25px"
-        />
+        /> -->
 
         <li class="mb-1">
           <button
@@ -448,6 +400,54 @@
                     style=" border-top: 6px solid #DA566E; "
                   ></div>
                 </div>
+              </div>
+            </ul>
+          </div>
+        </li>
+
+        <li class="mb-1">
+          <button
+            class="btn btn-toggle align-items-center rounded collapsed"
+            data-bs-toggle="collapse"
+            data-bs-target="#function-collapse"
+            aria-expanded="true"
+            style="margin-top:15px"
+          >
+            Function
+          </button>
+          <div class="collapse show" id="function-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+              <div
+                id="declare_function"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#6181f3; border-radius: 50px;"
+              >
+                <div class="square-textbox" style=" width: 120px; ">
+                  " Function "
+                </div>
+              </div>
+              <div
+                id="call_function"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#6181f3;justify-content: space-between;"
+              >
+                <div class="square-box-short"></div>
+                <div
+                  class="square-textbox"
+                  style="justify-content:flex-end; width: 120px; "
+                >
+                  <div
+                    class="triangle-down"
+                    style=" border-top: 6px solid var(--dark-blue-2); "
+                  ></div>
+                </div>
+                <div class="square-box-short"></div>
               </div>
             </ul>
           </div>
