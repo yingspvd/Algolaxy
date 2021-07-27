@@ -165,7 +165,6 @@
               >
                 Set
                 <div class="square-textbox"></div>
-                =
                 <div class="square-textbox">
                   [ ]
                 </div>
@@ -177,7 +176,7 @@
                 @dragstart="dragStart"
                 @dragover.stop
                 class="square-box-long"
-                style="background:#B09CFF"
+                style="background:#6181F3"
               >
                 <div class="dropdown-box" style="width: 40px;">
                   <div class="triangle-down"></div>
@@ -186,10 +185,11 @@
                   class="dropdown-box"
                   style="border-radius: 10px; width: 40px;"
                 >
-                  <div
+                  <div style="margin-right: 16px;">=</div>
+                  <!-- <div
                     class="triangle-down"
                     style=" border-top: 6px solid #E4AD6A; "
-                  ></div>
+                  ></div> -->
                 </div>
                 <div class="square-textbox">0</div>
               </div>
@@ -200,7 +200,7 @@
                 @dragstart="dragStart"
                 @dragover.stop
                 class="square-box-long"
-                style="background:#B09CFF"
+                style="background:#6181F3"
               >
                 <div class="dropdown-box" style="width: 40px;">
                   <div class="triangle-down"></div>
@@ -209,10 +209,7 @@
                   class="dropdown-box"
                   style="border-radius: 10px; width: 40px;"
                 >
-                  <div
-                    class="triangle-down"
-                    style=" border-top: 6px solid #E4AD6A; "
-                  ></div>
+                  <div style="margin-right: 16px;">=</div>
                 </div>
                 <div class="square-textbox">
                   " "
@@ -224,23 +221,22 @@
                 @dragstart="dragStart"
                 @dragover.stop
                 class="square-box-long"
-                style="background:#B09CFF;"
+                style="background:#6181F3;"
               >
-                <div class="dropdown-box" style="width: 40px;">
+                Store
+                <div class="dropdown-box" style="width: 30px;">
                   <div class="triangle-down"></div>
+                </div>
+                <div class="square-textbox" style="width: 30px;">
+                  [ ]
                 </div>
                 <div
                   class="dropdown-box"
                   style="border-radius: 10px; width: 40px;"
                 >
-                  <div
-                    class="triangle-down"
-                    style=" border-top: 6px solid #E4AD6A; "
-                  ></div>
+                  <div style="margin-right: 16px;">=</div>
                 </div>
-                <div class="square-textbox">
-                  [ ]
-                </div>
+                <div style="width: 20px;" class="square-textbox"></div>
               </div>
             </ul>
           </div>
@@ -273,7 +269,7 @@
               </div>
             </ul>
           </div>
-        </li>      
+        </li>
 
         <li class="mb-1">
           <button
@@ -417,17 +413,17 @@
           </button>
           <div class="collapse show" id="function-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <div
-                id="declare_function"
+              <div               
                 draggable="true"
                 @dragstart="dragStart"
-                @dragover.stop
-                class="square-box-long"
-                style="background:#6181f3; border-radius: 50px;"
+                @dragover.stop                
               >
-                <div class="square-textbox" style=" width: 120px; ">
-                  " Function "
-                </div>
+                <img
+                  id="declare_function"
+                  src="../assets/sidebar/functionText.svg"
+                  width="200px"
+                  style="margin-top:10px;"
+                />
               </div>
               <div
                 id="call_function"
@@ -435,7 +431,7 @@
                 @dragstart="dragStart"
                 @dragover.stop
                 class="square-box-long"
-                style="background:#6181f3;justify-content: space-between;"
+                style="background:#B09CFF;justify-content: space-between;"
               >
                 <div class="square-box-short"></div>
                 <div
@@ -449,6 +445,242 @@
                 </div>
                 <div class="square-box-short"></div>
               </div>
+              <div
+                id="maxmin_function"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#B09CFF;"
+              >
+                <div
+                  class="dropdown-box"
+                  style="border-radius: 25px; width: 70px; height:22px;"
+                >
+                  <div style="margin-right:10px">Max</div>
+                  <div
+                    class="triangle-down"
+                    style=" border-top: 6px solid var(--dark-blue-2); "
+                  ></div>
+                </div>
+                <div
+                  class="square-textbox"
+                  style="justify-content:flex-end; width: 80px; "
+                >
+                  <div
+                    class="triangle-down"
+                    style=" border-top: 6px solid var(--dark-blue-2); "
+                  ></div>
+                </div>
+              </div>
+
+              <div
+                id="sort_function"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#B09CFF;"
+              >
+                SORT
+                <div
+                  class="square-textbox"
+                  style="justify-content:flex-end; width: 100px; "
+                >
+                  <div
+                    class="triangle-down"
+                    style=" border-top: 6px solid var(--dark-blue-2); "
+                  ></div>
+                </div>
+              </div>
+
+              <div
+                id="swap_function"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#B09CFF;"
+              >
+                SWAP
+                <div
+                  class="square-textbox"
+                  style="justify-content:flex-end; width: 40px; "
+                >
+                  <div
+                    class="triangle-down"
+                    style=" border-top: 6px solid var(--dark-blue-2); "
+                  ></div>
+                </div>
+                and
+                <div
+                  class="square-textbox"
+                  style="justify-content:flex-end; width: 40px; "
+                >
+                  <div
+                    class="triangle-down"
+                    style=" border-top: 6px solid var(--dark-blue-2); "
+                  ></div>
+                </div>
+              </div>
+
+              <div
+                id="length_function"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#B09CFF;"
+              >
+                LENGTH
+                <div
+                  class="square-textbox"
+                  style="justify-content:flex-end; width: 100px; "
+                >
+                  <div
+                    class="triangle-down"
+                    style=" border-top: 6px solid var(--dark-blue-2); "
+                  ></div>
+                </div>
+              </div>
+
+              <div
+                id="pushpop_function"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#B09CFF;"
+              >
+                <div
+                  class="dropdown-box"
+                  style="border-radius: 25px; width: 70px; height:22px;"
+                >
+                  <div style="margin-right:10px">Push</div>
+                  <div
+                    class="triangle-down"
+                    style=" border-top: 6px solid var(--dark-blue-2); "
+                  ></div>
+                </div>
+                <div
+                  class="square-textbox"
+                  style="justify-content:flex-end; width: 80px; "
+                >
+                  <div
+                    class="triangle-down"
+                    style=" border-top: 6px solid var(--dark-blue-2); "
+                  ></div>
+                </div>
+              </div>
+
+              <div
+                id="queue_function"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#B09CFF;"
+              >
+                <div
+                  class="dropdown-box"
+                  style="border-radius: 25px; width: 100px; height:22px;"
+                >
+                  <div style="margin-right:10px">Enqueue</div>
+                  <div
+                    class="triangle-down"
+                    style=" border-top: 6px solid var(--dark-blue-2); "
+                  ></div>
+                </div>
+                <div
+                  class="square-textbox"
+                  style="justify-content:flex-end; width: 50px; "
+                >
+                  <div
+                    class="triangle-down"
+                    style=" border-top: 6px solid var(--dark-blue-2); "
+                  ></div>
+                </div>
+              </div>
+
+              <div
+                id="floor_function"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#B09CFF;"
+              >
+                FLOOR
+                <div
+                  class="square-textbox"
+                  style="justify-content:flex-end; width: 100px; "
+                >
+                  <div
+                    class="triangle-down"
+                    style=" border-top: 6px solid var(--dark-blue-2); "
+                  ></div>
+                </div>
+              </div>
+
+              <div
+                id="round_function"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#B09CFF;"
+              >
+                ROUND
+                <div
+                  class="square-textbox"
+                  style="justify-content:flex-end; width: 100px; "
+                >
+                  <div
+                    class="triangle-down"
+                    style=" border-top: 6px solid var(--dark-blue-2); "
+                  ></div>
+                </div>
+              </div>
+
+              <div
+                id="random_function"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#B09CFF;"
+              >
+                RANDOM from
+                <div
+                  class="square-textbox"
+                  style="justify-content:flex-end; width: 20px; "
+                >
+                </div>
+                to
+                <div
+                  class="square-textbox"
+                  style="justify-content:flex-end; width: 20px; "
+                >
+                </div>
+              </div>
+
+              <div
+                id="squareroot_function"
+                draggable="true"
+                @dragstart="dragStart"
+                @dragover.stop
+                class="square-box-long"
+                style="background:#B09CFF;"
+              >
+                SQUARE ROOT
+                <div
+                  class="square-textbox"
+                  style="justify-content:flex-end; width: 40px; padding-right: 8px; "
+                >
+                    ( )
+                </div>
+              </div>
+
             </ul>
           </div>
         </li>
@@ -632,18 +864,6 @@ main {
   color: var(--dark-blue-2);
   text-align: center;
   font-weight: 500;
-}
-
-.parallelogram {
-  width: 200px;
-  height: 35px;
-  transform: skew(-20deg);
-  background: #86e2ff;
-  min-width: 180px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
 }
 
 .square-box-long {
