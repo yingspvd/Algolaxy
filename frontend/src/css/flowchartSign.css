@@ -1,3 +1,9 @@
+.arrow-container-f {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .terminator-f {
   background-color: #ff839f;
   border-radius: 50px;
@@ -16,29 +22,26 @@
 }
 
 .parallelogram-f {
-  width: 200px;
-  height: 40px;
-  transform: skew(-20deg);
-  background: #86e2ff;
-  min-width: 180px;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
+  position: relative;
 }
 
-.not-skew-f {
-  transform: skew(20deg);
-  color: var(--dark-blue-2);
-  text-align: center;
-  font-weight: 500;
-  display: flex;
-  justify-content: center;
-  padding-top: 5px;
-}
 .custom-select-f {
   position: relative;
   margin-right: 5px;
 }
+
+.dropdown-round-f {
+  border-radius: 60px;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1);
+  margin-left: 5px;
+  appearance: none;
+  padding: 0 20px 0 15px;
+  position: relative;
+}
+
 .dropdown-f {
   border-radius: 5px;
   border-color: transparent transparent rgba(0, 0, 0, 0.1);
@@ -46,6 +49,12 @@
   appearance: none;
   padding: 0 15px 0 10px;
   position: relative;
+  outline: none;
+}
+
+.label-dropdown-f {
+  position: absolute;
+  padding-top: 8px;
 }
 
 .triangle-purple {
@@ -118,7 +127,7 @@
 
 .square-box-long-f {
   width: auto;
-  height: 35px;
+  height: auto;
   background: #ffa05b;
   min-width: 180px;
   display: flex;
@@ -126,13 +135,27 @@
   align-items: center;
   font-weight: 500;
   color: var(--dark-blue-2);
-  padding: 0 10px;
+  padding: 10px 10px;
+  margin: 0 10px;
+  
 }
+
 
 .square-box-short-f {
   width: 3px;
   height: 35px;
   background: white;
+}
+
+.square-round-box-short-f {
+  width: 40px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border-radius: 30px;
+  margin: 0 5px;
 }
 
 .square-textbox-f {
@@ -159,9 +182,11 @@
   padding: 0 10px;
   z-index: 2;
   outline: none !important;
+  max-width: 250px;
 }
 
 .text-declare-before-f {
+  height: auto;
   background-color: white;
   padding: 0 10px 0 5px;
   margin: 0 -10px 0 5px;
@@ -169,6 +194,7 @@
   z-index: 1;
 }
 .text-declare-after-f {
+  height: auto;
   background-color: white;
   padding: 0 5px 0 10px;
   margin: 0 5px 0 -10px;
@@ -182,9 +208,11 @@
   margin: 0 5px;
   border-radius: 3px;
   position: absolute;
+  outline: none;
 }
 
 .diamond-item-f {
+  display: flex;
   position: absolute;
 }
 

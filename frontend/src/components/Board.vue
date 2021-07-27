@@ -18,14 +18,18 @@
         </div>
       </div>
 
-      <div
-        id="board"
-        class="board scrollarea"
-        @dragover.prevent
-        @drop.prevent="drop"
-      >
+      <div id="board" class="board scrollarea">
         <div class="terminator-f" style="margin:10px 0 0 0">
           <div class="text-f">START</div>
+        </div>
+
+        <div
+          @dragover.prevent
+          @drop.prevent="drop"
+          id="arrowSet1"
+          class="arrow-container"
+        >
+          <img src="../assets/arrow.svg" height="30px" />
         </div>
       </div>
       <div class="side-toolbar-container">
@@ -43,22 +47,26 @@
 </template>
 
 <script>
+const parallelPic = require("../assets/sidebar/parallel.svg");
 const displayPic = require("../assets/sidebar/display-green.svg");
 const conditionPic = require("../assets/sidebar/condition.svg");
 const arrow = require("../assets/arrow.svg");
 
 // const op_calculate = ["+", "-", "*", "/", "%", "^"];
-const op_assign = ["=", "++", "--"];
+// const op_assign = ["=", "++", "--"];
 // const op_compare = ["==", "<", ">","!="];
 // const op_connect = ["and","or","not"];
+const op_maxmin = ["Max", "Min"];
+const op_pushpop = ["Push", "Pop"];
+const op_queue = ["Enqueue", "dequeue"];
 
 export default {
   name: "board",
   data() {
     return {
-      divSet: 0,
-      arrow: 0,
-      allSet:[],
+      arrow: 1,
+      allObject: [],
+      allArrow: [],
       variable: ["x", "y", "z"],
       function: ["function", "function", "function"],
       terminator: 1,
@@ -74,36 +82,64 @@ export default {
       condition: 0,
       declareFunc: 0,
       callFunc: 0,
+      maxminFunc: 0,
+      pushpopFunc: 0,
+      queueFunc: 0,
+      sortFunc: 0,
+      lengthFunc: 0,
+      floorFunc: 0,
+      roundFunc: 0,
+      swapFunc: 0,
+      randomFunc: 0,
+      squareRootFunc: 0,
       connector: 0,
     };
   },
 
   methods: {
+    style_arrow(board, object) {
+      var next = object.nextElementSibling;
+      console.log(next);
+
+      this.arrow += 1;
+      var div = document.createElement("div");
+      div.id = "arrowSet" + this.arrow;
+      if (next == null) {
+        console.log("55");
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, next);
+      }
+
+      document.getElementById(div.id).classList.add("arrow-container-f");
+
+      div.ondragover = function(event) {
+        event.preventDefault();
+      };
+      div.ondrop = function(event) {
+        event.preventDefault();
+        this.drop(event);
+      }.bind(this);
+
+      var img = document.createElement("img");
+      img.id = "arrow" + this.arrow;
+      img.src = arrow;
+      img.setAttribute("height", "30px");
+    },
+
     drop(e) {
       var data = e.dataTransfer.getData("object_id");
       var board = document.getElementById("board");
-
-      this.create_div(board);
-      var set = "set" + this.divSet;
-      var divSet = document.getElementById(set);
-
-      if (data != "" && data != "start" && data != "end") {
-        this.style_arrow(board);
-      }
-      if (data == "end" && this.terminator == 1) {
-        this.style_arrow(board);
-        this.style_terminator(board, data);
-      }
-      this.choose_style(board, data, divSet);
+      var arrow_target = e.target.id;
+      this.choose_style(board, data, arrow_target);
     },
 
-    choose_style(board, data, divSet) {
-      console.log(divSet);
+    choose_style(board, data, arrow_target) {
       if (data == "read" || data == "print") {
-        this.style_parallelogram(board, data);
+        this.style_parallelogram(board, data, arrow_target);
       }
       if (data == "display") {
-        this.style_display(board, data);
+        this.style_display(board, data, arrow_target);
       }
       if (
         data == "declare_int" ||
@@ -131,38 +167,60 @@ export default {
       if (data == "connector") {
         this.style_connector(board, data);
       }
+      if (
+        data == "maxmin_function" ||
+        data == "pushpop_function" ||
+        data == "queue_function"
+      ) {
+        this.style_maxminFunction(board, data);
+      }
+      if (
+        data == "sort_function" ||
+        data == "length_function" ||
+        data == "floor_function" ||
+        data == "round_function"
+      ) {
+        this.style_sortFunction(board, data);
+      }
+      if (data == "swap_function" || data == "random_function") {
+        this.style_swapFunction(board, data);
+      }
+      if (data == "squareroot_function") {
+        this.style_squareRootFunction(board, data);
+      }
+      // if (data != "" && data != "start" && data != "end") {
+      //   this.style_arrow(board);
+      // }
+      // if (data == "end" && this.terminator == 1) {
+      //   this.style_terminator(board, data);
+      //   this.style_arrow(board);
+      // }
     },
 
-    create_div(board) {
-      this.divSet += 1;
-      var div = document.createElement("div");
-      div.id = "set" + this.divSet;
-      board.appendChild(div);
+    addToArray(target, id) {
+      // console.log("target ", target);
+      // console.log("ID ", id);
+
+      var myArray = target.split(/([0-9]+)/);
+
+      var index = myArray[1] - 1;
+      // console.log("index", index);
+
+      this.allObject.splice(index, 0, id);
+      // console.log("ALL ARROW : ", this.allArrow);
+      // console.log("All : ", this.allObject);
+
+      this.arrow = 1;
+      var board = document.getElementById("board");
+      console.log("board", board);
+      for (var i = 0; i < this.allObject.length; i++) {
+        var divTarget = document.getElementById(this.allObject[i]);
+        board.appendChild(divTarget);
+        this.style_arrow(board);
+        console.log("board", i, "  ", board);
+      }
     },
 
-    style_arrow(divSet) {
-      this.arrow += 1;
-      var img = document.createElement("img");
-      img.id = "arrow" + this.arrow;
-      img.src = arrow;
-      img.setAttribute("height", "30px");
-      divSet.appendChild(img);
-    },
-
-    // style_arrow(board) {
-    //   // var set = "set" + this.div;
-    //   // var div = document.getElementById("board");
-    //   this.arrow += 1;
-    //   var img = document.createElement("img");
-    //   img.id = "arrow" + this.arrow;
-    //   img.src = arrow;
-    //   img.setAttribute("height", "30px");
-    //   board.appendChild(img);
-    // },
-
-    test() {
-      console.log("TEST : ");
-    },
     style_terminator(board, data) {
       this.terminator += 1;
       var div = document.createElement("div");
@@ -177,7 +235,13 @@ export default {
       div2.innerHTML = data.toUpperCase();
     },
 
-    style_parallelogram(board, data) {
+    style_parallelogram(board, data, arrow_target) {
+      var arrow = document.getElementById(arrow_target);
+      var next = arrow.nextElementSibling;
+
+      console.log("ARROW : ", arrow);
+      console.log("next : ", next);
+
       var temp = 0;
       if (data == "read") {
         this.read += 1;
@@ -189,17 +253,19 @@ export default {
 
       var div = document.createElement("div");
       div.id = data + temp;
-      board.appendChild(div);
-      document.getElementById(div.id).classList.add("parallelogram-f");
-      div.setAttribute("draggable", "true");
-      div.ondragstart = function(event) {
-        console.log(event.target.id);
-      };
+      if (next == null) {
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, next);
+      }
 
-      var div2 = document.createElement("div");
-      div2.id = "notSkew" + data + temp;
-      div.appendChild(div2);
-      document.getElementById(div2.id).classList.add("not-skew-f");
+      document.getElementById(div.id).classList.add("parallelogram-f");
+
+      var img = document.createElement("img");
+      img.id = "img" + temp;
+      img.src = parallelPic;
+      img.setAttribute("width", "200px");
+      div.appendChild(img);
 
       var select = document.createElement("select");
       select.id = "select" + data + temp;
@@ -212,14 +278,18 @@ export default {
       }
 
       var label = document.createElement("label");
+      label.id = "label" + data + temp;
       label.innerHTML = data[0].toUpperCase() + data.substring(1) + "   ";
 
       document
-        .getElementById(div2.id)
+        .getElementById(div.id)
         .appendChild(label)
         .appendChild(select);
 
       document.getElementById(select.id).classList.add("dropdown-f");
+      document.getElementById(label.id).classList.add("label-dropdown-f");
+
+      this.style_arrow(board, div);
     },
 
     style_display(board, data) {
@@ -266,12 +336,14 @@ export default {
         bText = "[";
         aText = "]";
       }
-      console.log(bText);
-      console.log(aText);
+
+      var div1 = document.createElement("div");
+      div1.id = data + temp;
+      board.appendChild(div1);
 
       var div = document.createElement("div");
-      div.id = data + temp;
-      board.appendChild(div);
+      div.id = "div" + data + temp;
+      div1.appendChild(div);
       document.getElementById(div.id).classList.add("square-box-long-f");
 
       var div2 = document.createElement("div");
@@ -306,6 +378,7 @@ export default {
       span2.id = "span2_" + data + temp;
       div.appendChild(span2);
       document.getElementById(span2.id).classList.add("input-declare-f");
+
       document.getElementById(span2.id).contentEditable = "true";
       span2.setAttribute("role", "textbox");
       span2.innerHTML = text;
@@ -345,7 +418,7 @@ export default {
       div.id = data + temp;
       board.appendChild(div);
       document.getElementById(div.id).classList.add("square-box-long-f");
-      document.getElementById(div.id).style.background = "#B09CFF";
+      document.getElementById(div.id).style.background = "#6181F3";
 
       if (data == "assign_array") {
         var store = document.createElement("div");
@@ -398,26 +471,13 @@ export default {
         document.getElementById(div5.id).classList.add("text-declare-after-f");
       }
 
-      var drop2 = document.createElement("div");
-      drop2.id = "drop2_" + data + temp;
-      div.appendChild(drop2);
-      document.getElementById(drop2.id).classList.add("custom-select-f");
-
-      var select2 = document.createElement("select");
-      select2.id = "select2_" + data + temp;
-      for (const val of op_assign) {
-        var option2 = document.createElement("option");
-        option2.value = val;
-        option2.text = val;
-        select2.appendChild(option2);
-      }
-      document.getElementById(drop2.id).appendChild(select2);
-      document.getElementById(select2.id).classList.add("dropdown-f");
-
-      var tri2 = document.createElement("div");
-      tri2.id = "tri2_" + data + temp;
-      drop2.appendChild(tri2);
-      document.getElementById(tri2.id).classList.add("triangle-yellow");
+      var equal = document.createElement("div");
+      equal.id = "equal_" + data + temp;
+      div.appendChild(equal);
+      equal.innerHTML = "=";
+      document
+        .getElementById(equal.id)
+        .classList.add("square-round-box-short-f");
 
       if (data == "assign_int" || data == "assign_string") {
         var div2 = document.createElement("div");
@@ -517,7 +577,7 @@ export default {
       div.id = data + this.declareFunc;
       board.appendChild(div);
       document.getElementById(div.id).classList.add("square-box-long-f");
-      document.getElementById(div.id).style.background = "#6181f3";
+      document.getElementById(div.id).style.background = "#B09CFF";
       document.getElementById(div.id).style.borderRadius = "50px";
 
       var span = document.createElement("span");
@@ -536,7 +596,7 @@ export default {
       div.id = data + this.callFunc;
       board.appendChild(div);
       document.getElementById(div.id).classList.add("square-box-long-f");
-      document.getElementById(div.id).style.background = "#6181f3";
+      document.getElementById(div.id).style.background = "#B09CFF";
       document.getElementById(div.id).style.justifyContent = "space-between";
 
       var div2 = document.createElement("div");
@@ -559,6 +619,260 @@ export default {
       div3.id = "div3_" + this.callFunc;
       div.appendChild(div3);
       document.getElementById(div3.id).classList.add("square-box-short-f");
+    },
+    style_maxminFunction(board, data) {
+      var temp = 0;
+      var optionChoose = "";
+
+      if (data == "maxmin_function") {
+        this.maxminFunc += 1;
+        temp = this.maxminFunc;
+        optionChoose = op_maxmin;
+      } else if (data == "pushpop_function") {
+        this.pushpopFunc += 1;
+        temp = this.pushpopFunc;
+        optionChoose = op_pushpop;
+      } else {
+        this.queueFunc += 1;
+        temp = this.queueFunc;
+        optionChoose = op_queue;
+      }
+
+      var div = document.createElement("div");
+      div.id = data + temp;
+      board.appendChild(div);
+      document.getElementById(div.id).classList.add("square-box-long-f");
+      document.getElementById(div.id).style.background = "#B09CFF";
+
+      var drop = document.createElement("div");
+      drop.id = "drop_" + data + temp;
+      div.appendChild(drop);
+      document.getElementById(drop.id).classList.add("custom-select-f");
+
+      var select = document.createElement("select");
+      select.id = "select_" + data + temp;
+      for (const val of optionChoose) {
+        var option = document.createElement("option");
+        option.value = val;
+        option.text = val;
+        select.appendChild(option);
+      }
+      document.getElementById(drop.id).appendChild(select);
+      document.getElementById(select.id).classList.add("dropdown-round-f");
+
+      var tri = document.createElement("div");
+      tri.id = "tri_" + data + temp;
+      drop.appendChild(tri);
+      document.getElementById(tri.id).classList.add("triangle-purple");
+
+      var drop1 = document.createElement("div");
+      drop1.id = "drop1_" + data + temp;
+      div.appendChild(drop1);
+      document.getElementById(drop1.id).classList.add("custom-select-f");
+
+      var select1 = document.createElement("select");
+      select1.id = "select1_" + data + temp;
+      for (const val of this.variable) {
+        var option1 = document.createElement("option");
+        option1.value = val;
+        option1.text = val;
+        select1.appendChild(option1);
+      }
+      document.getElementById(drop1.id).appendChild(select1);
+      document.getElementById(select1.id).classList.add("dropdown-f");
+
+      var tri1 = document.createElement("div");
+      tri1.id = "tri1_" + data + temp;
+      drop1.appendChild(tri1);
+      document.getElementById(tri1.id).classList.add("triangle-purple");
+    },
+    style_sortFunction(board, data) {
+      var temp = 0;
+      var text = "";
+
+      if (data == "sort_function") {
+        this.sortFunc += 1;
+        temp = this.sortFunc;
+        text = "SORT";
+      } else if (data == "length_function") {
+        this.lengthFunc += 1;
+        temp = this.lengthFunc;
+        text = "LENGTH";
+      } else if (data == "floor_function") {
+        this.floorFunc += 1;
+        temp = this.floorFunc;
+        text = "FLOOR";
+      } else {
+        this.roundFunc += 1;
+        temp = this.roundFunc;
+        text = "ROUND";
+      }
+
+      var div = document.createElement("div");
+      div.id = data + temp;
+      board.appendChild(div);
+      document.getElementById(div.id).classList.add("square-box-long-f");
+      document.getElementById(div.id).style.background = "#B09CFF";
+
+      var div2 = document.createElement("div");
+      div2.id = "div2_" + data + temp;
+      div.appendChild(div2);
+      div2.innerHTML = text;
+      document.getElementById(div2.id).classList.add("text-f");
+
+      var drop1 = document.createElement("div");
+      drop1.id = "drop1_" + data + temp;
+      div.appendChild(drop1);
+      document.getElementById(drop1.id).classList.add("custom-select-f");
+
+      var select1 = document.createElement("select");
+      select1.id = "select1_" + data + temp;
+      for (const val of this.variable) {
+        var option1 = document.createElement("option");
+        option1.value = val;
+        option1.text = val;
+        select1.appendChild(option1);
+      }
+      document.getElementById(drop1.id).appendChild(select1);
+      document.getElementById(select1.id).classList.add("dropdown-f");
+
+      var tri1 = document.createElement("div");
+      tri1.id = "tri1_" + data + temp;
+      drop1.appendChild(tri1);
+      document.getElementById(tri1.id).classList.add("triangle-purple");
+    },
+    style_swapFunction(board, data) {
+      var temp = 0;
+      var text = "";
+      var text2 = "";
+
+      if (data == "swap_function") {
+        this.swapFunc += 1;
+        temp = this.swapFunc;
+        text = "SWAP";
+        text2 = "and";
+      } else {
+        this.squareRootFunc += 1;
+        temp = this.squareRootFunc;
+        text = "RANDOM from";
+        text2 = "to";
+      }
+      console.log(text2);
+
+      var div = document.createElement("div");
+      div.id = data + temp;
+      board.appendChild(div);
+      document.getElementById(div.id).classList.add("square-box-long-f");
+      document.getElementById(div.id).style.background = "#B09CFF";
+
+      var div2 = document.createElement("div");
+      div2.id = "div2_" + data + temp;
+      div.appendChild(div2);
+      div2.innerHTML = text;
+      document.getElementById(div2.id).classList.add("text-f");
+
+      if (data == "swap_function") {
+        var drop1 = document.createElement("div");
+        drop1.id = "drop1_" + data + temp;
+        div.appendChild(drop1);
+        document.getElementById(drop1.id).classList.add("custom-select-f");
+
+        var select1 = document.createElement("select");
+        select1.id = "select1_" + data + temp;
+        for (const val of this.variable) {
+          var option1 = document.createElement("option");
+          option1.value = val;
+          option1.text = val;
+          select1.appendChild(option1);
+        }
+        document.getElementById(drop1.id).appendChild(select1);
+        document.getElementById(select1.id).classList.add("dropdown-f");
+
+        var tri1 = document.createElement("div");
+        tri1.id = "tri1_" + data + temp;
+        drop1.appendChild(tri1);
+        document.getElementById(tri1.id).classList.add("triangle-purple");
+      } else {
+        var span = document.createElement("span");
+        span.id = "span_" + data + temp;
+        div.appendChild(span);
+        document.getElementById(span.id).classList.add("input-f");
+        document.getElementById(span.id).contentEditable = "true";
+        span.setAttribute("role", "textbox");
+        span.innerHTML = "0";
+      }
+
+      var div3 = document.createElement("div");
+      div3.id = "div3_" + data + temp;
+      div.appendChild(div3);
+      div3.innerHTML = text2;
+      document.getElementById(div3.id).classList.add("text-f");
+
+      if (data == "swap_function") {
+        var drop2 = document.createElement("div");
+        drop2.id = "drop2_" + data + temp;
+        div.appendChild(drop2);
+        document.getElementById(drop2.id).classList.add("custom-select-f");
+
+        var select2 = document.createElement("select");
+        select2.id = "select2_" + data + temp;
+        for (const val of this.variable) {
+          var option2 = document.createElement("option");
+          option2.value = val;
+          option2.text = val;
+          select2.appendChild(option2);
+        }
+        document.getElementById(drop2.id).appendChild(select2);
+        document.getElementById(select2.id).classList.add("dropdown-f");
+
+        var tri2 = document.createElement("div");
+        tri2.id = "tri2_" + data + temp;
+        drop2.appendChild(tri2);
+        document.getElementById(tri2.id).classList.add("triangle-purple");
+      } else {
+        var span1 = document.createElement("span");
+        span1.id = "span1_" + data + temp;
+        div.appendChild(span1);
+        document.getElementById(span1.id).classList.add("input-f");
+        document.getElementById(span1.id).contentEditable = "true";
+        span1.setAttribute("role", "textbox");
+        span1.innerHTML = "10";
+      }
+    },
+    style_squareRootFunction(board, data) {
+      this.squareRootFunc += 1;
+
+      var div = document.createElement("div");
+      div.id = data + this.squareRootFunc;
+      board.appendChild(div);
+      document.getElementById(div.id).classList.add("square-box-long-f");
+      document.getElementById(div.id).style.background = "#B09CFF";
+
+      var div2 = document.createElement("div");
+      div2.id = "div2_" + this.squareRootFunc;
+      div.appendChild(div2);
+      div2.innerHTML = "SQUARE ROOT";
+      document.getElementById(div2.id).classList.add("text-f");
+
+      var div4 = document.createElement("div");
+      div4.id = "div4_" + this.squareRootFunc;
+      div.appendChild(div4);
+      div4.innerHTML = "(";
+      document.getElementById(div4.id).classList.add("text-declare-before-f");
+
+      var span2 = document.createElement("span");
+      span2.id = "span2_" + this.squareRootFunc;
+      div.appendChild(span2);
+      document.getElementById(span2.id).classList.add("input-declare-f");
+      document.getElementById(span2.id).contentEditable = "true";
+      span2.setAttribute("role", "textbox");
+      span2.innerHTML = "";
+
+      var div3 = document.createElement("div");
+      div3.id = "div3_" + this.squareRootFunc;
+      div.appendChild(div3);
+      div3.innerHTML = ")";
+      document.getElementById(div3.id).classList.add("text-declare-after-f");
     },
 
     style_connector(board, data) {
@@ -627,6 +941,12 @@ export default {
   background-color: var(--white-gray);
 }
 
+.arrow-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .fa-undo-alt,
 .fa-redo-alt,
 .fa-compress,
@@ -656,8 +976,8 @@ export default {
 }
 
 .scrollarea {
-  overflow-x: scroll;
   overflow-y: scroll;
+  overflow-x: scroll;
 }
 /* width */
 ::-webkit-scrollbar {
