@@ -98,17 +98,15 @@ export default {
 
   methods: {
     style_arrow(board, object) {
-      var next = object.nextElementSibling;
-      console.log(next);
+      var nextElement = object.nextElementSibling;
 
       this.arrow += 1;
       var div = document.createElement("div");
       div.id = "arrowSet" + this.arrow;
-      if (next == null) {
-        console.log("55");
+      if (nextElement == null) {
         board.appendChild(div);
       } else {
-        board.insertBefore(div, next);
+        board.insertBefore(div, nextElement);
       }
 
       document.getElementById(div.id).classList.add("arrow-container-f");
@@ -125,6 +123,8 @@ export default {
       img.id = "arrow" + this.arrow;
       img.src = arrow;
       img.setAttribute("height", "30px");
+
+      div.appendChild(img);
     },
 
     drop(e) {
