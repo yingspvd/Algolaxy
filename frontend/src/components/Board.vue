@@ -146,26 +146,26 @@ export default {
         data == "declare_string" ||
         data == "declare_array"
       ) {
-        this.style_declare(board, data);
+        this.style_declare(board, data, arrow_target);
       }
       if (
         data == "assign_int" ||
         data == "assign_string" ||
         data == "assign_array"
       ) {
-        this.style_assign(board, data);
+        this.style_assign(board, data, arrow_target);
       }
       if (data == "condition") {
-        this.style_condition(board, data);
+        this.style_condition(board, data, arrow_target);
       }
       if (data == "declare_function") {
-        this.style_function(board, data);
+        this.style_function(board, data, arrow_target);
       }
       if (data == "call_function") {
-        this.style_callFunction(board, data);
+        this.style_callFunction(board, data, arrow_target);
       }
       if (data == "connector") {
-        this.style_connector(board, data);
+        this.style_connector(board, data, arrow_target);
       }
       if (
         data == "maxmin_function" ||
@@ -197,30 +197,6 @@ export default {
       // }
     },
 
-    addToArray(target, id) {
-      // console.log("target ", target);
-      // console.log("ID ", id);
-
-      var myArray = target.split(/([0-9]+)/);
-
-      var index = myArray[1] - 1;
-      // console.log("index", index);
-
-      this.allObject.splice(index, 0, id);
-      // console.log("ALL ARROW : ", this.allArrow);
-      // console.log("All : ", this.allObject);
-
-      this.arrow = 1;
-      var board = document.getElementById("board");
-      console.log("board", board);
-      for (var i = 0; i < this.allObject.length; i++) {
-        var divTarget = document.getElementById(this.allObject[i]);
-        board.appendChild(divTarget);
-        this.style_arrow(board);
-        console.log("board", i, "  ", board);
-      }
-    },
-
     style_terminator(board, data) {
       this.terminator += 1;
       var div = document.createElement("div");
@@ -235,14 +211,11 @@ export default {
       div2.innerHTML = data.toUpperCase();
     },
 
-    style_parallelogram(board, data, arrow_target) {
-      var arrow = document.getElementById(arrow_target);
-      var next = arrow.nextElementSibling;
-
-      console.log("ARROW : ", arrow);
-      console.log("next : ", next);
-
+    style_parallelogram(board, data, arrow) {
+      var arrow_target = document.getElementById(arrow);
+      var nextElement = arrow_target.nextElementSibling;
       var temp = 0;
+
       if (data == "read") {
         this.read += 1;
         temp = this.read;
@@ -253,10 +226,10 @@ export default {
 
       var div = document.createElement("div");
       div.id = data + temp;
-      if (next == null) {
+      if (nextElement == null) {
         board.appendChild(div);
       } else {
-        board.insertBefore(div, next);
+        board.insertBefore(div, nextElement);
       }
 
       document.getElementById(div.id).classList.add("parallelogram-f");
@@ -292,11 +265,18 @@ export default {
       this.style_arrow(board, div);
     },
 
-    style_display(board, data) {
+    style_display(board, data, arrow) {
+      var arrow_target = document.getElementById(arrow);
+      var nextElement = arrow_target.nextElementSibling;
+
       this.display += 1;
       var div = document.createElement("div");
       div.id = data + this.display;
-      board.appendChild(div);
+      if (nextElement == null) {
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, nextElement);
+      }
       document.getElementById(div.id).classList.add("display-f");
 
       var img = document.createElement("img");
@@ -312,9 +292,14 @@ export default {
       document.getElementById(span.id).contentEditable = "true";
       span.setAttribute("role", "textbox");
       span.innerHTML = "x";
+
+      this.style_arrow(board, div);
     },
 
-    style_declare(board, data) {
+    style_declare(board, data, arrow) {
+      var arrow_target = document.getElementById(arrow);
+      var nextElement = arrow_target.nextElementSibling;
+
       var temp = 0;
       var text = "";
       var bText = "";
@@ -339,7 +324,11 @@ export default {
 
       var div1 = document.createElement("div");
       div1.id = data + temp;
-      board.appendChild(div1);
+      if (nextElement == null) {
+        board.appendChild(div1);
+      } else {
+        board.insertBefore(div1, nextElement);
+      }
 
       var div = document.createElement("div");
       div.id = "div" + data + temp;
@@ -388,9 +377,14 @@ export default {
       div.appendChild(div5);
       div5.innerHTML = aText;
       document.getElementById(div5.id).classList.add("text-declare-after-f");
+
+      this.style_arrow(board, div1);
     },
 
-    style_assign(board, data) {
+    style_assign(board, data, arrow) {
+      var arrow_target = document.getElementById(arrow);
+      var nextElement = arrow_target.nextElementSibling;
+
       var temp = 0;
       var text = "";
       var bText = "";
@@ -416,7 +410,12 @@ export default {
 
       var div = document.createElement("div");
       div.id = data + temp;
-      board.appendChild(div);
+      if (nextElement == null) {
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, nextElement);
+      }
+
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#6181F3";
 
@@ -508,13 +507,22 @@ export default {
         span2.setAttribute("role", "textbox");
         span2.innerHTML = text;
       }
+
+      this.style_arrow(board, div);
     },
 
-    style_condition(board, data) {
+    style_condition(board, data, arrow) {
+      var arrow_target = document.getElementById(arrow);
+      var nextElement = arrow_target.nextElementSibling;
+
       this.condition += 1;
       var div = document.createElement("div");
       div.id = data + this.condition;
-      board.appendChild(div);
+      if (nextElement == null) {
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, nextElement);
+      }
       document.getElementById(div.id).classList.add("display-f");
 
       var img = document.createElement("img");
@@ -569,13 +577,22 @@ export default {
       document.getElementById(span.id).contentEditable = "true";
       span.setAttribute("role", "textbox");
       span.innerHTML = "text";
+
+      this.style_arrow(board, div);
     },
 
-    style_function(board, data) {
+    style_function(board, data, arrow) {
+      var arrow_target = document.getElementById(arrow);
+      var nextElement = arrow_target.nextElementSibling;
+
       this.declareFunc += 1;
       var div = document.createElement("div");
       div.id = data + this.declareFunc;
-      board.appendChild(div);
+      if (nextElement == null) {
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, nextElement);
+      }
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#B09CFF";
       document.getElementById(div.id).style.borderRadius = "50px";
@@ -587,14 +604,23 @@ export default {
       document.getElementById(span.id).contentEditable = "true";
       span.setAttribute("role", "textbox");
       span.innerHTML = "Function";
+
+      this.style_arrow(board, div);
     },
 
-    style_callFunction(board, data) {
+    style_callFunction(board, data, arrow) {
+      var arrow_target = document.getElementById(arrow);
+      var nextElement = arrow_target.nextElementSibling;
+
       this.callFunc += 1;
 
       var div = document.createElement("div");
       div.id = data + this.callFunc;
-      board.appendChild(div);
+      if (nextElement == null) {
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, nextElement);
+      }
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#B09CFF";
       document.getElementById(div.id).style.justifyContent = "space-between";
@@ -619,7 +645,10 @@ export default {
       div3.id = "div3_" + this.callFunc;
       div.appendChild(div3);
       document.getElementById(div3.id).classList.add("square-box-short-f");
+
+      this.style_arrow(board, div);
     },
+
     style_maxminFunction(board, data) {
       var temp = 0;
       var optionChoose = "";
@@ -875,11 +904,19 @@ export default {
       document.getElementById(div3.id).classList.add("text-declare-after-f");
     },
 
-    style_connector(board, data) {
+    style_connector(board, data, arrow) {
+      var arrow_target = document.getElementById(arrow);
+      var nextElement = arrow_target.nextElementSibling;
+
       var div = document.createElement("div");
       div.id = data + this.connector;
-      board.appendChild(div);
+      if (nextElement == null) {
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, nextElement);
+      }
       document.getElementById(div.id).classList.add("circle-f");
+      this.style_arrow(board, div);
     },
   },
 };
