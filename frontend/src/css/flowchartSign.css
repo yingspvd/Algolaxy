@@ -33,6 +33,7 @@
   margin-right: 5px;
 }
 
+
 .dropdown-round-f {
   border-radius: 60px;
   border-color: transparent transparent rgba(0, 0, 0, 0.1);
@@ -40,6 +41,11 @@
   appearance: none;
   padding: 0 20px 0 15px;
   position: relative;
+}
+
+.diamond-img-f{
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .dropdown-f {

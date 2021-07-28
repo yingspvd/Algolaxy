@@ -12,7 +12,9 @@
         </div>
 
         <select class="dropdown-function">
-          <option class="dropdown-item" v-for="(test, i) in test" :key="i">{{test}}</option>
+          <option class="dropdown-item" v-for="(test, i) in test" :key="i">{{
+            test
+          }}</option>
         </select>
 
         <div>
@@ -21,12 +23,13 @@
             <i class="fas fa-expand"></i>
           </a>
         </div>
- 
       </div>
 
       <div id="board" class="board scrollarea">
-        <div class="terminator-f" style="margin:10px 0 0 0">
-          <div class="text-f">START</div>
+        <div>
+          <div class="terminator-f" style="margin:10px 0 0 0">
+            <div class="text-f">START</div>
+          </div>
         </div>
 
         <div
@@ -60,7 +63,7 @@ const arrow = require("../assets/arrow.svg");
 
 // const op_calculate = ["+", "-", "*", "/", "%", "^"];
 // const op_assign = ["=", "++", "--"];
-// const op_compare = ["==", "<", ">","!="];
+const op_compare = ["==", "<", ">", "!="];
 // const op_connect = ["and","or","not"];
 const op_maxmin = ["Max", "Min"];
 const op_pushpop = ["Push", "Pop"];
@@ -104,6 +107,28 @@ export default {
   },
 
   methods: {
+    dragStart: (e) => {
+      console.log("Start ", e.target.id);
+      e.dataTransfer.setData("object_id", e.target.id);
+    },
+
+    drop(e) {
+      var data = e.dataTransfer.getData("object_id");
+      var object = document.getElementById(data);
+      var board = document.getElementById("board");
+      var arrow_target = e.target.id;
+
+      var myArray = data.split(/([0-9]+)/);
+
+      if (myArray.length == 1) {
+        this.choose_style(board, data, arrow_target);
+      } else {
+        e.target.appendChild(object);
+      }
+
+      console.log(data);
+    },
+
     style_arrow(board, object) {
       var nextElement = object.nextElementSibling;
 
@@ -134,14 +159,10 @@ export default {
       div.appendChild(img);
     },
 
-    drop(e) {
-      var data = e.dataTransfer.getData("object_id");
-      var board = document.getElementById("board");
-      var arrow_target = e.target.id;
-      this.choose_style(board, data, arrow_target);
-    },
-
     choose_style(board, data, arrow_target) {
+      if (data == "end" && this.terminator == 1) {
+        this.style_terminator(board, data, arrow_target);
+      }
       if (data == "read" || data == "print") {
         this.style_parallelogram(board, data, arrow_target);
       }
@@ -179,7 +200,7 @@ export default {
         data == "pushpop_function" ||
         data == "queue_function"
       ) {
-        this.style_maxminFunction(board, data);
+        this.style_maxminFunction(board, data, arrow_target);
       }
       if (
         data == "sort_function" ||
@@ -187,33 +208,36 @@ export default {
         data == "floor_function" ||
         data == "round_function"
       ) {
-        this.style_sortFunction(board, data);
+        this.style_sortFunction(board, data, arrow_target);
       }
       if (data == "swap_function" || data == "random_function") {
-        this.style_swapFunction(board, data);
+        this.style_swapFunction(board, data, arrow_target);
       }
       if (data == "squareroot_function") {
-        this.style_squareRootFunction(board, data);
+        this.style_squareRootFunction(board, data, arrow_target);
       }
-      // if (data != "" && data != "start" && data != "end") {
-      //   this.style_arrow(board);
-      // }
-      // if (data == "end" && this.terminator == 1) {
-      //   this.style_terminator(board, data);
-      //   this.style_arrow(board);
-      // }
     },
 
-    style_terminator(board, data) {
+    style_terminator(board, data, arrow) {
+      var arrow_target = document.getElementById(arrow);
+      var nextElement = arrow_target.nextElementSibling;
+
       this.terminator += 1;
       var div = document.createElement("div");
       div.id = "terminator" + this.terminator;
-      board.appendChild(div);
-      document.getElementById(div.id).classList.add("terminator-f");
+      if (nextElement == null) {
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, nextElement);
+      }
+      var div1 = document.createElement("div");
+      div1.id = "div1_" + this.terminator;
+      div.appendChild(div1);
+      document.getElementById(div1.id).classList.add("terminator-f");
 
       var div2 = document.createElement("div");
       div2.id = "text";
-      div.appendChild(div2);
+      div1.appendChild(div2);
       document.getElementById(div2.id).classList.add("text-f");
       div2.innerHTML = data.toUpperCase();
     },
@@ -238,8 +262,12 @@ export default {
       } else {
         board.insertBefore(div, nextElement);
       }
-
       document.getElementById(div.id).classList.add("parallelogram-f");
+      div.draggable = "true";
+      div.ondragstart = function(event) {
+        console.log("Start");
+        this.dragStart(event);
+      }.bind(this);
 
       var img = document.createElement("img");
       img.id = "img" + temp;
@@ -535,8 +563,9 @@ export default {
       var img = document.createElement("img");
       img.id = "img" + this.condition;
       img.src = conditionPic;
-      img.setAttribute("width", "200px");
+      img.setAttribute("width", "250px");
       div.appendChild(img);
+      document.getElementById(img.id).classList.add("diamond-img-f");
 
       var div2 = document.createElement("div");
       div2.id = "item" + this.condition;
@@ -566,16 +595,26 @@ export default {
       document.getElementById(tri1.id).classList.add("triangle-purple");
 
       // Dropdown
+      var drop2 = document.createElement("div");
+      drop2.id = "drop2_" + data + this.condition;
+      div2.appendChild(drop2);
+      document.getElementById(drop2.id).classList.add("custom-select-f");
+
       var select2 = document.createElement("select");
       select2.id = "select2_" + data + this.condition;
-      for (const val of this.variable) {
+      for (const val of op_compare) {
         var option2 = document.createElement("option");
         option2.value = val;
         option2.text = val;
         select2.appendChild(option2);
       }
-      document.getElementById(div2.id).appendChild(select2);
-      document.getElementById(select2.id).classList.add("dropdown-f");
+      document.getElementById(drop2.id).appendChild(select2);
+      document.getElementById(select2.id).classList.add("dropdown-round-f");
+
+      var tri2 = document.createElement("div");
+      tri2.id = "tri2_" + data + this.condition;
+      drop2.appendChild(tri2);
+      document.getElementById(tri2.id).classList.add("triangle-green");
 
       var span = document.createElement("span");
       span.id = "span_" + data + this.condition;
@@ -657,7 +696,10 @@ export default {
       this.style_arrow(board, div);
     },
 
-    style_maxminFunction(board, data) {
+    style_maxminFunction(board, data, arrow) {
+      var arrow_target = document.getElementById(arrow);
+      var nextElement = arrow_target.nextElementSibling;
+
       var temp = 0;
       var optionChoose = "";
 
@@ -677,7 +719,11 @@ export default {
 
       var div = document.createElement("div");
       div.id = data + temp;
-      board.appendChild(div);
+      if (nextElement == null) {
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, nextElement);
+      }
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#B09CFF";
 
@@ -722,8 +768,14 @@ export default {
       tri1.id = "tri1_" + data + temp;
       drop1.appendChild(tri1);
       document.getElementById(tri1.id).classList.add("triangle-purple");
+
+      this.style_arrow(board, div);
     },
-    style_sortFunction(board, data) {
+
+    style_sortFunction(board, data, arrow) {
+      var arrow_target = document.getElementById(arrow);
+      var nextElement = arrow_target.nextElementSibling;
+
       var temp = 0;
       var text = "";
 
@@ -747,7 +799,11 @@ export default {
 
       var div = document.createElement("div");
       div.id = data + temp;
-      board.appendChild(div);
+      if (nextElement == null) {
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, nextElement);
+      }
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#B09CFF";
 
@@ -777,8 +833,13 @@ export default {
       tri1.id = "tri1_" + data + temp;
       drop1.appendChild(tri1);
       document.getElementById(tri1.id).classList.add("triangle-purple");
+
+      this.style_arrow(board, div);
     },
-    style_swapFunction(board, data) {
+    style_swapFunction(board, data, arrow) {
+      var arrow_target = document.getElementById(arrow);
+      var nextElement = arrow_target.nextElementSibling;
+
       var temp = 0;
       var text = "";
       var text2 = "";
@@ -798,7 +859,11 @@ export default {
 
       var div = document.createElement("div");
       div.id = data + temp;
-      board.appendChild(div);
+      if (nextElement == null) {
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, nextElement);
+      }
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#B09CFF";
 
@@ -875,13 +940,23 @@ export default {
         span1.setAttribute("role", "textbox");
         span1.innerHTML = "10";
       }
+
+      this.style_arrow(board, div);
     },
-    style_squareRootFunction(board, data) {
+
+    style_squareRootFunction(board, data, arrow) {
+      var arrow_target = document.getElementById(arrow);
+      var nextElement = arrow_target.nextElementSibling;
+
       this.squareRootFunc += 1;
 
       var div = document.createElement("div");
       div.id = data + this.squareRootFunc;
-      board.appendChild(div);
+      if (nextElement == null) {
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, nextElement);
+      }
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#B09CFF";
 
@@ -910,20 +985,27 @@ export default {
       div.appendChild(div3);
       div3.innerHTML = ")";
       document.getElementById(div3.id).classList.add("text-declare-after-f");
+
+      this.style_arrow(board, div);
     },
 
     style_connector(board, data, arrow) {
       var arrow_target = document.getElementById(arrow);
       var nextElement = arrow_target.nextElementSibling;
 
+      this.connector += 1;
       var div = document.createElement("div");
-      div.id = data + this.connector;
+      div.id = "div_" + data + this.connector;
       if (nextElement == null) {
         board.appendChild(div);
       } else {
         board.insertBefore(div, nextElement);
       }
-      document.getElementById(div.id).classList.add("circle-f");
+
+      var div1 = document.createElement("div");
+      div1.id = "div1_" + data + this.connector;
+      div.appendChild(div1);
+      document.getElementById(div1.id).classList.add("circle-f");
       this.style_arrow(board, div);
     },
   },
@@ -984,6 +1066,7 @@ export default {
   height: 100%;
   border-radius: 10px;
   background-color: var(--white-gray);
+  padding-bottom: 50px;
 }
 
 .arrow-container {
