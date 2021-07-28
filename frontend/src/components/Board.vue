@@ -10,12 +10,18 @@
             <i class="fas fa-redo-alt"></i>
           </a>
         </div>
+
+        <select class="dropdown-function">
+          <option class="dropdown-item" v-for="(test, i) in test" :key="i">{{test}}</option>
+        </select>
+
         <div>
           <a style="cursor:pointer;">
             <i class="fas fa-compress"></i>
             <i class="fas fa-expand"></i>
           </a>
         </div>
+ 
       </div>
 
       <div id="board" class="board scrollarea">
@@ -68,6 +74,7 @@ export default {
       allObject: [],
       allArrow: [],
       variable: ["x", "y", "z"],
+      test: ["main", "function", "function"],
       function: ["function", "function", "function"],
       terminator: 1,
       read: 0,
@@ -623,6 +630,7 @@ export default {
       }
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#B09CFF";
+      document.getElementById(div.id).style.height = "35px";
       document.getElementById(div.id).style.justifyContent = "space-between";
 
       var div2 = document.createElement("div");
@@ -1010,6 +1018,22 @@ export default {
 }
 .fa-file-export:hover {
   color: green;
+}
+
+.dropdown-function {
+  background: var(--dark-blue-1);
+  border-radius: 10px;
+  border: 0px solid rgb(0 0 0 / 0%);
+  color: white;
+  outline: none;
+}
+.dropdown-item {
+  color: #ffffff;
+  font-weight: 500;
+}
+.dropdown-item:hover {
+  background: var(--pink);
+  border-radius: 5px;
 }
 
 .scrollarea {

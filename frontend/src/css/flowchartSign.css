@@ -135,11 +135,10 @@
   align-items: center;
   font-weight: 500;
   color: var(--dark-blue-2);
-  padding: 10px 10px;
+  padding: 5px 5px;
   margin: 0 10px;
   
 }
-
 
 .square-box-short-f {
   width: 3px;
