@@ -361,13 +361,10 @@
 
                 <div
                   class="dropdown-box"
-                  style="border-radius: 25px; width: 60px; height:30px;"
+                  style="border-radius: 25px; width: 60px; height:30px; justify-content: center"
                 >
-                  <div style="margin-right:15px">=</div>
-                  <div
-                    class="triangle-down"
-                    style=" border-top: 6px solid #E4AD6A; "
-                  ></div>
+                  =
+                 
                 </div>
               </div>
 
