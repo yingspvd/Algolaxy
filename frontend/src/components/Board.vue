@@ -56,7 +56,7 @@
 </template>
 
 <script>
-const parallelPic = require("../assets/sidebar/parallel.svg");
+// const parallelPic = require("../assets/sidebar/parallel.svg");
 const displayPic = require("../assets/sidebar/display-green.svg");
 const conditionPic = require("../assets/sidebar/condition.svg");
 const arrow = require("../assets/arrow.svg");
@@ -107,26 +107,60 @@ export default {
   },
 
   methods: {
-    dragStart: (e) => {
-      console.log("Start ", e.target.id);
+    dragStart: (e, arrow) => {
+      var id = e.target.id;
+      var data = id.split(/([0-9]+)/);
+
+      if (data[0] == "condition") {
+        var img = new Image();
+        img.src = conditionPic;
+        e.dataTransfer.setDragImage(img, 200, 100);
+      }
+      // if (data[0] == "read" || data[0] == "print") {
+      //   var imgPara = new Image();
+      //   imgPara.src = parallelPic;
+      //   imgPara.style.width = "10px";
+      //   e.dataTransfer.setDragImage(imgPara, 200, 50);
+      // }
+      console.log(data);
+
       e.dataTransfer.setData("object_id", e.target.id);
+      e.dataTransfer.setData("arrow", arrow);
     },
 
     drop(e) {
+      var board = document.getElementById("board");
+
+      // Object that placed
       var data = e.dataTransfer.getData("object_id");
       var object = document.getElementById(data);
-      var board = document.getElementById("board");
-      var arrow_target = e.target.id;
+      var data2 = e.dataTransfer.getData("arrow");
+      var arrow_object = document.getElementById(data2);
+      // var object_id = document.getElementById(data).parentElement.id;
 
+      // Arrow target
+      var arrow_id = e.target.id;
+      var arrow_target = document.getElementById(arrow_id);
+
+      // Object next from arrow target
+      var nextElement = arrow_target.nextElementSibling;
+      console.log("Element", nextElement);
       var myArray = data.split(/([0-9]+)/);
 
+      // Object from sidebar
       if (myArray.length == 1) {
-        this.choose_style(board, data, arrow_target);
+        this.choose_style(board, data, arrow_id);
       } else {
-        e.target.appendChild(object);
+        if (nextElement == null) {
+          board.appendChild(object);
+          board.appendChild(arrow_object);
+        } else {
+          console.log("object", object);
+          console.log("arrow_object", arrow_object);
+          board.insertBefore(object, nextElement);
+          board.insertBefore(arrow_object, nextElement);
+        }
       }
-
-      console.log(data);
     },
 
     style_arrow(board, object) {
@@ -265,15 +299,51 @@ export default {
       document.getElementById(div.id).classList.add("parallelogram-f");
       div.draggable = "true";
       div.ondragstart = function(event) {
-        console.log("Start");
-        this.dragStart(event);
+        var arrow_object = div.nextElementSibling.id;
+        this.dragStart(event, arrow_object);
       }.bind(this);
 
-      var img = document.createElement("img");
-      img.id = "img" + temp;
-      img.src = parallelPic;
-      img.setAttribute("width", "200px");
-      div.appendChild(img);
+      var div1 = document.createElement("div");
+      div1.id = "notSkew" + data + temp;
+      div.appendChild(div1);
+      document.getElementById(div1.id).classList.add("not-skew-f");
+
+      var div2 = document.createElement("div");
+      div2.id = "div2_" + data + temp;
+      div1.appendChild(div2);
+      div2.innerHTML = data[0].toUpperCase() + data.substring(1) + "   ";
+      document.getElementById(div2.id).classList.add("text-f");
+
+      // var label = document.createElement("label");
+      // label.id = "label" + data + temp;
+      // label.innerHTML = data[0].toUpperCase() + data.substring(1) + "   ";
+      // document.getElementById(div1.id).appendChild(label);
+
+      if (data == "print") {
+        var div4 = document.createElement("div");
+        div4.id = "div4_" + data + temp;
+        div1.appendChild(div4);
+        div4.innerHTML = "&#8220";
+        document.getElementById(div4.id).classList.add("text-declare-before-f");
+
+        var span1 = document.createElement("span");
+        span1.id = "span1_" + data + temp;
+        div1.appendChild(span1);
+        document.getElementById(span1.id).classList.add("input-declare-f");
+        document.getElementById(span1.id).contentEditable = "true";
+        span1.setAttribute("role", "textbox");
+        span1.innerHTML = "";
+
+        var div5 = document.createElement("div");
+        div5.id = "div5_" + data + temp;
+        div1.appendChild(div5);
+        div5.innerHTML = "&#8221";
+        document.getElementById(div5.id).classList.add("text-declare-after-f");
+      }
+      var drop1 = document.createElement("div");
+      drop1.id = "drop1_" + data + temp;
+      div1.appendChild(drop1);
+      document.getElementById(drop1.id).classList.add("custom-select-f");
 
       var select = document.createElement("select");
       select.id = "select" + data + temp;
@@ -284,18 +354,16 @@ export default {
         option.text = val;
         select.appendChild(option);
       }
-
-      var label = document.createElement("label");
-      label.id = "label" + data + temp;
-      label.innerHTML = data[0].toUpperCase() + data.substring(1) + "   ";
-
-      document
-        .getElementById(div.id)
-        .appendChild(label)
-        .appendChild(select);
-
+      document.getElementById(drop1.id).appendChild(select);
       document.getElementById(select.id).classList.add("dropdown-f");
-      document.getElementById(label.id).classList.add("label-dropdown-f");
+
+      var tri1 = document.createElement("div");
+      tri1.id = "tri1_" + data + temp;
+      drop1.appendChild(tri1);
+      document.getElementById(tri1.id).classList.add("triangle-purple");
+
+      // document.getElementById(select.id).classList.add("dropdown-f");
+      // document.getElementById(label.id).classList.add("label-dropdown-f");
 
       this.style_arrow(board, div);
     },
@@ -313,15 +381,20 @@ export default {
         board.insertBefore(div, nextElement);
       }
       document.getElementById(div.id).classList.add("display-f");
+      div.draggable = "true";
+      div.ondragstart = function(event) {
+        var arrow_object = div.nextElementSibling.id;
+        this.dragStart(event, arrow_object);
+      }.bind(this);
 
       var img = document.createElement("img");
-      img.id = "img" + this.display;
+      img.id = "img" + data + this.display;
       img.src = displayPic;
       img.setAttribute("width", "200px");
       div.appendChild(img);
 
       var span = document.createElement("span");
-      span.id = "span" + this.display;
+      span.id = "span" + data + this.display;
       div.appendChild(span);
       document.getElementById(span.id).classList.add("input-display-f");
       document.getElementById(span.id).contentEditable = "true";
@@ -343,8 +416,8 @@ export default {
         this.declare_int += 1;
         temp = this.declare_int;
         text = "0";
-        bText = "&nbsp";
-        aText = "&nbsp";
+        // bText = "&nbsp";
+        // aText = "&nbsp";
       } else if (data == "declare_string") {
         this.declare_string += 1;
         temp = this.declare_string;
@@ -357,18 +430,20 @@ export default {
         aText = "]";
       }
 
-      var div1 = document.createElement("div");
-      div1.id = data + temp;
-      if (nextElement == null) {
-        board.appendChild(div1);
-      } else {
-        board.insertBefore(div1, nextElement);
-      }
-
       var div = document.createElement("div");
-      div.id = "div" + data + temp;
-      div1.appendChild(div);
+      div.id = data + temp;
+      board.appendChild(div);
       document.getElementById(div.id).classList.add("square-box-long-f");
+      if (nextElement == null) {
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, nextElement);
+      }
+      div.draggable = "true";
+      div.ondragstart = function(event) {
+        var arrow_object = div.nextElementSibling.id;
+        this.dragStart(event, arrow_object);
+      }.bind(this);
 
       var div2 = document.createElement("div");
       div2.id = "div2_" + data + temp;
@@ -413,7 +488,7 @@ export default {
       div5.innerHTML = aText;
       document.getElementById(div5.id).classList.add("text-declare-after-f");
 
-      this.style_arrow(board, div1);
+      this.style_arrow(board, div);
     },
 
     style_assign(board, data, arrow) {
@@ -429,8 +504,8 @@ export default {
         this.assign_int += 1;
         temp = this.assign_int;
         text = "0";
-        bText = "&nbsp";
-        aText = "&nbsp";
+        // bText = "&nbsp";
+        // aText = "&nbsp";
       } else if (data == "assign_string") {
         this.assign_string += 1;
         temp = this.assign_string;
@@ -450,9 +525,13 @@ export default {
       } else {
         board.insertBefore(div, nextElement);
       }
-
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#6181F3";
+      div.draggable = "true";
+      div.ondragstart = function(event) {
+        var arrow_object = div.nextElementSibling.id;
+        this.dragStart(event, arrow_object);
+      }.bind(this);
 
       if (data == "assign_array") {
         var store = document.createElement("div");
@@ -559,6 +638,11 @@ export default {
         board.insertBefore(div, nextElement);
       }
       document.getElementById(div.id).classList.add("display-f");
+      div.draggable = "true";
+      div.ondragstart = function(event) {
+        var arrow_object = div.nextElementSibling.id;
+        this.dragStart(event, arrow_object);
+      }.bind(this);
 
       var img = document.createElement("img");
       img.id = "img" + this.condition;
@@ -642,6 +726,11 @@ export default {
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#B09CFF";
       document.getElementById(div.id).style.borderRadius = "50px";
+      div.draggable = "true";
+      div.ondragstart = function(event) {
+        var arrow_object = div.nextElementSibling.id;
+        this.dragStart(event, arrow_object);
+      }.bind(this);
 
       var span = document.createElement("span");
       span.id = "span_" + data + this.declareFunc;
@@ -671,6 +760,11 @@ export default {
       document.getElementById(div.id).style.background = "#B09CFF";
       document.getElementById(div.id).style.height = "35px";
       document.getElementById(div.id).style.justifyContent = "space-between";
+      div.draggable = "true";
+      div.ondragstart = function(event) {
+        var arrow_object = div.nextElementSibling.id;
+        this.dragStart(event, arrow_object);
+      }.bind(this);
 
       var div2 = document.createElement("div");
       div2.id = "div2_" + this.callFunc;
@@ -726,6 +820,11 @@ export default {
       }
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#B09CFF";
+      div.draggable = "true";
+      div.ondragstart = function(event) {
+        var arrow_object = div.nextElementSibling.id;
+        this.dragStart(event, arrow_object);
+      }.bind(this);
 
       var drop = document.createElement("div");
       drop.id = "drop_" + data + temp;
@@ -806,6 +905,11 @@ export default {
       }
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#B09CFF";
+      div.draggable = "true";
+      div.ondragstart = function(event) {
+        var arrow_object = div.nextElementSibling.id;
+        this.dragStart(event, arrow_object);
+      }.bind(this);
 
       var div2 = document.createElement("div");
       div2.id = "div2_" + data + temp;
@@ -855,7 +959,6 @@ export default {
         text = "RANDOM from";
         text2 = "to";
       }
-      console.log(text2);
 
       var div = document.createElement("div");
       div.id = data + temp;
@@ -866,6 +969,11 @@ export default {
       }
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#B09CFF";
+      div.draggable = "true";
+      div.ondragstart = function(event) {
+        var arrow_object = div.nextElementSibling.id;
+        this.dragStart(event, arrow_object);
+      }.bind(this);
 
       var div2 = document.createElement("div");
       div2.id = "div2_" + data + temp;
@@ -959,6 +1067,11 @@ export default {
       }
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#B09CFF";
+      div.draggable = "true";
+      div.ondragstart = function(event) {
+        var arrow_object = div.nextElementSibling.id;
+        this.dragStart(event, arrow_object);
+      }.bind(this);
 
       var div2 = document.createElement("div");
       div2.id = "div2_" + this.squareRootFunc;
