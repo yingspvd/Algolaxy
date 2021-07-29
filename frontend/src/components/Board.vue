@@ -56,13 +56,11 @@
 </template>
 
 <script>
-// const parallelPic = require("../assets/sidebar/parallel.svg");
 const displayPic = require("../assets/sidebar/display-green.svg");
 const conditionPic = require("../assets/sidebar/condition.svg");
 const arrow = require("../assets/arrow.svg");
 
 // const op_calculate = ["+", "-", "*", "/", "%", "^"];
-// const op_assign = ["=", "++", "--"];
 const op_compare = ["==", "<", ">", "!="];
 // const op_connect = ["and","or","not"];
 const op_maxmin = ["Max", "Min"];
@@ -74,8 +72,6 @@ export default {
   data() {
     return {
       arrow: 1,
-      allObject: [],
-      allArrow: [],
       variable: ["x", "y", "z"],
       test: ["main", "function", "function"],
       function: ["function", "function", "function"],
@@ -122,7 +118,6 @@ export default {
       //   imgPara.style.width = "10px";
       //   e.dataTransfer.setDragImage(imgPara, 200, 50);
       // }
-      console.log(data);
 
       e.dataTransfer.setData("object_id", e.target.id);
       e.dataTransfer.setData("arrow", arrow);
@@ -136,31 +131,39 @@ export default {
       var object = document.getElementById(data);
       var data2 = e.dataTransfer.getData("arrow");
       var arrow_object = document.getElementById(data2);
-      // var object_id = document.getElementById(data).parentElement.id;
 
       // Arrow target
       var arrow_id = e.target.id;
+      var arrow_split = arrow_id.split(/([0-9]+)/);
+      if (arrow_split[0] == "arrow") {
+        arrow_split[0] = "arrowSet";
+        arrow_id = arrow_split.join("");
+      }
       var arrow_target = document.getElementById(arrow_id);
 
       // Object next from arrow target
       var nextElement = arrow_target.nextElementSibling;
-      console.log("Element", nextElement);
       var myArray = data.split(/([0-9]+)/);
 
       // Object from sidebar
       if (myArray.length == 1) {
         this.choose_style(board, data, arrow_id);
-      } else {
+      }
+      // Swap Object
+      else {
         if (nextElement == null) {
           board.appendChild(object);
           board.appendChild(arrow_object);
-        } else {
-          console.log("object", object);
-          console.log("arrow_object", arrow_object);
+        } else if (object.id != nextElement.id) {
           board.insertBefore(object, nextElement);
           board.insertBefore(arrow_object, nextElement);
         }
       }
+    },
+
+    drop_var(e) {
+      var data = e.dataTransfer.getData("object_id");
+      console.log("var", data);
     },
 
     style_arrow(board, object) {
@@ -326,13 +329,14 @@ export default {
         div4.innerHTML = "&#8220";
         document.getElementById(div4.id).classList.add("text-declare-before-f");
 
-        var span1 = document.createElement("span");
+        var span1 = document.createElement("input");
         span1.id = "span1_" + data + temp;
         div1.appendChild(span1);
         document.getElementById(span1.id).classList.add("input-declare-f");
         document.getElementById(span1.id).contentEditable = "true";
-        span1.setAttribute("role", "textbox");
+        span1.type = "text";
         span1.innerHTML = "";
+        
 
         var div5 = document.createElement("div");
         div5.id = "div5_" + data + temp;
@@ -567,13 +571,14 @@ export default {
         div4.id = "div4_" + data + temp;
         div.appendChild(div4);
         div4.innerHTML = bText;
-        document.getElementById(div4.id).classList.add("text-declare-before-f");
+        document.getElementById(div4.id).classList.add("text-array-before-f");
 
-        var span1 = document.createElement("span");
+        var span1 = document.createElement("input");
         span1.id = "span1_" + data + temp;
         div.appendChild(span1);
-        document.getElementById(span1.id).classList.add("input-declare-f");
+        document.getElementById(span1.id).classList.add("input-array-f");
         document.getElementById(span1.id).contentEditable = "true";
+        span1.maxLength = "10";
         span1.setAttribute("role", "textbox");
         span1.innerHTML = text;
 
@@ -581,7 +586,7 @@ export default {
         div5.id = "div5_" + data + temp;
         div.appendChild(div5);
         div5.innerHTML = aText;
-        document.getElementById(div5.id).classList.add("text-declare-after-f");
+        document.getElementById(div5.id).classList.add("text-array-after-f");
       }
 
       var equal = document.createElement("div");
@@ -1121,6 +1126,10 @@ export default {
       document.getElementById(div1.id).classList.add("circle-f");
       this.style_arrow(board, div);
     },
+
+    style_textbox(){
+      console.log("textbox");
+    }
   },
 };
 </script>
