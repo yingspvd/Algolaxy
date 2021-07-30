@@ -19,7 +19,6 @@
   text-align: center;
   font-weight: 500;
   margin: 0 5px;
-  
 }
 
 .parallelogram-f {
@@ -38,7 +37,6 @@
   position: relative;
   margin-right: 5px;
 }
-
 
 .dropdown-round-f {
   border-radius: 60px;
@@ -60,7 +58,7 @@
   justify-content: space-evenly;
 }
 
-.diamond-img-f{
+.diamond-img-f {
   max-width: 100%;
   max-height: 100%;
 }
@@ -161,7 +159,6 @@
   color: var(--dark-blue-2);
   padding: 5px 5px;
   margin: 0 10px;
-  
 }
 
 .square-box-short-f {
@@ -213,7 +210,6 @@
   border: 0;
 }
 
-
 .text-declare-before-f {
   height: 100%;
   background-color: white;
@@ -237,7 +233,6 @@
   z-index: 2;
   outline: none !important;
   border-radius: 3px;
-  
 }
 .text-array-before-f {
   background-color: white;
@@ -292,7 +287,6 @@
   align-items: center;
   position: relative;
   border: solid 1px;
-  padding: .25em .5em;
+  padding: 0.25em 0.5em;
   margin: 5px;
-
 }
