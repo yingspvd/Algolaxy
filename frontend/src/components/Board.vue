@@ -34,7 +34,7 @@
 
         <div
           @dragover.prevent
-          @drop.prevent="drop"
+          @drop.prevent="dropObject"
           id="arrowSet1"
           class="arrow-container"
         >
@@ -123,7 +123,7 @@ export default {
       e.dataTransfer.setData("arrow", arrow);
     },
 
-    drop(e) {
+    dropObject(e) {
       var board = document.getElementById("board");
 
       // Object that placed
@@ -143,6 +143,8 @@ export default {
 
       // Object next from arrow target
       var nextElement = arrow_target.nextElementSibling;
+
+      // Split to check that come from sidebar
       var myArray = data.split(/([0-9]+)/);
 
       // Object from sidebar
@@ -185,7 +187,7 @@ export default {
       };
       div.ondrop = function(event) {
         event.preventDefault();
-        this.drop(event);
+        this.dropObject(event);
       }.bind(this);
 
       var img = document.createElement("img");
@@ -329,15 +331,18 @@ export default {
         div4.innerHTML = "&#8220";
         document.getElementById(div4.id).classList.add("text-declare-before-f");
 
-        var span1 = document.createElement("input");
+        var label = document.createElement("label");
+        label.id = "label_" + data + temp;
+        div1.appendChild(label);
+        document.getElementById(label.id).classList.add("input-sizer");
+
+        var span1 = document.createElement("textarea");
         span1.id = "span1_" + data + temp;
-        div1.appendChild(span1);
+        label.appendChild(span1);
         document.getElementById(span1.id).classList.add("input-declare-f");
         document.getElementById(span1.id).contentEditable = "true";
-        span1.type = "text";
         span1.innerHTML = "";
         
-
         var div5 = document.createElement("div");
         div5.id = "div5_" + data + temp;
         div1.appendChild(div5);
@@ -1127,8 +1132,12 @@ export default {
       this.style_arrow(board, div);
     },
 
-    style_textbox(){
+    style_textbox(divBig){
       console.log("textbox");
+      var div = document.createElement("div");
+      div.id = "inputText"  + this.connector;
+      divBig.appendChild(div);
+      document.getElementById(div.id).classList.add("circle-f");
     }
   },
 };
