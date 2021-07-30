@@ -25,7 +25,12 @@
         </div>
       </div>
 
-      <div id="board" class="board scrollarea">
+      <div
+        id="board"
+        @dragover.prevent
+        @drop.prevent="dropOnBoard"
+        class="board scrollarea"
+      >
         <div>
           <div class="terminator-f" style="margin:10px 0 0 0">
             <div class="text-f">START</div>
@@ -34,7 +39,7 @@
 
         <div
           @dragover.prevent
-          @drop.prevent="dropObject"
+          @drop.prevent="dropArrow"
           id="arrowSet1"
           class="arrow-container"
         >
@@ -43,7 +48,11 @@
       </div>
       <div class="side-toolbar-container">
         <div class="side-toolbar">
-          <a style="cursor:pointer;">
+          <a
+            @dragover.prevent
+            @drop.prevent="deleteObject"
+            style="cursor:pointer;"
+          >
             <i class="far fa-trash-alt"></i>
           </a>
           <a style="cursor:pointer; margin-top:15px">
@@ -56,6 +65,9 @@
 </template>
 
 <script>
+// import * as boardScript from "../js/board.js";
+// const boardScript = require("../js/board.js");
+
 const displayPic = require("../assets/sidebar/display-green.svg");
 const conditionPic = require("../assets/sidebar/condition.svg");
 const arrow = require("../assets/arrow.svg");
@@ -69,8 +81,11 @@ const op_queue = ["Enqueue", "dequeue"];
 
 export default {
   name: "board",
+
   data() {
     return {
+      // boardScript,
+      textarea: null,
       arrow: 1,
       variable: ["x", "y", "z"],
       test: ["main", "function", "function"],
@@ -103,6 +118,14 @@ export default {
   },
 
   methods: {
+    autosizeTextArea(textarea) {
+      var el = textarea;
+      setTimeout(function() {
+        el.style.cssText = "height:auto; padding:0";
+        el.style.cssText = "height:" + el.scrollHeight + "px";
+      }, 0);
+    },
+
     dragStart: (e, arrow) => {
       var id = e.target.id;
       var data = id.split(/([0-9]+)/);
@@ -123,7 +146,17 @@ export default {
       e.dataTransfer.setData("arrow", arrow);
     },
 
-    dropObject(e) {
+    dropOnBoard(e) {
+      var board = document.getElementById("board");
+      var data = e.dataTransfer.getData("object_id");
+      var lastChild = board.lastChild.id;
+
+      if (e.target.id == "board") {
+        this.choose_style(board, data, lastChild);
+      }
+    },
+
+    dropArrow(e) {
       var board = document.getElementById("board");
 
       // Object that placed
@@ -168,6 +201,10 @@ export default {
       console.log("var", data);
     },
 
+    deleteObject() {
+      console.log("delete");
+    },
+
     style_arrow(board, object) {
       var nextElement = object.nextElementSibling;
 
@@ -187,7 +224,7 @@ export default {
       };
       div.ondrop = function(event) {
         event.preventDefault();
-        this.dropObject(event);
+        this.dropArrow(event);
       }.bind(this);
 
       var img = document.createElement("img");
@@ -331,18 +368,26 @@ export default {
         div4.innerHTML = "&#8220";
         document.getElementById(div4.id).classList.add("text-declare-before-f");
 
-        var label = document.createElement("label");
-        label.id = "label_" + data + temp;
-        div1.appendChild(label);
-        document.getElementById(label.id).classList.add("input-sizer");
+        // var label = document.createElement("label");
+        // label.id = "label_" + data + temp;
+        // div1.appendChild(label);
+        // document.getElementById(label.id).classList.add("input-declare-f");
 
-        var span1 = document.createElement("textarea");
-        span1.id = "span1_" + data + temp;
-        label.appendChild(span1);
-        document.getElementById(span1.id).classList.add("input-declare-f");
-        document.getElementById(span1.id).contentEditable = "true";
-        span1.innerHTML = "";
-        
+        var div6 = document.createElement("div");
+        div6.id = "div6_" + data + temp;
+        div1.appendChild(div6);
+        // document.getElementById(div6.id).classList.add("grow-wrap");
+
+        var textarea = document.createElement("textarea");
+        textarea.id = "textarea_" + data + temp;
+        div1.appendChild(textarea);
+        document.getElementById(textarea.id).classList.add("textarea");
+        document.getElementById(textarea.id).contentEditable = "true";
+        textarea.innerHTML = "";
+        textarea.oninput = function(event) {
+          this.autosizeTextArea(event.target);
+        }.bind(this);
+
         var div5 = document.createElement("div");
         div5.id = "div5_" + data + temp;
         div1.appendChild(div5);
@@ -370,9 +415,6 @@ export default {
       tri1.id = "tri1_" + data + temp;
       drop1.appendChild(tri1);
       document.getElementById(tri1.id).classList.add("triangle-purple");
-
-      // document.getElementById(select.id).classList.add("dropdown-f");
-      // document.getElementById(label.id).classList.add("label-dropdown-f");
 
       this.style_arrow(board, div);
     },
@@ -513,8 +555,6 @@ export default {
         this.assign_int += 1;
         temp = this.assign_int;
         text = "0";
-        // bText = "&nbsp";
-        // aText = "&nbsp";
       } else if (data == "assign_string") {
         this.assign_string += 1;
         temp = this.assign_string;
@@ -536,11 +576,6 @@ export default {
       }
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#6181F3";
-      div.draggable = "true";
-      div.ondragstart = function(event) {
-        var arrow_object = div.nextElementSibling.id;
-        this.dragStart(event, arrow_object);
-      }.bind(this);
 
       if (data == "assign_array") {
         var store = document.createElement("div");
@@ -550,6 +585,7 @@ export default {
         document.getElementById(store.id).classList.add("text-f");
       }
 
+      // Dropdown1
       var drop1 = document.createElement("div");
       drop1.id = "drop1_" + data + temp;
       div.appendChild(drop1);
@@ -565,6 +601,10 @@ export default {
       }
       document.getElementById(drop1.id).appendChild(select);
       document.getElementById(select.id).classList.add("dropdown-f");
+      select.draggable = "true";
+      select.ondragstart = function(event) {
+        console.log(event.target.id);
+      }.bind(this);
 
       var tri1 = document.createElement("div");
       tri1.id = "tri1_" + data + temp;
@@ -594,6 +634,7 @@ export default {
         document.getElementById(div5.id).classList.add("text-array-after-f");
       }
 
+      // Equal Sign
       var equal = document.createElement("div");
       equal.id = "equal_" + data + temp;
       div.appendChild(equal);
@@ -602,6 +643,7 @@ export default {
         .getElementById(equal.id)
         .classList.add("square-round-box-short-f");
 
+      // InputBox
       if (data == "assign_int" || data == "assign_string") {
         var div2 = document.createElement("div");
         div2.id = "div2_" + data + temp;
@@ -1132,13 +1174,28 @@ export default {
       this.style_arrow(board, div);
     },
 
-    style_textbox(divBig){
-      console.log("textbox");
-      var div = document.createElement("div");
-      div.id = "inputText"  + this.connector;
-      divBig.appendChild(div);
-      document.getElementById(div.id).classList.add("circle-f");
-    }
+    style_textbox() {
+      // var div4 = document.createElement("div");
+      // div4.id = "div4_" + data + temp;
+      // div.appendChild(div4);
+      // var div4 = document.createElement("div");
+      // div4.id = "div4_" + data + temp;
+      // div.appendChild(div4);
+      // div4.innerHTML = bText;
+      // document.getElementById(div4.id).classList.add("text-declare-before-f");
+      // var span2 = document.createElement("span");
+      // span2.id = "span2_" + data + temp;
+      // div.appendChild(span2);
+      // document.getElementById(span2.id).classList.add("input-declare-f");
+      // document.getElementById(span2.id).contentEditable = "true";
+      // span2.setAttribute("role", "textbox");
+      // span2.innerHTML = text;
+      // var div5 = document.createElement("div");
+      // div5.id = "div5_" + data + temp;
+      // div.appendChild(div5);
+      // div5.innerHTML = aText;
+      // document.getElementById(div5.id).classList.add("text-declare-after-f");
+    },
   },
 };
 </script>
