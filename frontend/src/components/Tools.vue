@@ -295,12 +295,6 @@
           </div>
         </li>
 
-        <!-- <img
-          src="../assets/sidebar/ufo.svg"
-          height="20px"
-          style="margin-top:25px"
-        /> -->
-
         <li class="mb-1">
           <button
             class="btn btn-toggle align-items-center rounded collapsed"
@@ -315,13 +309,19 @@
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
               <div class="flowchart">
                 <div
+                  draggable="true"
+                  @dragstart="dragStart"
+                  @dragover.stop
                   class="square-textbox"
                   style="margin:10px 10px 0 10px; height:30px; width:60px"
                 >
                   " "
                 </div>
                 <div
-                  class="square-textbox"
+                  draggable="true"
+                  @dragstart="dragStart"
+                  @dragover.stop
+                  class="square-textbox unselectable"
                   style="justify-content:flex-end; margin:10px 0 0 10px; height:30px;  width:60px"
                 >
                   A
@@ -344,11 +344,17 @@
           </button>
           <div class="collapse show" id="operator-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <div class="sub-heading" style="color:white; margin-top:10px;">
+              <div
+                class="sub-heading unselectable"
+                style="color:white; margin-top:10px;"
+              >
                 Statement
               </div>
               <div class="flowchart">
                 <div
+                  draggable="true"
+                  @dragstart="dragStart"
+                  @dragover.stop
                   class="dropdown-box"
                   style="border-radius: 25px; width: 60px; height:30px; margin-right:20px;"
                 >
@@ -364,11 +370,13 @@
                   style="border-radius: 25px; width: 60px; height:30px; justify-content: center"
                 >
                   =
-                 
                 </div>
               </div>
 
-              <div class="sub-heading" style="color:white; margin-top:10px;">
+              <div
+                class="sub-heading unselectable"
+                style="color:white; margin-top:10px;"
+              >
                 Condition
               </div>
               <div class="flowchart">
@@ -410,11 +418,7 @@
           </button>
           <div class="collapse show" id="function-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <div               
-                draggable="true"
-                @dragstart="dragStart"
-                @dragover.stop                
-              >
+              <div draggable="true" @dragstart="dragStart" @dragover.stop>
                 <img
                   id="declare_function"
                   src="../assets/sidebar/functionText.svg"
@@ -651,14 +655,12 @@
                 <div
                   class="square-textbox"
                   style="justify-content:flex-end; width: 20px; "
-                >
-                </div>
+                ></div>
                 to
                 <div
                   class="square-textbox"
                   style="justify-content:flex-end; width: 20px; "
-                >
-                </div>
+                ></div>
               </div>
 
               <div
@@ -674,10 +676,9 @@
                   class="square-textbox"
                   style="justify-content:flex-end; width: 40px; padding-right: 8px; "
                 >
-                    ( )
+                  ( )
                 </div>
               </div>
-
             </ul>
           </div>
         </li>
@@ -731,6 +732,13 @@ body {
 
 html {
   height: -webkit-fill-available;
+}
+
+.unselectable {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 main {
