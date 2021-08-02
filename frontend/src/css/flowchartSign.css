@@ -283,14 +283,55 @@
 }
 
 .textarea {
-  /* box-sizing: padding-box; */
-  overflow: hidden;
-  resize: none;
+  box-sizing: padding-box;
+  overflow: auto;
+  /* resize: none; */
   width: 100px;
-  min-width: 30px;
+  min-height: 30px;
   height: 45px;
   display: block;
   border: 0px;
   outline: none;
   z-index: 2;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d9dadb;
+  width: 1px;
+  border-radius: 10px;
+}
+
+.triangle-left-f {
+  width: 0;
+  height: 100%;
+  border-top: 20px solid transparent;
+  border-right: 30px solid #89cd83;
+  border-bottom: 20px solid transparent;
+  margin-right: 160px;
+}
+
+.square-round-f {
+  width: 150px;
+  border-radius: 0 50px 50px 0;
+  background: #89cd83;
+  margin-top: -40px;
+  margin-left: 20px;
+  padding: 5px 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 30px;
+  height:100%;
+}
+
+.textbox-variable-f{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }

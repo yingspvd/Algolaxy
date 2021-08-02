@@ -65,10 +65,7 @@
 </template>
 
 <script>
-// import * as boardScript from "../js/board.js";
-// const boardScript = require("../js/board.js");
-
-const displayPic = require("../assets/sidebar/display-green.svg");
+// const displayPic = require("../assets/sidebar/display-green.svg");
 const conditionPic = require("../assets/sidebar/condition.svg");
 const arrow = require("../assets/arrow.svg");
 
@@ -84,8 +81,6 @@ export default {
 
   data() {
     return {
-      // boardScript,
-      textarea: null,
       arrow: 1,
       variable: ["x", "y", "z"],
       test: ["main", "function", "function"],
@@ -368,15 +363,9 @@ export default {
         div4.innerHTML = "&#8220";
         document.getElementById(div4.id).classList.add("text-declare-before-f");
 
-        // var label = document.createElement("label");
-        // label.id = "label_" + data + temp;
-        // div1.appendChild(label);
-        // document.getElementById(label.id).classList.add("input-declare-f");
-
         var div6 = document.createElement("div");
         div6.id = "div6_" + data + temp;
         div1.appendChild(div6);
-        // document.getElementById(div6.id).classList.add("grow-wrap");
 
         var textarea = document.createElement("textarea");
         textarea.id = "textarea_" + data + temp;
@@ -395,7 +384,8 @@ export default {
         document.getElementById(div5.id).classList.add("text-declare-after-f");
       }
       var drop1 = document.createElement("div");
-      drop1.id = "drop1_" + data + temp;
+      // drop1.id = "drop1_" + data + temp;
+      drop1.id = "draggable";
       div1.appendChild(drop1);
       document.getElementById(drop1.id).classList.add("custom-select-f");
 
@@ -438,19 +428,31 @@ export default {
         this.dragStart(event, arrow_object);
       }.bind(this);
 
-      var img = document.createElement("img");
-      img.id = "img" + data + this.display;
-      img.src = displayPic;
-      img.setAttribute("width", "200px");
-      div.appendChild(img);
+      // var img = document.createElement("img");
+      // img.id = "img" + data + this.display;
+      // img.src = displayPic;
+      // img.setAttribute("width", "200px");
+      // div.appendChild(img);
 
-      var span = document.createElement("span");
-      span.id = "span" + data + this.display;
-      div.appendChild(span);
-      document.getElementById(span.id).classList.add("input-display-f");
-      document.getElementById(span.id).contentEditable = "true";
-      span.setAttribute("role", "textbox");
-      span.innerHTML = "x";
+      var triLeft = document.createElement("div");
+      triLeft.id = "triLeft" + data + this.display;
+      div.appendChild(triLeft);
+      document.getElementById(triLeft.id).classList.add("triangle-left-f");
+
+      var square = document.createElement("div");
+      square.id = "square" + data + this.display;
+      div.appendChild(square);
+      document.getElementById(square.id).classList.add("square-round-f");
+
+      var textarea = document.createElement("textarea");
+      textarea.id = "textarea" + data + this.display;
+      square.appendChild(textarea);
+      document.getElementById(textarea.id).classList.add("textarea");
+      document.getElementById(textarea.id).contentEditable = "true";
+      textarea.innerHTML = "";
+      textarea.oninput = function(event) {
+        this.autosizeTextArea(event.target);
+      }.bind(this);
 
       this.style_arrow(board, div);
     },
@@ -467,8 +469,8 @@ export default {
         this.declare_int += 1;
         temp = this.declare_int;
         text = "0";
-        // bText = "&nbsp";
-        // aText = "&nbsp";
+        bText = "&nbsp";
+        aText = "&nbsp";
       } else if (data == "declare_string") {
         this.declare_string += 1;
         temp = this.declare_string;
@@ -502,13 +504,16 @@ export default {
       div2.innerHTML = "Set";
       document.getElementById(div2.id).classList.add("text-f");
 
-      var span = document.createElement("span");
-      span.id = "span_" + data + temp;
-      div.appendChild(span);
-      document.getElementById(span.id).classList.add("input-f");
-      document.getElementById(span.id).contentEditable = "true";
-      span.setAttribute("role", "textbox");
-      span.innerHTML = "x";
+      var textarea = document.createElement("textarea");
+      textarea.id = "textarea" + data + temp;
+      div.appendChild(textarea);
+      document.getElementById(textarea.id).classList.add("textarea");
+      document.getElementById(textarea.id).style.minHeight = "45px";
+      document.getElementById(textarea.id).contentEditable = "true";
+      textarea.innerHTML = "";
+      textarea.oninput = function(event) {
+        this.autosizeTextArea(event.target);
+      }.bind(this);
 
       if (data == "declare_int" || data == "declare_string") {
         var div3 = document.createElement("div");
@@ -518,24 +523,36 @@ export default {
         document.getElementById(div3.id).classList.add("text-f");
       }
 
+      var divTextarea = document.createElement("div");
+      divTextarea.id = "divTextarea_" + data + temp;
+      div.appendChild(divTextarea);
+      document
+        .getElementById(divTextarea.id)
+        .classList.add("textbox-variable-f");
+
       var div4 = document.createElement("div");
       div4.id = "div4_" + data + temp;
-      div.appendChild(div4);
+      divTextarea.appendChild(div4);
       div4.innerHTML = bText;
       document.getElementById(div4.id).classList.add("text-declare-before-f");
 
-      var span2 = document.createElement("span");
-      span2.id = "span2_" + data + temp;
-      div.appendChild(span2);
-      document.getElementById(span2.id).classList.add("input-declare-f");
-
-      document.getElementById(span2.id).contentEditable = "true";
-      span2.setAttribute("role", "textbox");
-      span2.innerHTML = text;
+      var textarea2 = document.createElement("textarea");
+      textarea2.id = "textarea2_" + data + temp;
+      divTextarea.appendChild(textarea2);
+      document.getElementById(textarea2.id).classList.add("textarea");
+      document.getElementById(textarea2.id).style.minHeight = "45px";
+      document.getElementById(textarea2.id).contentEditable = "true";
+      textarea2.innerHTML = text;
+      if (data == "declare_array") {
+        textarea2.maxLength = "10";
+      }
+      textarea2.oninput = function(event) {
+        this.autosizeTextArea(event.target);
+      }.bind(this);
 
       var div5 = document.createElement("div");
       div5.id = "div5_" + data + temp;
-      div.appendChild(div5);
+      divTextarea.appendChild(div5);
       div5.innerHTML = aText;
       document.getElementById(div5.id).classList.add("text-declare-after-f");
 
@@ -591,6 +608,10 @@ export default {
       div.appendChild(drop1);
       document.getElementById(drop1.id).classList.add("custom-select-f");
 
+      // drop1.ondragstart = function() {
+      //   console.log("5555");
+      // }.bind(this);
+
       var select = document.createElement("select");
       select.id = "select_" + data + temp;
       for (const val of this.variable) {
@@ -612,24 +633,34 @@ export default {
       document.getElementById(tri1.id).classList.add("triangle-purple");
 
       if (data == "assign_array") {
+        var divTextarea_array = document.createElement("div");
+        divTextarea_array.id = "divTextarea_array" + data + temp;
+        div.appendChild(divTextarea_array);
+        document
+          .getElementById(divTextarea_array.id)
+          .classList.add("textbox-variable-f");
+
         var div4 = document.createElement("div");
         div4.id = "div4_" + data + temp;
-        div.appendChild(div4);
+        divTextarea_array.appendChild(div4);
         div4.innerHTML = bText;
         document.getElementById(div4.id).classList.add("text-array-before-f");
 
-        var span1 = document.createElement("input");
-        span1.id = "span1_" + data + temp;
-        div.appendChild(span1);
-        document.getElementById(span1.id).classList.add("input-array-f");
-        document.getElementById(span1.id).contentEditable = "true";
-        span1.maxLength = "10";
-        span1.setAttribute("role", "textbox");
-        span1.innerHTML = text;
+        var textarea = document.createElement("textarea");
+        textarea.id = "textarea" + data + temp;
+        divTextarea_array.appendChild(textarea);
+        document.getElementById(textarea.id).classList.add("textarea");
+        document.getElementById(textarea.id).style.minHeight = "45px";
+        document.getElementById(textarea.id).contentEditable = "true";
+        textarea.maxLength = "10";
+        textarea.innerHTML = text;
+        textarea.oninput = function(event) {
+          this.autosizeTextArea(event.target);
+        }.bind(this);
 
         var div5 = document.createElement("div");
         div5.id = "div5_" + data + temp;
-        div.appendChild(div5);
+        divTextarea_array.appendChild(div5);
         div5.innerHTML = aText;
         document.getElementById(div5.id).classList.add("text-array-after-f");
       }

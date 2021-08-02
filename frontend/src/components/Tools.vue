@@ -923,23 +923,6 @@ main {
   align-items: center;
 }
 
-.triangle-left {
-  width: 0;
-  height: 0;
-  border-top: 20px solid transparent;
-  border-right: 40px solid #89cd83;
-  border-bottom: 20px solid transparent;
-  margin: 10px 0 10px 0;
-}
-
-.square-round {
-  width: 150px;
-  height: 40px;
-  border-radius: 0 50px 50px 0;
-  background: #89cd83;
-  margin: 10px 0 10px 0;
-}
-
 .place {
   height: 12px;
   letter-spacing: 0;

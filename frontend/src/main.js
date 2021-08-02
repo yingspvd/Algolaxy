@@ -8,7 +8,6 @@ import interact from "interactjs";
 Vue.config.productionTip = false;
 
 Vue.use(VueParticles);
-// Vue.use(interact);
 
 new Vue({
   router,
