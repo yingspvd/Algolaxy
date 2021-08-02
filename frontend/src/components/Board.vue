@@ -649,7 +649,7 @@ export default {
         var textarea = document.createElement("textarea");
         textarea.id = "textarea" + data + temp;
         divTextarea_array.appendChild(textarea);
-        document.getElementById(textarea.id).classList.add("textarea");
+        document.getElementById(textarea.id).classList.add("textarea-array");
         document.getElementById(textarea.id).style.minHeight = "45px";
         document.getElementById(textarea.id).contentEditable = "true";
         textarea.maxLength = "10";
@@ -682,13 +682,16 @@ export default {
         div2.innerHTML = bText;
         document.getElementById(div2.id).classList.add("text-declare-before-f");
 
-        var span = document.createElement("span");
-        span.id = "span_" + data + temp;
-        div.appendChild(span);
-        document.getElementById(span.id).classList.add("input-declare-f");
-        document.getElementById(span.id).contentEditable = "true";
-        span.setAttribute("role", "textbox");
-        span.innerHTML = text;
+        var textarea1 = document.createElement("textarea");
+        textarea1.id = "textarea1" + data + temp;
+        div.appendChild(textarea1);
+        document.getElementById(textarea1.id).classList.add("textarea");
+        document.getElementById(textarea1.id).style.minHeight = "45px";
+        document.getElementById(textarea1.id).contentEditable = "true";
+        textarea1.innerHTML = text;
+        textarea1.oninput = function(event) {
+          this.autosizeTextArea(event.target);
+        }.bind(this);
 
         var div3 = document.createElement("div");
         div3.id = "div3_" + data + temp;
@@ -696,13 +699,16 @@ export default {
         div3.innerHTML = aText;
         document.getElementById(div3.id).classList.add("text-declare-after-f");
       } else {
-        var span2 = document.createElement("span");
-        span2.id = "span2_" + data + temp;
-        div.appendChild(span2);
-        document.getElementById(span2.id).classList.add("input-f");
-        document.getElementById(span2.id).contentEditable = "true";
-        span2.setAttribute("role", "textbox");
-        span2.innerHTML = text;
+
+        var textarea2 = document.createElement("textarea");
+        textarea2.id = "textarea2" + data + temp;
+        div.appendChild(textarea2);
+        document.getElementById(textarea2.id).classList.add("textarea");
+        document.getElementById(textarea2.id).contentEditable = "true";
+        textarea2.innerHTML = text;
+        textarea2.oninput = function(event) {
+          this.autosizeTextArea(event.target);
+        }.bind(this);
       }
 
       this.style_arrow(board, div);
@@ -727,16 +733,22 @@ export default {
         this.dragStart(event, arrow_object);
       }.bind(this);
 
-      var img = document.createElement("img");
-      img.id = "img" + this.condition;
-      img.src = conditionPic;
-      img.setAttribute("width", "250px");
-      div.appendChild(img);
-      document.getElementById(img.id).classList.add("diamond-img-f");
+    
+      // var img = document.createElement("img");
+      // img.id = "img" + this.condition;
+      // img.src = conditionPic;
+      // img.setAttribute("width", "250px");
+      // div.appendChild(img);
+      // document.getElementById(img.id).classList.add("diamond-img-f");
+
+      var condition = document.createElement("div");
+      condition.id = "condition" + data + this.condition;
+      div.appendChild(condition);
+      document.getElementById(condition.id).classList.add("diamond-square-box");
 
       var div2 = document.createElement("div");
       div2.id = "item" + this.condition;
-      div.appendChild(div2);
+      condition.appendChild(div2);
       document.getElementById(div2.id).classList.add("diamond-item-f");
 
       // Dropdown
@@ -783,13 +795,15 @@ export default {
       drop2.appendChild(tri2);
       document.getElementById(tri2.id).classList.add("triangle-green");
 
-      var span = document.createElement("span");
-      span.id = "span_" + data + this.condition;
-      div2.appendChild(span);
-      document.getElementById(span.id).classList.add("input-f");
-      document.getElementById(span.id).contentEditable = "true";
-      span.setAttribute("role", "textbox");
-      span.innerHTML = "text";
+      var textarea = document.createElement("textarea");
+        textarea.id = "textarea" + data + this.condition;
+        div2.appendChild(textarea);
+        document.getElementById(textarea.id).classList.add("textarea");
+        document.getElementById(textarea.id).contentEditable = "true";
+        textarea.oninput = function(event) {
+          this.autosizeTextArea(event.target);
+        }.bind(this);
+
 
       this.style_arrow(board, div);
     },
@@ -815,7 +829,7 @@ export default {
         this.dragStart(event, arrow_object);
       }.bind(this);
 
-      var span = document.createElement("span");
+      var span = document.createElement("input");
       span.id = "span_" + data + this.declareFunc;
       div.appendChild(span);
       document.getElementById(span.id).classList.add("input-f");
@@ -1037,8 +1051,8 @@ export default {
         text = "SWAP";
         text2 = "and";
       } else {
-        this.squareRootFunc += 1;
-        temp = this.squareRootFunc;
+        this.randomFunc += 1;
+        temp = this.randomFunc;
         text = "RANDOM from";
         text2 = "to";
       }
@@ -1086,13 +1100,12 @@ export default {
         drop1.appendChild(tri1);
         document.getElementById(tri1.id).classList.add("triangle-purple");
       } else {
-        var span = document.createElement("span");
+        var span = document.createElement("input");
         span.id = "span_" + data + temp;
         div.appendChild(span);
         document.getElementById(span.id).classList.add("input-f");
         document.getElementById(span.id).contentEditable = "true";
-        span.setAttribute("role", "textbox");
-        span.innerHTML = "0";
+        
       }
 
       var div3 = document.createElement("div");
@@ -1123,13 +1136,11 @@ export default {
         drop2.appendChild(tri2);
         document.getElementById(tri2.id).classList.add("triangle-purple");
       } else {
-        var span1 = document.createElement("span");
+        var span1 = document.createElement("input");
         span1.id = "span1_" + data + temp;
         div.appendChild(span1);
         document.getElementById(span1.id).classList.add("input-f");
         document.getElementById(span1.id).contentEditable = "true";
-        span1.setAttribute("role", "textbox");
-        span1.innerHTML = "10";
       }
 
       this.style_arrow(board, div);
@@ -1168,13 +1179,15 @@ export default {
       div4.innerHTML = "(";
       document.getElementById(div4.id).classList.add("text-declare-before-f");
 
-      var span2 = document.createElement("span");
-      span2.id = "span2_" + this.squareRootFunc;
-      div.appendChild(span2);
-      document.getElementById(span2.id).classList.add("input-declare-f");
-      document.getElementById(span2.id).contentEditable = "true";
-      span2.setAttribute("role", "textbox");
-      span2.innerHTML = "";
+      var textarea = document.createElement("textarea");
+      textarea.id = "textarea_" + this.squareRootFunc;
+      div.appendChild(textarea);
+      document.getElementById(textarea.id).classList.add("textarea");
+      document.getElementById(textarea.id).contentEditable = "true";
+      textarea.innerHTML = "";
+      textarea.oninput = function(event) {
+        this.autosizeTextArea(event.target);
+      }.bind(this);
 
       var div3 = document.createElement("div");
       div3.id = "div3_" + this.squareRootFunc;
