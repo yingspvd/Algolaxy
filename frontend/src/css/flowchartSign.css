@@ -48,12 +48,31 @@
   /* outline: none; */
 }
 
+.diamond-box {
+  height: 100%;
+  aspect-ratio: auto 1 / 1;
+}
+
+.diamond-box:before {
+  content: "";
+  float: left;
+  padding-top: 100%;
+}
+
+.diamond-item-f {
+  display: flex;
+  align-items: center;
+  margin: 10px 10px;
+  transform: rotateX(0deg) rotateZ(-45deg) rotateY(45deg);
+}
+
 .diamond-square-box {
-  width: 180px;
-  height: 180px;
+  width: 100%;
+  height: 100%;
   background-color: #ff9fc2;
   transform: rotateX(45deg) rotateZ(45deg);
   display: flex;
+  align-items: center;
   justify-content: space-evenly;
 }
 
@@ -259,13 +278,6 @@
   outline: none;
 }
 
-.diamond-item-f {
-  display: flex;
-  align-items: center;
-  /* position: absolute; */
-  transform: rotateX(0deg) rotateZ(-45deg);
-}
-
 .circle-f {
   width: 40px;
   height: 40px;
@@ -289,8 +301,8 @@
   overflow: auto;
   /* resize: none; */
   width: 100px;
-  min-height: 30px;
-  height: 45px;
+  /* min-height: 30px; */
+  height: 100%;
   display: block;
   border: 0px;
   outline: none;
@@ -345,7 +357,5 @@
 
 .textbox-variable-f {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
   align-items: center;
 }

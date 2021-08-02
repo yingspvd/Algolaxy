@@ -740,10 +740,14 @@ export default {
       // img.setAttribute("width", "250px");
       // div.appendChild(img);
       // document.getElementById(img.id).classList.add("diamond-img-f");
+      var diamondDiv = document.createElement("div");
+      diamondDiv.id = "diamondDiv" + data + this.condition;
+      div.appendChild(diamondDiv);
+      document.getElementById(diamondDiv.id).classList.add("diamond-box");
 
       var condition = document.createElement("div");
       condition.id = "condition" + data + this.condition;
-      div.appendChild(condition);
+      diamondDiv.appendChild(condition);
       document.getElementById(condition.id).classList.add("diamond-square-box");
 
       var div2 = document.createElement("div");
