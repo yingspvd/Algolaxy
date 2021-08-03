@@ -21,6 +21,7 @@
           <a style="cursor:pointer;">
             <i class="fas fa-compress"></i>
             <i class="fas fa-expand"></i>
+            <i class="fas fa-arrows-alt"></i>
           </a>
         </div>
       </div>
@@ -46,6 +47,7 @@
           <img src="../assets/arrow.svg" height="30px" />
         </div>
       </div>
+
       <div class="side-toolbar-container">
         <div class="side-toolbar">
           <a
@@ -60,6 +62,9 @@
           </a>
         </div>
       </div>
+
+      <!-- <div style="width:100%; height:100% "></div> -->
+
     </div>
   </div>
 </template>
@@ -702,7 +707,7 @@ export default {
         document.getElementById(textarea1.id).classList.add("textarea");
         document.getElementById(textarea1.id).style.minHeight = "45px";
         document.getElementById(textarea1.id).contentEditable = "true";
-        textarea1.innerHTML = text;
+        textarea1.placeholder = text;
         textarea1.oninput = function(event) {
           this.autosizeTextArea(event.target);
         }.bind(this);
@@ -718,7 +723,7 @@ export default {
         div.appendChild(textarea2);
         document.getElementById(textarea2.id).classList.add("textarea");
         document.getElementById(textarea2.id).contentEditable = "true";
-        textarea2.innerHTML = text;
+        textarea2.placeholder = text;
         textarea2.oninput = function(event) {
           this.autosizeTextArea(event.target);
         }.bind(this);
@@ -757,14 +762,19 @@ export default {
       div.appendChild(diamondDiv);
       document.getElementById(diamondDiv.id).classList.add("diamond-box");
 
+      var diamondAll = document.createElement("div");
+      diamondAll.id = "diamondAll" + data + this.condition;
+      diamondDiv.appendChild(diamondAll);
+      document.getElementById(diamondAll.id).classList.add("diamond-all");
+
       var condition = document.createElement("div");
       condition.id = "condition" + data + this.condition;
-      diamondDiv.appendChild(condition);
+      diamondAll.appendChild(condition);
       document.getElementById(condition.id).classList.add("diamond-square-box");
 
       var div2 = document.createElement("div");
       div2.id = "item" + this.condition;
-      condition.appendChild(div2);
+      diamondAll.appendChild(div2);
       document.getElementById(div2.id).classList.add("diamond-item-f");
 
       // Dropdown
@@ -844,13 +854,12 @@ export default {
         this.dragStart(event, arrow_object);
       }.bind(this);
 
-      var span = document.createElement("input");
+      var span = document.createElement("textarea");
       span.id = "span_" + data + this.declareFunc;
       div.appendChild(span);
-      document.getElementById(span.id).classList.add("input-f");
+      document.getElementById(span.id).classList.add("textarea");
       document.getElementById(span.id).contentEditable = "true";
-      span.setAttribute("role", "textbox");
-      span.innerHTML = "Function";
+      span.placeholder = "Function";
 
       this.style_arrow(board, div);
     },
@@ -1269,7 +1278,7 @@ html {
   display: flex;
   flex-direction: column;
   width: 550px;
-  height: 700px;
+  height: 650px;
   /* margin-left: 65px; */
   border-radius: 5px;
   background-color: var(--white-gray);
@@ -1328,7 +1337,8 @@ html {
 .fa-undo-alt,
 .fa-redo-alt,
 .fa-compress,
-.fa-expand {
+.fa-expand,
+.fa-arrows-alt {
   color: #ffffff;
   width: 20px;
   margin: 0 0 0 10px;
@@ -1336,7 +1346,8 @@ html {
 .fa-undo-alt:hover,
 .fa-redo-alt:hover,
 .fa-compress:hover,
-.fa-expand:hover {
+.fa-expand:hover,
+.fa-arrows-alt:hover {
   color: var(--gray);
 }
 
@@ -1392,46 +1403,67 @@ html {
   line-height: 1.25;
 }
 
-@media screen and (max-width: 1439px) {
+@media screen and (max-width: 1500px) {
   #container {
     display: flex;
     flex-direction: column;
     width: 500px;
-    height: 650px;
-    /* margin-left: 65px; */
+    height: 625px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
 }
-@media screen and (max-width: 1315px) {
+
+@media screen and (max-width: 1440px) {
   #container {
     display: flex;
     flex-direction: column;
     width: 450px;
-    height: 650px;
-    /* margin-left: 65px; */
+    height: 600px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
 }
-@media screen and (max-width: 1280px) {
-  #container {
-    display: flex;
-    flex-direction: column;
-    width: 425px;
-    height: 650px;
-    /* margin-left: 65px; */
-    border-radius: 5px;
-    background-color: var(--white-gray);
-  }
-}
-@media screen and (max-width: 1210px) {
+
+@media screen and (max-width: 1320px) {
   #container {
     display: flex;
     flex-direction: column;
     width: 400px;
-    height: 650px;
-    /* margin-left: 65px; */
+    height: 575px;
+    border-radius: 5px;
+    background-color: var(--white-gray);
+  }
+}
+
+@media screen and (max-width: 1220px) {
+  #container {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    height: 550px;
+    border-radius: 5px;
+    background-color: var(--white-gray);
+  }
+}
+
+@media screen and (max-width: 1120px) {
+  #container {
+    display: flex;
+    flex-direction: column;
+    width: 325px;
+    height: 550px;
+    border-radius: 5px;
+    background-color: var(--white-gray);
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  #container {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: 550px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
