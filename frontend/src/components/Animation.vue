@@ -65,7 +65,7 @@ export default {};
 <style scoped>
 #container {
   width: 500px;
-  height: 700px;
+  height: 650px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -111,50 +111,73 @@ export default {};
   margin-right: 60px;
 }
 
-@media screen and (max-width: 1439px) {
+@media screen and (max-width: 1500px) {
   #container {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 450px;
-    height: 650px;
-    /* margin-left: 65px; */
+    height: 625px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
 }
-@media screen and (max-width: 1310px) {
-  #container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 425px;
-    height: 650px;
-    /* margin-left: 65px; */
-    border-radius: 5px;
-    background-color: var(--white-gray);
-  }
-}
-@media screen and (max-width: 1280px) {
+
+@media screen and (max-width: 1440px) {
   #container {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 400px;
-    height: 650px;
-    /* margin-left: 65px; */
+    height: 600px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
 }
-@media screen and (max-width: 1210px) {
+
+@media screen and (max-width: 1320px) {
   #container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 375px;
-    height: 650px;
-    /* margin-left: 65px; */
+    width: 350px;
+    height: 575px;
+    border-radius: 5px;
+    background-color: var(--white-gray);
+  }
+}
+
+@media screen and (max-width: 1220px) {
+  #container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    height: 550px;
+    border-radius: 5px;
+    background-color: var(--white-gray);
+  }
+}
+
+@media screen and (max-width: 1120px) {
+  #container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 275px;
+    height: 550px;
+    border-radius: 5px;
+    background-color: var(--white-gray);
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  #container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 275px;
+    height: 550px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
