@@ -254,20 +254,7 @@
   outline: none !important;
   border-radius: 3px;
 }
-.text-array-before-f {
-  background-color: white;
-  padding: 0 10px 0 5px;
-  margin: 0 -10px 0 5px;
-  border-radius: 3px 0 0 3px;
-  z-index: 1;
-}
-.text-array-after-f {
-  background-color: white;
-  padding: 0 5px 0 10px;
-  margin: 0 5px 0 -10px;
-  border-radius: 0 3px 3px 0;
-  z-index: 1;
-}
+
 
 .input-display-f {
   background-color: white;
@@ -302,15 +289,17 @@
   /* resize: none; */
   width: 100px;
   /* min-height: 30px; */
-  height: 100%;
+  min-height: 26px;
   display: block;
   border: 0px;
   outline: none;
   z-index: 2;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
 }
 
 .textarea-array {
-  box-sizing: padding-box;
   overflow: auto;
   /* resize: none; */
   width: 50px;
@@ -323,7 +312,7 @@
 }
 /* width */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -357,5 +346,8 @@
 
 .textbox-variable-f {
   display: flex;
-  align-items: center;
+  align-items: top;
+  margin: 0 5px;
+  background-color: white;
+  border-radius: 3px;
 }

@@ -1,5 +1,4 @@
 <template>
-<!-- pungjung -->
   <div id="container" style="box-shadow: 0px 5px 10px #91A0A5;">
     <div class="tool-container">
       <div class="top-toolbar">
@@ -119,6 +118,7 @@ export default {
       setTimeout(function() {
         el.style.cssText = "height:auto; padding:0";
         el.style.cssText = "height:" + el.scrollHeight + "px";
+        console.log(textarea.clientHeight);
       }, 0);
     },
 
@@ -385,8 +385,7 @@ export default {
         document.getElementById(div5.id).classList.add("text-declare-after-f");
       }
       var drop1 = document.createElement("div");
-      // drop1.id = "drop1_" + data + temp;
-      drop1.id = "draggable";
+      drop1.id = "drop1_" + data + temp;
       div1.appendChild(drop1);
       document.getElementById(drop1.id).classList.add("custom-select-f");
 
@@ -512,8 +511,16 @@ export default {
       document.getElementById(textarea.id).style.minHeight = "45px";
       document.getElementById(textarea.id).contentEditable = "true";
       textarea.innerHTML = "";
-      textarea.oninput = function(event) {
-        this.autosizeTextArea(event.target);
+      textarea.draggable = true;
+      this.autosizeTextArea(textarea);
+      textarea.oninput = function(e) {
+        e.stopPropagation();
+        this.autosizeTextArea(e.target);
+      }.bind(this);
+
+      textarea.ondrag = function(e) {
+        e.stopPropagation();
+        console.log("555");
       }.bind(this);
 
       if (data == "declare_int" || data == "declare_string") {
@@ -543,9 +550,9 @@ export default {
       document.getElementById(textarea2.id).classList.add("textarea");
       document.getElementById(textarea2.id).style.minHeight = "45px";
       document.getElementById(textarea2.id).contentEditable = "true";
-      textarea2.innerHTML = text;
+      textarea2.placeholder = text;
       if (data == "declare_array") {
-        textarea2.maxLength = "10";
+        textarea2.maxLength = "9";
       }
       textarea2.oninput = function(event) {
         this.autosizeTextArea(event.target);
@@ -594,6 +601,11 @@ export default {
       }
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#6181F3";
+      // div.draggable = "true";
+      // div.ondragstart = function(event) {
+      //   var arrow_object = div.nextElementSibling.id;
+      //   this.dragStart(event, arrow_object);
+      // }.bind(this);
 
       if (data == "assign_array") {
         var store = document.createElement("div");
@@ -608,10 +620,11 @@ export default {
       drop1.id = "drop1_" + data + temp;
       div.appendChild(drop1);
       document.getElementById(drop1.id).classList.add("custom-select-f");
-
-      // drop1.ondragstart = function() {
-      //   console.log("5555");
-      // }.bind(this);
+      drop1.draggable = true;
+      drop1.onmousedown = function() {
+        console.log("drag");
+        // select.disabled = true;
+      }.bind(this);
 
       var select = document.createElement("select");
       select.id = "select_" + data + temp;
@@ -623,9 +636,9 @@ export default {
       }
       document.getElementById(drop1.id).appendChild(select);
       document.getElementById(select.id).classList.add("dropdown-f");
-      select.draggable = "true";
-      select.ondragstart = function(event) {
-        console.log(event.target.id);
+      select.onmousedown = function(e) {
+        console.log("DOWN");
+        e.stopPropagation();
       }.bind(this);
 
       var tri1 = document.createElement("div");
@@ -645,7 +658,7 @@ export default {
         div4.id = "div4_" + data + temp;
         divTextarea_array.appendChild(div4);
         div4.innerHTML = bText;
-        document.getElementById(div4.id).classList.add("text-array-before-f");
+        document.getElementById(div4.id).classList.add("text-declare-before-f");
 
         var textarea = document.createElement("textarea");
         textarea.id = "textarea" + data + temp;
@@ -653,8 +666,8 @@ export default {
         document.getElementById(textarea.id).classList.add("textarea-array");
         document.getElementById(textarea.id).style.minHeight = "45px";
         document.getElementById(textarea.id).contentEditable = "true";
-        textarea.maxLength = "10";
-        textarea.innerHTML = text;
+        textarea.maxLength = "9";
+        textarea.placeholder = text;
         textarea.oninput = function(event) {
           this.autosizeTextArea(event.target);
         }.bind(this);
@@ -663,7 +676,7 @@ export default {
         div5.id = "div5_" + data + temp;
         divTextarea_array.appendChild(div5);
         div5.innerHTML = aText;
-        document.getElementById(div5.id).classList.add("text-array-after-f");
+        document.getElementById(div5.id).classList.add("text-declare-after-f");
       }
 
       // Equal Sign
@@ -700,7 +713,6 @@ export default {
         div3.innerHTML = aText;
         document.getElementById(div3.id).classList.add("text-declare-after-f");
       } else {
-
         var textarea2 = document.createElement("textarea");
         textarea2.id = "textarea2" + data + temp;
         div.appendChild(textarea2);
@@ -734,7 +746,6 @@ export default {
         this.dragStart(event, arrow_object);
       }.bind(this);
 
-    
       // var img = document.createElement("img");
       // img.id = "img" + this.condition;
       // img.src = conditionPic;
@@ -801,14 +812,13 @@ export default {
       document.getElementById(tri2.id).classList.add("triangle-green");
 
       var textarea = document.createElement("textarea");
-        textarea.id = "textarea" + data + this.condition;
-        div2.appendChild(textarea);
-        document.getElementById(textarea.id).classList.add("textarea");
-        document.getElementById(textarea.id).contentEditable = "true";
-        textarea.oninput = function(event) {
-          this.autosizeTextArea(event.target);
-        }.bind(this);
-
+      textarea.id = "textarea" + data + this.condition;
+      div2.appendChild(textarea);
+      document.getElementById(textarea.id).classList.add("textarea");
+      document.getElementById(textarea.id).contentEditable = "true";
+      textarea.oninput = function(event) {
+        this.autosizeTextArea(event.target);
+      }.bind(this);
 
       this.style_arrow(board, div);
     },
@@ -1110,7 +1120,6 @@ export default {
         div.appendChild(span);
         document.getElementById(span.id).classList.add("input-f");
         document.getElementById(span.id).contentEditable = "true";
-        
       }
 
       var div3 = document.createElement("div");
@@ -1251,6 +1260,10 @@ export default {
 
 <style scoped>
 @import "../css/flowchartSign.css";
+
+html {
+  height: 100%;
+}
 
 #container {
   display: flex;

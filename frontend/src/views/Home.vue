@@ -75,7 +75,6 @@ export default {
 <style>
 body {
   overflow: hidden;
-  
 }
 
 html,
