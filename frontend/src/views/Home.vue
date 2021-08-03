@@ -31,6 +31,8 @@
       <Board />
       <Animation />
     </div>
+
+    <Top/>
   </div>
 </template>
 
@@ -39,6 +41,7 @@ import Navbar from "../components/Navbar.vue";
 import Tools from "../components/Tools.vue";
 import Board from "../components/Board.vue";
 import Animation from "../components/Animation.vue";
+import Top from "../components/Backgroud-top.vue";
 
 export default {
   name: "Home",
@@ -47,6 +50,7 @@ export default {
     Tools,
     Board,
     Animation,
+    Top,
   },
   data() {
     return {
