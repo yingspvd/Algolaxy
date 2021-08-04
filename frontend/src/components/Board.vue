@@ -21,7 +21,6 @@
           <a style="cursor:pointer;">
             <i class="fas fa-compress"></i>
             <i class="fas fa-expand"></i>
-            <i @click="$emit('popUpMove', true)" class="fas fa-arrows-alt"></i>
           </a>
         </div>
       </div>
@@ -32,6 +31,9 @@
         @drop.prevent="dropOnBoard"
         class="board scrollarea"
       >
+        <div v-if="popUpMove == false" class="move-element">
+          <i @click="clickMove" class="fas fa-arrows-alt"></i>
+        </div>
         <div>
           <div class="terminator-f" style="margin:10px 0 0 0">
             <div class="text-f">START</div>
@@ -48,7 +50,11 @@
         </div>
       </div>
 
-      <div id="popup" class="popup"></div>
+      <div v-if="popUpMove" id="popup" class="popup">
+        <div class="popup-cross">
+          <i @click="clickMove" class="far fa-times-circle"></i>
+        </div>
+      </div>
 
       <div class="side-toolbar-container">
         <div class="side-toolbar">
@@ -73,9 +79,9 @@
 const conditionPic = require("../assets/sidebar/condition.svg");
 const arrow = require("../assets/arrow.svg");
 
-// const op_calculate = ["+", "-", "*", "/", "%", "^"];
+const op_calculate = ["+", "-", "*", "/", "%", "^"];
 const op_compare = ["==", "<", ">", "!="];
-// const op_connect = ["and","or","not"];
+const op_connect = ["AND", "OR", "NOT"];
 const op_maxmin = ["Max", "Min"];
 const op_pushpop = ["Push", "Pop"];
 const op_queue = ["Enqueue", "dequeue"];
@@ -85,9 +91,10 @@ export default {
 
   data() {
     return {
+      popUpMove: false,
       arrow: 1,
       variable: ["x", "y", "z"],
-      test: ["main", "function", "function"],
+      test: ["main"],
       function: ["function", "function", "function"],
       terminator: 1,
       read: 0,
@@ -113,14 +120,20 @@ export default {
       randomFunc: 0,
       squareRootFunc: 0,
       connector: 0,
+      textString: 0,
+      textInt: 0,
+      textArray: 0,
+      variableDrop: 0,
+      opCalculate: 0,
+      opEqual: 0,
+      opCompare: 0,
+      opConnect: 0,
     };
   },
 
   methods: {
     clickMove() {
-      console.log("move");
-      this.popUpMove = true;
-      this.$emit("clicked", "true");
+      this.popUpMove = !this.popUpMove;
     },
 
     dragStart: (e, arrow) => {
@@ -288,6 +301,20 @@ export default {
       }
       if (data == "squareroot_function") {
         this.style_squareRootFunction(board, data, arrow_target);
+      }
+      if (data == "text_string" || data == "text_array" || data == "text_int") {
+        this.style_text(board, data);
+      }
+      if (data == "variable_drop") {
+        this.style_variable(board, data);
+      }
+      if (
+        data == "op_calculate" ||
+        data == "op_equal" ||
+        data == "op_compare" ||
+        data == "op_connect"
+      ) {
+        this.style_operator(board, data);
       }
     },
 
@@ -1248,12 +1275,161 @@ export default {
       } else {
         board.insertBefore(div, nextElement);
       }
+      document.getElementById(div.id).classList.add("display-f");
+      div.draggable = "true";
+      div.ondragstart = function(event) {
+        var arrow_object = div.nextElementSibling.id;
+        this.dragStart(event, arrow_object);
+      }.bind(this);
 
-      var div1 = document.createElement("div");
-      div1.id = "div1_" + data + this.connector;
-      div.appendChild(div1);
-      document.getElementById(div1.id).classList.add("circle-f");
+      var connector = document.createElement("div");
+      connector.id = "connector_" + data + this.connector;
+      div.appendChild(connector);
+      document.getElementById(connector.id).classList.add("circle-f");
+
       this.style_arrow(board, div);
+    },
+
+    style_text(board, data) {
+      var temp = 0;
+      var text = "";
+      var bText = "";
+      var aText = "";
+      if (data == "text_int") {
+        this.textInt += 1;
+        temp = this.textInt;
+        text = "0";
+      } else if (data == "text_string") {
+        this.textString += 1;
+        temp = this.textString;
+        text = "Text";
+        bText = "&#8220";
+        aText = "&#8221";
+      } else {
+        this.textArray += 1;
+        temp = this.textArray;
+        bText = "[";
+        aText = "]";
+      }
+
+      var div = document.createElement("div");
+      div.id = "div_" + data + temp;
+      board.appendChild(div);
+
+      var textBox = document.createElement("div");
+      textBox.id = "textBox_" + data + temp;
+      div.appendChild(textBox);
+      document.getElementById(textBox.id).classList.add("textbox-variable-f");
+
+      var before = document.createElement("div");
+      before.id = "before_" + temp;
+      textBox.appendChild(before);
+      before.innerHTML = bText;
+      document.getElementById(before.id).classList.add("text-declare-before-f");
+
+      var textarea = document.createElement("textarea");
+      textarea.id = "textarea_" + temp;
+      textBox.appendChild(textarea);
+      document.getElementById(textarea.id).classList.add("textarea");
+      document.getElementById(textarea.id).contentEditable = "true";
+      textarea.placeholder = text;
+      textarea.rows = "1";
+      textarea.oninput = function(event) {
+        this.autosizeTextArea(event.target);
+      }.bind(this);
+
+      var after = document.createElement("div");
+      after.id = "after_" + temp;
+      textBox.appendChild(after);
+      after.innerHTML = aText;
+      document.getElementById(after.id).classList.add("text-declare-after-f");
+    },
+
+    style_variable(board, data) {
+      this.variableDrop += 1;
+
+      var div = document.createElement("div");
+      div.id = "div_" + data + this.variableDrop;
+      board.appendChild(div);
+
+      var drop1 = document.createElement("div");
+      drop1.id = "drop1_" + data + this.variableDrop;
+      div.appendChild(drop1);
+      document.getElementById(drop1.id).classList.add("custom-select-f");
+
+      var select1 = document.createElement("select");
+      select1.id = "select1_" + data + this.variableDrop;
+      for (const val of this.variable) {
+        var option1 = document.createElement("option");
+        option1.value = val;
+        option1.text = val;
+        select1.appendChild(option1);
+      }
+      document.getElementById(drop1.id).appendChild(select1);
+      document.getElementById(select1.id).classList.add("dropdown-f");
+
+      var tri1 = document.createElement("div");
+      tri1.id = "tri1_" + data + this.variableDrop;
+      drop1.appendChild(tri1);
+      document.getElementById(tri1.id).classList.add("triangle-purple");
+    },
+    style_operator(board, data) {
+      var temp = 0;
+      var triColor = "";
+      var op = "";
+
+      if (data == "op_calculate") {
+        this.opCalculate += 1;
+        temp = this.opCalculate;
+        triColor = "triangle-green";
+        op = op_calculate;
+      } else if (data == "op_compare") {
+        this.opCompare += 1;
+        temp = this.opCompare;
+        triColor = "triangle-blue";
+        op = op_compare;
+      } else if (data == "op_connect") {
+        this.opConnect += 1;
+        temp = this.opConnect;
+        triColor = "triangle-pink";
+        op = op_connect;
+      } else {
+        this.opEqual += 1;
+        temp = this.opEqual;
+      }
+
+      var div = document.createElement("div");
+      div.id = "div_" + data + temp;
+      board.appendChild(div);
+
+      if (data == "op_equal") {
+        var equalBox = document.createElement("div");
+        equalBox.id = "equalBox_" + data + temp;
+        div.appendChild(equalBox);
+        document.getElementById(equalBox.id).classList.add("dropdown-round-f");
+        equalBox.innerHTML = "=";
+      } else {
+        var drop = document.createElement("div");
+        drop.id = "drop_" + data + temp;
+        div.appendChild(drop);
+        document.getElementById(drop.id).classList.add("custom-select-f");
+
+        var select = document.createElement("select");
+        select.id = "select_" + data + temp;
+        for (const val of op) {
+          var option = document.createElement("option");
+          option.value = val;
+          option.text = val;
+          select.appendChild(option);
+        }
+        document.getElementById(drop.id).appendChild(select);
+        document.getElementById(select.id).classList.add("dropdown-round-f");
+
+        var tri = document.createElement("div");
+        tri.id = "tri_" + data + temp;
+        drop.appendChild(tri);
+        document.getElementById(tri.id).classList.add(triColor);
+      }
     },
 
     style_textbox() {
@@ -1293,10 +1469,17 @@ html {
   background-color: #000000;
   opacity: 0.5;
   position: absolute;
-  top: 44px;
+  top: 43px;
   border-radius: 2x;
-  /* height: calc(100% - 44px);
-  width: 100%; */
+  height: calc(100% - 43px);
+  width: 100%;
+}
+
+.popup-cross {
+  cursor: pointer;
+  position: absolute;
+  top: 3%;
+  right: 3%;
 }
 
 #container {
@@ -1317,6 +1500,13 @@ html {
   align-items: flex-start;
   position: relative;
 }
+.move-element {
+  cursor: pointer;
+  position: absolute;
+  top: 10%;
+  right: 3%;
+}
+
 .top-toolbar {
   display: flex;
   justify-content: space-between;
@@ -1363,17 +1553,28 @@ html {
 .fa-redo-alt,
 .fa-compress,
 .fa-expand,
-.fa-arrows-alt {
+.fa-times-circle {
   color: #ffffff;
   width: 20px;
   margin: 0 0 0 10px;
 }
+
 .fa-undo-alt:hover,
 .fa-redo-alt:hover,
 .fa-compress:hover,
 .fa-expand:hover,
-.fa-arrows-alt:hover {
+.fa-times-circle:hover {
   color: var(--gray);
+}
+
+.fa-arrows-alt {
+  color: var(--gray);
+  font-size: 20px;
+}
+
+.fa-times-circle {
+  font-size: 23px;
+  /* margin: 15px 0 0 360px; */
 }
 
 .fa-trash-alt,

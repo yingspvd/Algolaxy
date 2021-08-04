@@ -45,20 +45,25 @@
   appearance: none;
   padding: 0 20px 0 15px;
   position: relative;
-  /* outline: none; */
+  outline: none;
 }
 
-.diamond-box {
+/* .diamond-box {
   height: 100%;
   aspect-ratio: auto 1 / 1;
-  /* position: relative; */
+  
 }
 
 .diamond-box:before {
   content: "";
   float: left;
   padding-top: 100%;
-  /* position: relative; */
+  
+} */
+
+.diamond-box {
+  width: 200px;
+  height: 200px;
 }
 
 .diamond-all {
@@ -72,8 +77,8 @@
 .diamond-item-f {
   display: flex;
   align-items: center;
-  margin: 80px 10px;
-  max-height: 80px;
+  margin: 70px 10px;
+  height: 60px;
   overflow: auto;
   /* position: absolute; */
   /* transform: rotateZ(-45deg) rotateY(45deg); */
@@ -234,7 +239,6 @@
   border-radius: 3px;
 }
 
-
 .circle-f {
   width: 25px;
   height: 25px;
@@ -333,5 +337,3 @@
   align-items: center;
   height: 100%;
 }
-
-
