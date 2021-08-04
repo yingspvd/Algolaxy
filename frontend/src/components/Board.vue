@@ -835,9 +835,9 @@ export default {
       document.getElementById(textarea.id).contentEditable = "true";
       textarea.rows = "1";
       textarea.placeholder = "Text";
-      // textarea.oninput = function(event) {
-      //   this.autosizeTextArea(event.target);
-      // }.bind(this);
+      textarea.oninput = function(event) {
+        this.autosizeTextArea(event.target);
+      }.bind(this);
 
       this.style_arrow(board, div);
     },
@@ -1290,11 +1290,13 @@ html {
 }
 
 .popup {
-  background-color: #949494;
+  background-color: #000000;
+  opacity: 0.5;
   position: absolute;
-
-  /* height: calc(100% - 100px);  */
-  /* width: 100%;*/
+  top: 44px;
+  border-radius: 2x;
+  /* height: calc(100% - 44px);
+  width: 100%; */
 }
 
 #container {
