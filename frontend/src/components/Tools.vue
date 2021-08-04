@@ -1,5 +1,13 @@
 <template>
   <div id="container">
+    <a @click="closeSidebar()">
+      <img
+        :src="require(`../assets/sidebar/${btnColor}.svg`)"
+        height="65px"
+        style="cursor:pointer; position:absolute; top:6.5%; left: 107.5%;"
+        id="sidebarBtn"
+      />
+    </a>
     <div id="sidebar" class="flex-shrink-0 p-3">
       <!-- <vue-particles
       style="position:absolute; width: 260px; height: 89%; z-index: -4"
@@ -309,6 +317,17 @@
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
               <div class="flowchart">
                 <div
+                  id="text_int"
+                  draggable="true"
+                  @dragstart="dragStart"
+                  @dragover.stop
+                  class="square-textbox"
+                  style="margin:10px 10px 0 10px; height:30px; width:60px"
+                >
+                  0
+                </div>
+                <div
+                  id="text_string"
                   draggable="true"
                   @dragstart="dragStart"
                   @dragover.stop
@@ -317,12 +336,25 @@
                 >
                   " "
                 </div>
+              </div>
+              <div class="flowchart">
                 <div
+                  id="text_array"
+                  draggable="true"
+                  @dragstart="dragStart"
+                  @dragover.stop
+                  class="square-textbox"
+                  style="margin:10px 20px 0 0; height:30px; width:60px"
+                >
+                  [ ]
+                </div>
+                <div
+                  id="variable_drop"
                   draggable="true"
                   @dragstart="dragStart"
                   @dragover.stop
                   class="square-textbox unselectable"
-                  style="justify-content:flex-end; margin:10px 0 0 10px; height:30px;  width:60px"
+                  style="justify-content:flex-end; margin:10px 0 0 0; height:30px;  width:60px"
                 >
                   A
                   <div class="triangle-down" style="margin-left:15px"></div>
@@ -352,6 +384,7 @@
               </div>
               <div class="flowchart">
                 <div
+                  id="op_calculate"
                   draggable="true"
                   @dragstart="dragStart"
                   @dragover.stop
@@ -366,6 +399,10 @@
                 </div>
 
                 <div
+                  id="op_equal"
+                  draggable="true"
+                  @dragstart="dragStart"
+                  @dragover.stop
                   class="dropdown-box"
                   style="border-radius: 25px; width: 60px; height:30px; justify-content: center"
                 >
@@ -381,6 +418,10 @@
               </div>
               <div class="flowchart">
                 <div
+                  id="op_compare"
+                  draggable="true"
+                  @dragstart="dragStart"
+                  @dragover.stop
                   class="dropdown-box"
                   style="border-radius: 25px; width: 60px; height:30px; margin-right:20px;"
                 >
@@ -392,6 +433,10 @@
                 </div>
 
                 <div
+                  id="op_connect"
+                  draggable="true"
+                  @dragstart="dragStart"
+                  @dragover.stop                 
                   class="dropdown-box"
                   style="border-radius: 25px; width: 60px; height:30px;"
                 >
@@ -690,18 +735,21 @@
 <script>
 export default {
   name: "Tools",
-  props: ["sidebar"],
-  watch: {
-    sidebar: function() {
-      this.closeSidebar();
-    },
-  },
+  // watch: {
+  //   sidebar: function() {
+  //     this.closeSidebar();
+  //   },
+  // },
   data() {
-    return {};
+    return {
+      sidebar: true,
+      btnColor: "sidebar-yellow",
+    };
   },
 
   methods: {
     closeSidebar() {
+      this.sidebar = !this.sidebar;
       if (this.sidebar == false) {
         this.closeNav();
       } else {
@@ -710,11 +758,17 @@ export default {
     },
 
     closeNav() {
+      this.btnColor = "sidebar-green";
       document.getElementById("sidebar").style.width = "75px";
+      document.getElementById("sidebarBtn").style.left = "65%";
+      document.getElementById("sidebarBtn").style.transition = "0.8s";
     },
 
     openNav() {
+      this.btnColor = "sidebar-yellow";
       document.getElementById("sidebar").style.width = "280px";
+      document.getElementById("sidebarBtn").style.left = "91%";
+      document.getElementById("sidebarBtn").style.transition = "0.1s";
     },
 
     dragStart: (e) => {
@@ -751,6 +805,7 @@ main {
 }
 #container {
   display: flex;
+  position: relative;
 }
 .flex-shrink-0 {
   overflow: auto;
@@ -982,4 +1037,10 @@ main {
   flex-direction: column;
   align-items: center;
 }
+
+/* @media screen and (max-width: 1220px) {
+  #sidebar {
+    width: 250px
+  }
+} */
 </style>

@@ -17,22 +17,21 @@
     </vue-particles> -->
 
     <Navbar />
-    <a @click="closeSidebar()" style="margin-top:120px">
+    <!-- <a @click="closeSidebar()" style="margin-top:120px">
       <img
         :src="require(`../assets/sidebar/${btnColor}.svg`)"
         height="65px"
         style="margin:50px 0 0 250px; position:fixed; cursor:pointer; "
         id="sidebarBtn"
       />
-    </a>
-    <Tools :sidebar="sidebar" style="margin-top:120px" />
+    </a> -->
+    <Tools style="margin-top:120px" />
 
     <div class="workspace">
       <Board />
       <Animation />
     </div>
-
-    <Top/>
+   
   </div>
 </template>
 
@@ -41,7 +40,6 @@ import Navbar from "../components/Navbar.vue";
 import Tools from "../components/Tools.vue";
 import Board from "../components/Board.vue";
 import Animation from "../components/Animation.vue";
-import Top from "../components/Backgroud-top.vue";
 
 export default {
   name: "Home",
@@ -50,28 +48,11 @@ export default {
     Tools,
     Board,
     Animation,
-    Top,
   },
   data() {
     return {
-      sidebar: true,
-      btnColor: "sidebar-yellow",
+      popUpMove: false,
     };
-  },
-  methods: {
-    closeSidebar() {
-      this.sidebar = !this.sidebar;
-      this.checkCloseSidebar();
-    },
-    checkCloseSidebar() {
-      if (this.sidebar == false) {
-        this.btnColor = "sidebar-green";
-        document.getElementById("sidebarBtn").style.marginLeft = "50px";
-      } else {
-        this.btnColor = "sidebar-yellow";
-        document.getElementById("sidebarBtn").style.marginLeft = "255px";
-      }
-    },
   },
 };
 </script>
