@@ -173,7 +173,6 @@
   justify-content: center;
   flex-direction: row;
   align-items: center;
-  
 }
 
 .square-box-long-f {
@@ -208,41 +207,6 @@
   margin: 0 5px;
 }
 
-.square-textbox-f {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 35px;
-  height: 25px;
-  background: #ffffff;
-  border: 0 !important;
-  border-radius: 8px;
-  color: var(--dark-blue-2);
-}
-
-.input-f {
-  overflow: auto;
-  background-color: white;
-  padding: 0 10px;
-  border-radius: 3px;
-  margin: 0 5px;
-  max-width: 100px;
-  outline: none !important;
-  border: 0;
-}
-
-.input-declare-f {
-  background-color: white;
-  padding: 0 10px;
-  z-index: 2;
-  max-width: 150px;
-  min-height: 30px;
-  outline: none !important;
-  height: 100%;
-  border-radius: 3px;
-  border: 0;
-}
-
 .text-declare-before-f {
   height: 100%;
   background-color: white;
@@ -260,22 +224,14 @@
   z-index: 1;
 }
 
-.input-array-f {
+.textbox-variable-f {
+  display: flex;
+  align-items: top;
+  margin: 0 5px;
   background-color: white;
-  padding: 0 10px;
-  z-index: 2;
-  outline: none !important;
   border-radius: 3px;
 }
 
-.input-display-f {
-  background-color: white;
-  padding: 0 5px;
-  margin: 0 5px;
-  border-radius: 3px;
-  position: absolute;
-  outline: none;
-}
 
 .circle-f {
   width: 25px;
@@ -312,11 +268,11 @@
   text-align: center;
 }
 
-.textarea-1-row {
+.textarea-1-long-row {
   box-sizing: padding-box;
   overflow: auto;
   resize: none;
-  width: 100px;
+  width: 180px;
   min-height: 28px;
   display: block;
   border: 0px;
@@ -326,8 +282,8 @@
   display: flex;
   justify-content: center;
   text-align: center;
+  margin: 0 30px;
 }
-
 
 .textarea-array {
   display: flex;
@@ -337,12 +293,13 @@
   resize: none;
   overflow-y: hidden;
   width: 30px;
-  min-height: 30px;
+  min-height: 28px;
   display: block;
   border: 0px;
   outline: none;
   z-index: 2;
 }
+
 /* width */
 ::-webkit-scrollbar {
   width: 3px;
@@ -355,6 +312,7 @@
   border-radius: 10px;
 }
 
+/* Display */
 .triangle-left-f {
   width: 0;
   height: 100%;
@@ -364,7 +322,7 @@
 }
 
 .square-round-f {
-  width: 150px;
+  width: auto;
   border-radius: 0 50px 50px 0;
   background: #89cd83;
   padding: 5px 5px;
@@ -374,10 +332,4 @@
   height: 100%;
 }
 
-.textbox-variable-f {
-  display: flex;
-  align-items: top;
-  margin: 0 5px;
-  background-color: white;
-  border-radius: 3px;
-}
+

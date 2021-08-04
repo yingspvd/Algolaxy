@@ -21,7 +21,7 @@
           <a style="cursor:pointer;">
             <i class="fas fa-compress"></i>
             <i class="fas fa-expand"></i>
-            <i @click="$emit('popUpMove', 'true')" class="fas fa-arrows-alt"></i>
+            <i @click="$emit('popUpMove', true)" class="fas fa-arrows-alt"></i>
           </a>
         </div>
       </div>
@@ -48,6 +48,8 @@
         </div>
       </div>
 
+      <div id="popup" class="popup"></div>
+
       <div class="side-toolbar-container">
         <div class="side-toolbar">
           <a
@@ -62,8 +64,6 @@
           </a>
         </div>
       </div>
-
-      <!-- <div style="width:100%; height:100% "></div> -->
     </div>
   </div>
 </template>
@@ -382,7 +382,7 @@ export default {
         div1.appendChild(textarea);
         document.getElementById(textarea.id).classList.add("textarea");
         document.getElementById(textarea.id).contentEditable = "true";
-        textarea.innerHTML = "";
+        textarea.placeholder = "Text";
         textarea.rows = "1";
         textarea.oninput = function(event) {
           this.autosizeTextArea(event.target);
@@ -457,7 +457,7 @@ export default {
       var textarea = document.createElement("textarea");
       textarea.id = "textarea" + data + this.display;
       square.appendChild(textarea);
-      document.getElementById(textarea.id).classList.add("textarea-1-row");
+      document.getElementById(textarea.id).classList.add("textarea-1-long-row");
       document.getElementById(textarea.id).contentEditable = "true";
       textarea.innerHTML = "";
       textarea.rows = "1";
@@ -477,11 +477,10 @@ export default {
         this.declare_int += 1;
         temp = this.declare_int;
         text = "0";
-        bText = "&nbsp";
-        aText = "&nbsp";
       } else if (data == "declare_string") {
         this.declare_string += 1;
         temp = this.declare_string;
+        text = "Text";
         bText = "&#8220";
         aText = "&#8221";
       } else {
@@ -517,7 +516,7 @@ export default {
       div.appendChild(textarea);
       document.getElementById(textarea.id).classList.add("textarea");
       document.getElementById(textarea.id).contentEditable = "true";
-      textarea.innerHTML = "";
+      textarea.placeholder = "x";
       textarea.draggable = true;
       textarea.rows = "1";
       this.autosizeTextArea(textarea);
@@ -594,6 +593,7 @@ export default {
       } else if (data == "assign_string") {
         this.assign_string += 1;
         temp = this.assign_string;
+        text = "Text";
         bText = "&#8220";
         aText = "&#8221";
       } else {
@@ -729,7 +729,7 @@ export default {
         div.appendChild(textarea2);
         document.getElementById(textarea2.id).classList.add("textarea");
         document.getElementById(textarea2.id).contentEditable = "true";
-        textarea2.placeholder = text;
+        textarea2.placeholder = "Text";
         textarea2.rows = "1";
         textarea2.oninput = function(event) {
           this.autosizeTextArea(event.target);
@@ -834,6 +834,7 @@ export default {
       document.getElementById(textarea.id).classList.add("textarea");
       document.getElementById(textarea.id).contentEditable = "true";
       textarea.rows = "1";
+      textarea.placeholder = "Text";
       // textarea.oninput = function(event) {
       //   this.autosizeTextArea(event.target);
       // }.bind(this);
@@ -862,12 +863,13 @@ export default {
         this.dragStart(event, arrow_object);
       }.bind(this);
 
-      var span = document.createElement("textarea");
-      span.id = "span_" + data + this.declareFunc;
-      div.appendChild(span);
-      document.getElementById(span.id).classList.add("textarea");
-      document.getElementById(span.id).contentEditable = "true";
-      span.placeholder = "Function";
+      var textarea = document.createElement("textarea");
+      textarea.id = "textarea_" + data + this.declareFunc;
+      div.appendChild(textarea);
+      document.getElementById(textarea.id).classList.add("textarea-1-long-row");
+      document.getElementById(textarea.id).contentEditable = "true";
+      textarea.rows = "1";
+      textarea.placeholder = "Function";
 
       this.style_arrow(board, div);
     },
@@ -1132,11 +1134,13 @@ export default {
         drop1.appendChild(tri1);
         document.getElementById(tri1.id).classList.add("triangle-purple");
       } else {
-        var span = document.createElement("input");
-        span.id = "span_" + data + temp;
-        div.appendChild(span);
-        document.getElementById(span.id).classList.add("input-f");
-        document.getElementById(span.id).contentEditable = "true";
+        var textarea = document.createElement("textarea");
+        textarea.id = "textarea_" + data + temp;
+        div.appendChild(textarea);
+        document.getElementById(textarea.id).classList.add("textarea-array");
+        document.getElementById(textarea.id).contentEditable = "true";
+        textarea.rows = "1";
+        textarea.placeholder = "1";
       }
 
       var div3 = document.createElement("div");
@@ -1167,11 +1171,13 @@ export default {
         drop2.appendChild(tri2);
         document.getElementById(tri2.id).classList.add("triangle-purple");
       } else {
-        var span1 = document.createElement("input");
-        span1.id = "span1_" + data + temp;
-        div.appendChild(span1);
-        document.getElementById(span1.id).classList.add("input-f");
-        document.getElementById(span1.id).contentEditable = "true";
+        var textarea1 = document.createElement("textarea");
+        textarea1.id = "textarea1_" + data + temp;
+        div.appendChild(textarea1);
+        document.getElementById(textarea1.id).classList.add("textarea-array");
+        document.getElementById(textarea1.id).contentEditable = "true";
+        textarea1.rows = "1";
+        textarea1.placeholder = "10";
       }
 
       this.style_arrow(board, div);
@@ -1215,7 +1221,7 @@ export default {
       div.appendChild(textarea);
       document.getElementById(textarea.id).classList.add("textarea");
       document.getElementById(textarea.id).contentEditable = "true";
-      textarea.innerHTML = "";
+      textarea.placeholder = "2+2";
       textarea.rows = "1";
       textarea.oninput = function(event) {
         this.autosizeTextArea(event.target);
@@ -1281,6 +1287,14 @@ export default {
 
 html {
   height: 100%;
+}
+
+.popup {
+  background-color: #949494;
+  position: absolute;
+
+  /* height: calc(100% - 100px);  */
+  /* width: 100%;*/
 }
 
 #container {
