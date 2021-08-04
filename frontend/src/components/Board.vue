@@ -835,9 +835,9 @@ export default {
       document.getElementById(textarea.id).contentEditable = "true";
       textarea.rows = "1";
       textarea.placeholder = "Text";
-      textarea.oninput = function(event) {
-        this.autosizeTextArea(event.target);
-      }.bind(this);
+      // textarea.oninput = function(event) {
+      //   this.autosizeTextArea(event.target);
+      // }.bind(this);
 
       this.style_arrow(board, div);
     },

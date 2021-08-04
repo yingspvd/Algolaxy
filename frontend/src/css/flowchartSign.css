@@ -73,6 +73,8 @@
   display: flex;
   align-items: center;
   margin: 80px 10px;
+  max-height: 80px;
+  overflow: auto;
   /* position: absolute; */
   /* transform: rotateZ(-45deg) rotateY(45deg); */
 }
