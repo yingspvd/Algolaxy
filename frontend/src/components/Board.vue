@@ -21,7 +21,7 @@
           <a style="cursor:pointer;">
             <i class="fas fa-compress"></i>
             <i class="fas fa-expand"></i>
-            <i class="fas fa-arrows-alt"></i>
+            <i @click="$emit('popUpMove', 'true')" class="fas fa-arrows-alt"></i>
           </a>
         </div>
       </div>
@@ -64,7 +64,6 @@
       </div>
 
       <!-- <div style="width:100%; height:100% "></div> -->
-
     </div>
   </div>
 </template>
@@ -118,13 +117,10 @@ export default {
   },
 
   methods: {
-    autosizeTextArea(textarea) {
-      var el = textarea;
-      setTimeout(function() {
-        el.style.cssText = "height:auto; padding:0";
-        el.style.cssText = "height:" + el.scrollHeight + "px";
-        console.log(textarea.clientHeight);
-      }, 0);
+    clickMove() {
+      console.log("move");
+      this.popUpMove = true;
+      this.$emit("clicked", "true");
     },
 
     dragStart: (e, arrow) => {
@@ -295,6 +291,14 @@ export default {
       }
     },
 
+    autosizeTextArea(textarea) {
+      var el = textarea;
+      setTimeout(function() {
+        el.style.cssText = "height:auto; padding:0";
+        el.style.cssText = "height:" + el.scrollHeight + "px";
+      }, 0);
+    },
+
     style_terminator(board, data, arrow) {
       var arrow_target = document.getElementById(arrow);
       var nextElement = arrow_target.nextElementSibling;
@@ -379,6 +383,7 @@ export default {
         document.getElementById(textarea.id).classList.add("textarea");
         document.getElementById(textarea.id).contentEditable = "true";
         textarea.innerHTML = "";
+        textarea.rows = "1";
         textarea.oninput = function(event) {
           this.autosizeTextArea(event.target);
         }.bind(this);
@@ -452,12 +457,10 @@ export default {
       var textarea = document.createElement("textarea");
       textarea.id = "textarea" + data + this.display;
       square.appendChild(textarea);
-      document.getElementById(textarea.id).classList.add("textarea");
+      document.getElementById(textarea.id).classList.add("textarea-1-row");
       document.getElementById(textarea.id).contentEditable = "true";
       textarea.innerHTML = "";
-      textarea.oninput = function(event) {
-        this.autosizeTextArea(event.target);
-      }.bind(this);
+      textarea.rows = "1";
 
       this.style_arrow(board, div);
     },
@@ -513,10 +516,10 @@ export default {
       textarea.id = "textarea" + data + temp;
       div.appendChild(textarea);
       document.getElementById(textarea.id).classList.add("textarea");
-      document.getElementById(textarea.id).style.minHeight = "45px";
       document.getElementById(textarea.id).contentEditable = "true";
       textarea.innerHTML = "";
       textarea.draggable = true;
+      textarea.rows = "1";
       this.autosizeTextArea(textarea);
       textarea.oninput = function(e) {
         e.stopPropagation();
@@ -552,13 +555,16 @@ export default {
       var textarea2 = document.createElement("textarea");
       textarea2.id = "textarea2_" + data + temp;
       divTextarea.appendChild(textarea2);
-      document.getElementById(textarea2.id).classList.add("textarea");
-      document.getElementById(textarea2.id).style.minHeight = "45px";
+
+      if (data == "declare_array") {
+        document.getElementById(textarea2.id).classList.add("textarea-array");
+        textarea2.maxLength = "9";
+      } else {
+        document.getElementById(textarea2.id).classList.add("textarea");
+      }
       document.getElementById(textarea2.id).contentEditable = "true";
       textarea2.placeholder = text;
-      if (data == "declare_array") {
-        textarea2.maxLength = "9";
-      }
+      textarea2.rows = "1";
       textarea2.oninput = function(event) {
         this.autosizeTextArea(event.target);
       }.bind(this);
@@ -669,9 +675,9 @@ export default {
         textarea.id = "textarea" + data + temp;
         divTextarea_array.appendChild(textarea);
         document.getElementById(textarea.id).classList.add("textarea-array");
-        document.getElementById(textarea.id).style.minHeight = "45px";
         document.getElementById(textarea.id).contentEditable = "true";
         textarea.maxLength = "9";
+        textarea.rows = "1";
         textarea.placeholder = text;
         textarea.oninput = function(event) {
           this.autosizeTextArea(event.target);
@@ -705,9 +711,9 @@ export default {
         textarea1.id = "textarea1" + data + temp;
         div.appendChild(textarea1);
         document.getElementById(textarea1.id).classList.add("textarea");
-        document.getElementById(textarea1.id).style.minHeight = "45px";
         document.getElementById(textarea1.id).contentEditable = "true";
         textarea1.placeholder = text;
+        textarea1.rows = "1";
         textarea1.oninput = function(event) {
           this.autosizeTextArea(event.target);
         }.bind(this);
@@ -724,6 +730,7 @@ export default {
         document.getElementById(textarea2.id).classList.add("textarea");
         document.getElementById(textarea2.id).contentEditable = "true";
         textarea2.placeholder = text;
+        textarea2.rows = "1";
         textarea2.oninput = function(event) {
           this.autosizeTextArea(event.target);
         }.bind(this);
@@ -826,9 +833,10 @@ export default {
       div2.appendChild(textarea);
       document.getElementById(textarea.id).classList.add("textarea");
       document.getElementById(textarea.id).contentEditable = "true";
-      textarea.oninput = function(event) {
-        this.autosizeTextArea(event.target);
-      }.bind(this);
+      textarea.rows = "1";
+      // textarea.oninput = function(event) {
+      //   this.autosizeTextArea(event.target);
+      // }.bind(this);
 
       this.style_arrow(board, div);
     },
@@ -1208,6 +1216,7 @@ export default {
       document.getElementById(textarea.id).classList.add("textarea");
       document.getElementById(textarea.id).contentEditable = "true";
       textarea.innerHTML = "";
+      textarea.rows = "1";
       textarea.oninput = function(event) {
         this.autosizeTextArea(event.target);
       }.bind(this);

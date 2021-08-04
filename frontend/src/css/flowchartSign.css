@@ -171,7 +171,7 @@
 .display-f {
   display: flex;
   justify-content: center;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   
 }
@@ -221,6 +221,7 @@
 }
 
 .input-f {
+  overflow: auto;
   background-color: white;
   padding: 0 10px;
   border-radius: 3px;
@@ -300,7 +301,7 @@
   /* resize: none; */
   width: 100px;
   /* min-height: 30px; */
-  min-height: 26px;
+  min-height: 28px;
   display: block;
   border: 0px;
   outline: none;
@@ -311,12 +312,32 @@
   text-align: center;
 }
 
-.textarea-array {
+.textarea-1-row {
+  box-sizing: padding-box;
   overflow: auto;
-  /* resize: none; */
-  width: 50px;
+  resize: none;
+  width: 100px;
+  min-height: 28px;
+  display: block;
+  border: 0px;
+  outline: none;
+  z-index: 2;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+
+.textarea-array {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+  resize: none;
+  overflow-y: hidden;
+  width: 30px;
   min-height: 30px;
-  height: 45px;
   display: block;
   border: 0px;
   outline: none;
@@ -340,20 +361,16 @@
   border-top: 20px solid transparent;
   border-right: 30px solid #89cd83;
   border-bottom: 20px solid transparent;
-  margin-right: 160px;
 }
 
 .square-round-f {
   width: 150px;
   border-radius: 0 50px 50px 0;
   background: #89cd83;
-  margin-top: -40px;
-  margin-left: 20px;
   padding: 5px 5px;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 30px;
   height: 100%;
 }
 
