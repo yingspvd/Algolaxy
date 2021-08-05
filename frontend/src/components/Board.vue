@@ -1,7 +1,7 @@
 <template>
   <div
     id="container"
-    style="box-shadow: 0px 5px 10px #91A0A5; background: var(--white-gray);"
+    style="box-shadow: 0px 5px 10px #91A0A5; background: var(--white-gray); resize: both;"
   >
     <div class="tool-container">
       <div class="top-toolbar">
@@ -28,6 +28,51 @@
         </div>
       </div>
 
+      <!-- Trash and export -->
+      <div class="side-toolbar-container" v-if="moveMode == false">
+        <div class="side-toolbar">
+          <a
+            @dragover.prevent
+            @drop.prevent="deleteObject"
+            style="cursor:pointer;"
+          >
+            <i class="far fa-trash-alt"></i>
+          </a>
+          <a style="cursor:pointer; margin-top:15px">
+            <i class="fas fa-file-export"></i>
+          </a>
+        </div>
+      </div>
+      <div v-else class="side-toolbar-container" style="z-index:0;">
+        <div class="side-toolbar">
+          <a
+            @dragover.prevent
+            @drop.prevent="deleteObject"
+            style="cursor:pointer;"
+          >
+            <i class="far fa-trash-alt"></i>
+          </a>
+          <a style="cursor:pointer; margin-top:15px">
+            <i class="fas fa-file-export"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="move-element">
+        <i
+          v-if="moveMode == false"
+          @click="clickMove"
+          class="fas fa-arrows-alt"
+        ></i>
+      </div>
+      <div class="move-element">
+        <i
+          v-if="moveMode == true"
+          @click="clickMove"
+          class="far fa-times-circle"
+        ></i>
+      </div>
+
       <!-- Board -->
       <div
         id="board"
@@ -35,14 +80,6 @@
         @drop.prevent="dropOnBoard"
         class="board scrollarea"
       >
-        <div class="move-element">
-          <i
-            v-if="moveMode == false"
-            @click="clickMove"
-            class="fas fa-arrows-alt"
-          ></i>
-          <i v-else @click="clickMove" class="far fa-times-circle"></i>
-        </div>
         <div>
           <div class="terminator-f" style="margin:10px 0 0 0">
             <div class="text-f">START</div>
@@ -58,22 +95,6 @@
           <img src="../assets/arrow.svg" height="30px" />
         </div>
       </div>
-
-      <!-- Trash and export -->
-      <div class="side-toolbar-container">
-        <div class="side-toolbar">
-          <a
-            @dragover.prevent
-            @drop.prevent="deleteObject"
-            style="cursor:pointer;"
-          >
-            <i class="far fa-trash-alt"></i>
-          </a>
-          <a style="cursor:pointer; margin-top:15px">
-            <i class="fas fa-file-export"></i>
-          </a>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -82,6 +103,7 @@
 // const displayPic = require("../assets/sidebar/display-green.svg");
 const conditionPic = require("../assets/sidebar/condition.svg");
 const arrow = require("../assets/arrow.svg");
+// const arrowLong = require("../assets/arrowLong.svg");
 
 const op_calculate = ["+", "-", "*", "/", "%", "^"];
 const op_compare = ["==", "<", ">", "!="];
@@ -89,6 +111,13 @@ const op_connect = ["AND", "OR", "NOT"];
 const op_maxmin = ["Max", "Min"];
 const op_pushpop = ["Push", "Pop"];
 const op_queue = ["Enqueue", "dequeue"];
+
+const elemObName = [
+  "select_assign_array",
+  "textarea_assign_array",
+  "beforeA_assign_array",
+  "afterA_assign_array",
+];
 
 export default {
   name: "board",
@@ -139,13 +168,18 @@ export default {
     clickMove() {
       this.moveMode = !this.moveMode;
       var board = document.getElementById("board");
-      var popUp = document.createElement("div");
-      popUp.id = "popUp";
-      board.appendChild(popUp);
-      document.getElementById(popUp.id).classList.add("popup");
 
-      popUp.style.cssText = "height:auto; padding:0";
-      popUp.style.cssText = "height:" + board.scrollHeight + "px";
+      if (this.moveMode) {
+        var popUp = document.createElement("div");
+        board.appendChild(popUp);
+        popUp.classList.add("popup");
+        popUp.id = "popup";
+        popUp.style.cssText = "height:auto; padding:0";
+        popUp.style.cssText = "height:" + board.scrollHeight + "px";
+      } else {
+        var popUpBlack = document.getElementById("popup");
+        board.removeChild(popUpBlack);
+      }
     },
 
     dragStart: (e, arrow) => {
@@ -219,12 +253,32 @@ export default {
     },
 
     dropOnObject(e) {
+      var i = 0;
+      var check = false;
       var target = document.getElementById(e.target.id);
       var data = e.dataTransfer.getData("object_id");
-      var object = document.getElementById(data);
-      console.log("data", object);
-      console.log("target", target);
-      console.log("parent", target.parentNode);
+      var myArray = e.target.id.split(/([0-9]+)/);
+      var ob_name = myArray[0];
+
+      while (i < elemObName.length) {
+        if (ob_name == elemObName[i]) {
+          ob_name = target.parentNode;
+          check = true;
+          break;
+        }
+        i++;
+      }
+
+      if (check == false) {
+        ob_name = document.getElementById(e.target.id);
+      }
+
+      var parentOb = ob_name.parentNode;
+      var nextElement = ob_name.nextElementSibling;
+
+      if (data == "text_int" || data == "text_string" || data == "text_array") {
+        this.style_text(data, parentOb, nextElement);
+      }
     },
 
     deleteObject() {
@@ -676,10 +730,9 @@ export default {
 
       if (data == "assign_array") {
         var store = document.createElement("div");
-        store.id = "store_" + data + temp;
         div.appendChild(store);
         store.innerHTML = "Store";
-        document.getElementById(store.id).classList.add("text-f");
+        store.classList.add("text-f");
       }
 
       // Dropdown1
@@ -697,8 +750,8 @@ export default {
         option.text = val;
         select.appendChild(option);
       }
-      document.getElementById(drop1.id).appendChild(select);
-      document.getElementById(select.id).classList.add("dropdown-f");
+      drop1.appendChild(select);
+      select.classList.add("dropdown-f");
 
       var tri1 = document.createElement("div");
       tri1.id = "triOne_" + data + temp;
@@ -796,6 +849,7 @@ export default {
         document.getElementById(textarea2.id).contentEditable = "true";
         textarea2.placeholder = "Text";
         textarea2.rows = "1";
+        this.dropFuncObject(textarea2);
         textarea2.oninput = function(event) {
           this.autosizeTextArea(event.target);
         }.bind(this);
@@ -1339,7 +1393,7 @@ export default {
       this.style_arrow(board, div);
     },
 
-    style_text(board, data) {
+    style_text(data, parentOb, nextElement) {
       var temp = 0;
       var text = "";
       var bText = "";
@@ -1363,7 +1417,7 @@ export default {
 
       var div = document.createElement("div");
       div.id = "div_" + data + temp;
-      board.appendChild(div);
+      parentOb.insertBefore(div, nextElement);
 
       var textBox = document.createElement("div");
       textBox.id = "textBox_" + data + temp;
@@ -1480,29 +1534,6 @@ export default {
         document.getElementById(tri.id).classList.add(triColor);
       }
     },
-
-    style_textbox() {
-      // var div4 = document.createElement("div");
-      // div4.id = "div4_" + data + temp;
-      // div.appendChild(div4);
-      // var div4 = document.createElement("div");
-      // div4.id = "div4_" + data + temp;
-      // div.appendChild(div4);
-      // div4.innerHTML = bText;
-      // document.getElementById(div4.id).classList.add("text-declare-before-f");
-      // var span2 = document.createElement("span");
-      // span2.id = "span2_" + data + temp;
-      // div.appendChild(span2);
-      // document.getElementById(span2.id).classList.add("input-declare-f");
-      // document.getElementById(span2.id).contentEditable = "true";
-      // span2.setAttribute("role", "textbox");
-      // span2.innerHTML = text;
-      // var div5 = document.createElement("div");
-      // div5.id = "div5_" + data + temp;
-      // div.appendChild(div5);
-      // div5.innerHTML = aText;
-      // document.getElementById(div5.id).classList.add("text-declare-after-f");
-    },
   },
 };
 </script>
@@ -1514,13 +1545,6 @@ html {
   height: 100%;
 }
 
-.popup-cross {
-  cursor: pointer;
-  position: absolute;
-  top: 3.5%;
-  right: 3.5%;
-}
-
 #container {
   display: flex;
   flex-direction: column;
@@ -1529,6 +1553,18 @@ html {
   /* margin-left: 65px; */
   border-radius: 5px;
   background-color: var(--white-gray);
+  right: 0;
+}
+#container::after {
+  display: flex;
+  flex-direction: column;
+  width: 550px;
+  height: 650px;
+  left: 0;
+  /* margin-left: 65px; */
+  border-radius: 5px;
+  background-color: var(--white-gray);
+  cursor: ew-resize;
 }
 .tool-container {
   width: 100%;
@@ -1542,8 +1578,9 @@ html {
 .move-element {
   cursor: pointer;
   position: absolute;
-  top: 2%;
-  right: 2%;
+  top: 10%;
+  right: 3%;
+  z-index: 2;
 }
 
 .top-toolbar {
@@ -1559,8 +1596,9 @@ html {
 }
 .side-toolbar-container {
   position: absolute;
-  top: 87%;
+  top: 86%;
   left: 92%;
+  z-index: 2;
 }
 .side-toolbar {
   display: flex;
@@ -1595,8 +1633,7 @@ html {
 .fa-undo-alt,
 .fa-redo-alt,
 .fa-compress,
-.fa-expand,
-.fa-times-circle {
+.fa-expand {
   color: #ffffff;
   width: 20px;
   margin: 0 0 0 10px;
@@ -1619,11 +1656,6 @@ html {
   color: #9b9b9b;
 }
 
-.fa-times-circle {
-  font-size: 23px;
-  /* margin: 15px 0 0 360px; */
-}
-
 .fa-trash-alt,
 .fa-file-export {
   color: var(--gray);
@@ -1635,6 +1667,10 @@ html {
 }
 .fa-file-export:hover {
   color: green;
+}
+.fa-times-circle {
+  font-size: 23px;
+  color: white;
 }
 
 .dropdown-function {
@@ -1657,14 +1693,19 @@ html {
   overflow-y: scroll;
   overflow-x: scroll;
 }
+
 /* scrollbar width */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 0;
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
   background: #7ca3b2;
   width: 1px;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #7c99a5;
   border-radius: 10px;
 }
 

@@ -64,7 +64,8 @@ body {
 
 html,
 body {
-  background: #bacdd3;
+  /* background: #bacdd3; */
+  background: #DEDEDE;
 }
 
 .home {
