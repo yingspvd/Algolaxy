@@ -1003,6 +1003,7 @@ main {
   background: #ffffff;
   border-radius: 3px;
   color: var(--dark-blue-2);
+  cursor: pointer;
 }
 
 .triangle-down {
@@ -1030,6 +1031,7 @@ main {
   background: #ffffff;
   border-radius: 3px;
   color: var(--dark-blue-2);
+  cursor: pointer;
 }
 .display {
   margin-top: 20px;
