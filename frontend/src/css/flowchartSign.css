@@ -1,3 +1,13 @@
+.popup {
+  background-color: #000000;
+  opacity: 0.5;
+  position: absolute;
+  border-radius: 2px;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+}
+
 .arrow-container-f {
   display: flex;
   justify-content: center;
@@ -12,6 +22,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 0;
+  cursor: pointer;
 }
 
 .text-f {
@@ -31,6 +43,7 @@
   justify-content: center;
   align-items: center;
   padding: 5px 5px;
+  cursor: pointer;
 }
 
 .custom-select-f {
@@ -46,6 +59,7 @@
   padding: 0 20px 0 15px;
   position: relative;
   outline: none;
+  min-width: 55px;
 }
 
 /* .diamond-box {
@@ -62,8 +76,8 @@
 } */
 
 .diamond-box {
-  width: 200px;
-  height: 200px;
+  width: 240px;
+  height: 240px;
 }
 
 .diamond-all {
@@ -72,12 +86,13 @@
   height: 100%;
   display: flex;
   justify-content: center;
+  cursor: pointer;
 }
 
 .diamond-item-f {
   display: flex;
   align-items: center;
-  margin: 70px 10px;
+  margin: 90px 10px;
   height: 60px;
   overflow: auto;
   /* position: absolute; */
@@ -105,7 +120,7 @@
   border-color: transparent transparent rgba(0, 0, 0, 0.1);
   margin-left: 5px;
   appearance: none;
-  padding: 0 15px 0 10px;
+  padding: 0 20px 0 10px;
   position: relative;
   outline: none;
 }
@@ -180,6 +195,7 @@
   justify-content: center;
   flex-direction: row;
   align-items: center;
+  cursor: pointer;
 }
 
 .square-box-long-f {
@@ -195,6 +211,7 @@
   color: var(--dark-blue-2);
   padding: 5px 5px;
   margin: 0 10px;
+  cursor: pointer;
 }
 
 .square-box-short-f {
@@ -216,19 +233,18 @@
 
 .text-declare-before-f {
   height: 100%;
-  background-color: white;
+  /* background-color: white; */
   padding: 0 10px 0 5px;
   margin: 0 -10px 0 5px;
   border-radius: 3px 0 0 3px;
-  z-index: 1;
 }
+
 .text-declare-after-f {
   height: 100%;
-  background-color: white;
+  /* background-color: white; */
   padding: 0 5px 0 10px;
   margin: 0 5px 0 -10px;
   border-radius: 0 3px 3px 0;
-  z-index: 1;
 }
 
 .textbox-variable-f {
@@ -244,6 +260,7 @@
   height: 25px;
   background: #ffc700;
   border-radius: 50%;
+  cursor: pointer;
 }
 
 .not-skew-f {
@@ -267,7 +284,7 @@
   display: block;
   border: 0px;
   outline: none;
-  z-index: 2;
+  z-index: 0;
   border-radius: 3px;
   display: flex;
   justify-content: center;
@@ -283,7 +300,7 @@
   display: block;
   border: 0px;
   outline: none;
-  z-index: 2;
+  z-index: 0;
   border-radius: 3px;
   display: flex;
   justify-content: center;
@@ -303,7 +320,7 @@
   display: block;
   border: 0px;
   outline: none;
-  z-index: 2;
+  z-index: 0;
 }
 
 /* width */

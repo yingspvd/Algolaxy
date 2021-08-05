@@ -436,7 +436,7 @@
                   id="op_connect"
                   draggable="true"
                   @dragstart="dragStart"
-                  @dragover.stop                 
+                  @dragover.stop
                   class="dropdown-box"
                   style="border-radius: 25px; width: 60px; height:30px;"
                 >
@@ -938,6 +938,7 @@ main {
   margin-top: 10px;
   font-weight: 500;
   color: var(--dark-blue-2);
+  cursor: pointer;
 }
 
 .square-box-purple {
@@ -1037,6 +1038,10 @@ main {
   flex-direction: column;
   align-items: center;
 }
+
+img {
+  cursor: pointer;
+  }
 
 /* @media screen and (max-width: 1220px) {
   #sidebar {

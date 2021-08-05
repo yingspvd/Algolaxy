@@ -1,5 +1,8 @@
 <template>
-  <div id="container" style="box-shadow: 0px 5px 10px #91A0A5;">
+  <div
+    id="container"
+    style="box-shadow: 0px 5px 10px #91A0A5; background: var(--white-gray);"
+  >
     <div class="tool-container">
       <div class="top-toolbar">
         <div>
@@ -25,14 +28,20 @@
         </div>
       </div>
 
+      <!-- Board -->
       <div
         id="board"
         @dragover.prevent
         @drop.prevent="dropOnBoard"
         class="board scrollarea"
       >
-        <div v-if="popUpMove == false" class="move-element">
-          <i @click="clickMove" class="fas fa-arrows-alt"></i>
+        <div class="move-element">
+          <i
+            v-if="moveMode == false"
+            @click="clickMove"
+            class="fas fa-arrows-alt"
+          ></i>
+          <i v-else @click="clickMove" class="far fa-times-circle"></i>
         </div>
         <div>
           <div class="terminator-f" style="margin:10px 0 0 0">
@@ -42,7 +51,7 @@
 
         <div
           @dragover.prevent
-          @drop.prevent="dropArrow"
+          @drop.prevent="dropOnArrow"
           id="arrowSet1"
           class="arrow-container"
         >
@@ -50,12 +59,7 @@
         </div>
       </div>
 
-      <div v-if="popUpMove" id="popup" class="popup">
-        <div class="popup-cross">
-          <i @click="clickMove" class="far fa-times-circle"></i>
-        </div>
-      </div>
-
+      <!-- Trash and export -->
       <div class="side-toolbar-container">
         <div class="side-toolbar">
           <a
@@ -91,7 +95,7 @@ export default {
 
   data() {
     return {
-      popUpMove: false,
+      moveMode: false,
       arrow: 1,
       variable: ["x", "y", "z"],
       test: ["main"],
@@ -133,7 +137,15 @@ export default {
 
   methods: {
     clickMove() {
-      this.popUpMove = !this.popUpMove;
+      this.moveMode = !this.moveMode;
+      var board = document.getElementById("board");
+      var popUp = document.createElement("div");
+      popUp.id = "popUp";
+      board.appendChild(popUp);
+      document.getElementById(popUp.id).classList.add("popup");
+
+      popUp.style.cssText = "height:auto; padding:0";
+      popUp.style.cssText = "height:" + board.scrollHeight + "px";
     },
 
     dragStart: (e, arrow) => {
@@ -166,7 +178,7 @@ export default {
       }
     },
 
-    dropArrow(e) {
+    dropOnArrow(e) {
       var board = document.getElementById("board");
 
       // Object that placed
@@ -206,9 +218,13 @@ export default {
       }
     },
 
-    drop_var(e) {
+    dropOnObject(e) {
+      var target = document.getElementById(e.target.id);
       var data = e.dataTransfer.getData("object_id");
-      console.log("var", data);
+      var object = document.getElementById(data);
+      console.log("data", object);
+      console.log("target", target);
+      console.log("parent", target.parentNode);
     },
 
     deleteObject() {
@@ -234,7 +250,7 @@ export default {
       };
       div.ondrop = function(event) {
         event.preventDefault();
-        this.dropArrow(event);
+        this.dropOnArrow(event);
       }.bind(this);
 
       var img = document.createElement("img");
@@ -554,7 +570,6 @@ export default {
 
       textarea.ondrag = function(e) {
         e.stopPropagation();
-        console.log("555");
       }.bind(this);
 
       if (data == "declare_int" || data == "declare_string") {
@@ -604,6 +619,24 @@ export default {
       this.style_arrow(board, div);
     },
 
+    dropFuncObject(div) {
+      div.ondragover = function(e) {
+        e.preventDefault();
+      };
+
+      div.ondrop = function(e) {
+        e.preventDefault();
+        this.dropOnObject(e);
+      }.bind(this);
+    },
+
+    stopPropagation(object) {
+      object.ondrop = function(e) {
+        e.stopPropagation();
+        console.log("555");
+      }.bind(this);
+    },
+
     style_assign(board, data, arrow) {
       var arrow_target = document.getElementById(arrow);
       var nextElement = arrow_target.nextElementSibling;
@@ -639,11 +672,7 @@ export default {
       }
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#6181F3";
-      // div.draggable = "true";
-      // div.ondragstart = function(event) {
-      //   var arrow_object = div.nextElementSibling.id;
-      //   this.dragStart(event, arrow_object);
-      // }.bind(this);
+      document.getElementById(div.id).style.zIndex = "1";
 
       if (data == "assign_array") {
         var store = document.createElement("div");
@@ -655,14 +684,10 @@ export default {
 
       // Dropdown1
       var drop1 = document.createElement("div");
-      drop1.id = "drop1_" + data + temp;
+      drop1.id = "dropOne_" + data + temp;
       div.appendChild(drop1);
       document.getElementById(drop1.id).classList.add("custom-select-f");
-      drop1.draggable = true;
-      drop1.onmousedown = function() {
-        console.log("drag");
-        // select.disabled = true;
-      }.bind(this);
+      this.dropFuncObject(drop1);
 
       var select = document.createElement("select");
       select.id = "select_" + data + temp;
@@ -674,32 +699,30 @@ export default {
       }
       document.getElementById(drop1.id).appendChild(select);
       document.getElementById(select.id).classList.add("dropdown-f");
-      select.onmousedown = function(e) {
-        console.log("DOWN");
-        e.stopPropagation();
-      }.bind(this);
 
       var tri1 = document.createElement("div");
-      tri1.id = "tri1_" + data + temp;
+      tri1.id = "triOne_" + data + temp;
       drop1.appendChild(tri1);
       document.getElementById(tri1.id).classList.add("triangle-purple");
 
       if (data == "assign_array") {
         var divTextarea_array = document.createElement("div");
-        divTextarea_array.id = "divTextarea_array" + data + temp;
+        divTextarea_array.id = "divTextareaA_" + data + temp;
         div.appendChild(divTextarea_array);
         document
           .getElementById(divTextarea_array.id)
           .classList.add("textbox-variable-f");
 
-        var div4 = document.createElement("div");
-        div4.id = "div4_" + data + temp;
-        divTextarea_array.appendChild(div4);
-        div4.innerHTML = bText;
-        document.getElementById(div4.id).classList.add("text-declare-before-f");
+        var before = document.createElement("div");
+        before.id = "beforeA_" + data + temp;
+        divTextarea_array.appendChild(before);
+        before.innerHTML = bText;
+        document
+          .getElementById(before.id)
+          .classList.add("text-declare-before-f");
 
         var textarea = document.createElement("textarea");
-        textarea.id = "textarea" + data + temp;
+        textarea.id = "textarea_" + data + temp;
         divTextarea_array.appendChild(textarea);
         document.getElementById(textarea.id).classList.add("textarea-array");
         document.getElementById(textarea.id).contentEditable = "true";
@@ -710,11 +733,13 @@ export default {
           this.autosizeTextArea(event.target);
         }.bind(this);
 
-        var div5 = document.createElement("div");
-        div5.id = "div5_" + data + temp;
-        divTextarea_array.appendChild(div5);
-        div5.innerHTML = aText;
-        document.getElementById(div5.id).classList.add("text-declare-after-f");
+        var after = document.createElement("div");
+        after.id = "afterA_" + data + temp;
+        divTextarea_array.appendChild(after);
+        after.innerHTML = aText;
+        document.getElementById(after.id).classList.add("text-declare-after-f");
+
+        this.dropFuncObject(divTextarea_array);
       }
 
       // Equal Sign
@@ -725,18 +750,29 @@ export default {
       document
         .getElementById(equal.id)
         .classList.add("square-round-box-short-f");
+      this.dropFuncObject(equal);
 
       // InputBox
       if (data == "assign_int" || data == "assign_string") {
-        var div2 = document.createElement("div");
-        div2.id = "div2_" + data + temp;
-        div.appendChild(div2);
-        div2.innerHTML = bText;
-        document.getElementById(div2.id).classList.add("text-declare-before-f");
+        var divTextarea = document.createElement("div");
+        divTextarea.id = "divTextarea_" + data + temp;
+        div.appendChild(divTextarea);
+        document
+          .getElementById(divTextarea.id)
+          .classList.add("textbox-variable-f");
+        this.dropFuncObject(divTextarea);
+
+        var beforeI = document.createElement("div");
+        beforeI.id = "beforeI_" + data + temp;
+        divTextarea.appendChild(beforeI);
+        beforeI.innerHTML = bText;
+        document
+          .getElementById(beforeI.id)
+          .classList.add("text-declare-before-f");
 
         var textarea1 = document.createElement("textarea");
-        textarea1.id = "textarea1" + data + temp;
-        div.appendChild(textarea1);
+        textarea1.id = "textareaI_" + data + temp;
+        divTextarea.appendChild(textarea1);
         document.getElementById(textarea1.id).classList.add("textarea");
         document.getElementById(textarea1.id).contentEditable = "true";
         textarea1.placeholder = text;
@@ -745,14 +781,16 @@ export default {
           this.autosizeTextArea(event.target);
         }.bind(this);
 
-        var div3 = document.createElement("div");
-        div3.id = "div3_" + data + temp;
-        div.appendChild(div3);
-        div3.innerHTML = aText;
-        document.getElementById(div3.id).classList.add("text-declare-after-f");
+        var afterI = document.createElement("div");
+        afterI.id = "afterI_" + data + temp;
+        divTextarea.appendChild(afterI);
+        afterI.innerHTML = aText;
+        document
+          .getElementById(afterI.id)
+          .classList.add("text-declare-after-f");
       } else {
         var textarea2 = document.createElement("textarea");
-        textarea2.id = "textarea2" + data + temp;
+        textarea2.id = "textareaAA_" + data + temp;
         div.appendChild(textarea2);
         document.getElementById(textarea2.id).classList.add("textarea");
         document.getElementById(textarea2.id).contentEditable = "true";
@@ -792,28 +830,29 @@ export default {
       // div.appendChild(img);
       // document.getElementById(img.id).classList.add("diamond-img-f");
       var diamondDiv = document.createElement("div");
-      diamondDiv.id = "diamondDiv" + data + this.condition;
+      diamondDiv.id = "diamondDiv_" + data + this.condition;
       div.appendChild(diamondDiv);
       document.getElementById(diamondDiv.id).classList.add("diamond-box");
+      document.getElementById(diamondDiv.id).style.zIndex = "1";
 
       var diamondAll = document.createElement("div");
-      diamondAll.id = "diamondAll" + data + this.condition;
+      diamondAll.id = "diamondAll_" + data + this.condition;
       diamondDiv.appendChild(diamondAll);
       document.getElementById(diamondAll.id).classList.add("diamond-all");
 
       var condition = document.createElement("div");
-      condition.id = "condition" + data + this.condition;
+      condition.id = "condition_" + data + this.condition;
       diamondAll.appendChild(condition);
       document.getElementById(condition.id).classList.add("diamond-square-box");
 
       var div2 = document.createElement("div");
-      div2.id = "item" + this.condition;
+      div2.id = "item_" + this.condition;
       diamondAll.appendChild(div2);
       document.getElementById(div2.id).classList.add("diamond-item-f");
 
       // Dropdown
       var drop1 = document.createElement("div");
-      drop1.id = "drop1_" + data + this.condition;
+      drop1.id = "drop_" + data + this.condition;
       div2.appendChild(drop1);
       document.getElementById(drop1.id).classList.add("custom-select-f");
 
@@ -829,18 +868,18 @@ export default {
       document.getElementById(select.id).classList.add("dropdown-f");
 
       var tri1 = document.createElement("div");
-      tri1.id = "tri1_" + data + this.condition;
+      tri1.id = "tri_" + data + this.condition;
       drop1.appendChild(tri1);
       document.getElementById(tri1.id).classList.add("triangle-purple");
 
       // Dropdown
       var drop2 = document.createElement("div");
-      drop2.id = "drop2_" + data + this.condition;
+      drop2.id = "dropTwo_" + data + this.condition;
       div2.appendChild(drop2);
       document.getElementById(drop2.id).classList.add("custom-select-f");
 
       var select2 = document.createElement("select");
-      select2.id = "select2_" + data + this.condition;
+      select2.id = "selectTwo_" + data + this.condition;
       for (const val of op_compare) {
         var option2 = document.createElement("option");
         option2.value = val;
@@ -851,7 +890,7 @@ export default {
       document.getElementById(select2.id).classList.add("dropdown-round-f");
 
       var tri2 = document.createElement("div");
-      tri2.id = "tri2_" + data + this.condition;
+      tri2.id = "triTwo_" + data + this.condition;
       drop2.appendChild(tri2);
       document.getElementById(tri2.id).classList.add("triangle-green");
 
@@ -929,6 +968,11 @@ export default {
       div.appendChild(div2);
       document.getElementById(div2.id).classList.add("square-box-short-f");
 
+      var drop = document.createElement("div");
+      drop.id = "drop_" + data + this.callFunc;
+      div.appendChild(drop);
+      document.getElementById(drop.id).classList.add("custom-select-f");
+
       var select = document.createElement("select");
       select.id = "select_" + data + this.callFunc;
       for (const val of this.function) {
@@ -937,8 +981,13 @@ export default {
         option.text = val;
         select.appendChild(option);
       }
-      document.getElementById(div.id).appendChild(select);
+      document.getElementById(drop.id).appendChild(select);
       document.getElementById(select.id).classList.add("dropdown-f");
+
+      var tri = document.createElement("div");
+      tri.id = "tri_" + data + this.callFunc;
+      drop.appendChild(tri);
+      document.getElementById(tri.id).classList.add("triangle-purple");
 
       var div3 = document.createElement("div");
       div3.id = "div3_" + this.callFunc;
@@ -1322,13 +1371,13 @@ export default {
       document.getElementById(textBox.id).classList.add("textbox-variable-f");
 
       var before = document.createElement("div");
-      before.id = "before_" + temp;
+      before.id = "before_" + data + temp;
       textBox.appendChild(before);
       before.innerHTML = bText;
       document.getElementById(before.id).classList.add("text-declare-before-f");
 
       var textarea = document.createElement("textarea");
-      textarea.id = "textarea_" + temp;
+      textarea.id = "textarea_" + data + temp;
       textBox.appendChild(textarea);
       document.getElementById(textarea.id).classList.add("textarea");
       document.getElementById(textarea.id).contentEditable = "true";
@@ -1339,7 +1388,7 @@ export default {
       }.bind(this);
 
       var after = document.createElement("div");
-      after.id = "after_" + temp;
+      after.id = "after_" + data + temp;
       textBox.appendChild(after);
       after.innerHTML = aText;
       document.getElementById(after.id).classList.add("text-declare-after-f");
@@ -1465,21 +1514,11 @@ html {
   height: 100%;
 }
 
-.popup {
-  background-color: #000000;
-  opacity: 0.5;
-  position: absolute;
-  top: 43px;
-  border-radius: 2x;
-  height: calc(100% - 43px);
-  width: 100%;
-}
-
 .popup-cross {
   cursor: pointer;
   position: absolute;
-  top: 3%;
-  right: 3%;
+  top: 3.5%;
+  right: 3.5%;
 }
 
 #container {
@@ -1503,8 +1542,8 @@ html {
 .move-element {
   cursor: pointer;
   position: absolute;
-  top: 10%;
-  right: 3%;
+  top: 2%;
+  right: 2%;
 }
 
 .top-toolbar {
@@ -1538,9 +1577,13 @@ html {
   align-items: center;
   width: 100%;
   height: 100%;
-  border-radius: 10px;
-  background-color: var(--white-gray);
+  /* border-radius: 10px; */
+  /* background-color: var(--white-gray); */
+  background-color: rgba(0, 0, 0, 0);
+  /* opacity: 60%; */
   padding-bottom: 50px;
+  position: relative;
+  z-index: 1;
 }
 
 .arrow-container {
@@ -1570,6 +1613,10 @@ html {
 .fa-arrows-alt {
   color: var(--gray);
   font-size: 20px;
+}
+
+.fa-arrows-alt:hover {
+  color: #9b9b9b;
 }
 
 .fa-times-circle {
@@ -1610,12 +1657,11 @@ html {
   overflow-y: scroll;
   overflow-x: scroll;
 }
-/* width */
+/* scrollbar width */
 ::-webkit-scrollbar {
   width: 5px;
   height: 8px;
 }
-
 ::-webkit-scrollbar-thumb {
   background: #7ca3b2;
   width: 1px;
