@@ -82,7 +82,7 @@
       >
         <div>
           <div class="terminator-f" style="margin:10px 0 0 0">
-            <div class="text-f">START</div>
+            <div class="text-f not-select">START</div>
           </div>
         </div>
 
@@ -113,6 +113,9 @@ const op_pushpop = ["Push", "Pop"];
 const op_queue = ["Enqueue", "dequeue"];
 
 const elemObName = [
+  "select_assign_int",
+  "textareaI_assign_int",
+  "select_assign_string",
   "select_assign_array",
   "textarea_assign_array",
   "beforeA_assign_array",
@@ -207,7 +210,7 @@ export default {
       var data = e.dataTransfer.getData("object_id");
       var lastChild = board.lastChild.id;
 
-      if (e.target.id == "board") {
+      if (e.target.id == "board" && lastChild != "end2") {
         this.choose_style(board, data, lastChild);
       }
     },
@@ -260,6 +263,7 @@ export default {
       var myArray = e.target.id.split(/([0-9]+)/);
       var ob_name = myArray[0];
 
+      console.log(target.id);
       while (i < elemObName.length) {
         if (ob_name == elemObName[i]) {
           ob_name = target.parentNode;
@@ -278,6 +282,14 @@ export default {
 
       if (data == "text_int" || data == "text_string" || data == "text_array") {
         this.style_text(data, parentOb, nextElement);
+      } else if (data == "variable_drop") {
+        this.style_variable(data, parentOb, nextElement);
+      } else if (data == "op_calculate" || data == "op_equal") {
+        this.style_operator(data, parentOb, nextElement);
+      }
+
+      if (data == "op_compare" || data == "op_connect") {
+        this.style_operator(data, parentOb, nextElement);
       }
     },
 
@@ -297,7 +309,8 @@ export default {
         board.insertBefore(div, nextElement);
       }
 
-      document.getElementById(div.id).classList.add("arrow-container-f");
+      div.classList.add("arrow-container-f");
+      div.classList.add("not-select");
 
       div.ondragover = function(event) {
         event.preventDefault();
@@ -352,39 +365,25 @@ export default {
         this.style_connector(board, data, arrow_target);
       }
       if (
-        data == "maxmin_function" ||
+        data == "maxmin_fn" ||
         data == "pushpop_function" ||
         data == "queue_function"
       ) {
         this.style_maxminFunction(board, data, arrow_target);
       }
       if (
-        data == "sort_function" ||
-        data == "length_function" ||
-        data == "floor_function" ||
-        data == "round_function"
+        data == "sort_fn" ||
+        data == "length_fn" ||
+        data == "floor_fn" ||
+        data == "round_fn"
       ) {
         this.style_sortFunction(board, data, arrow_target);
       }
-      if (data == "swap_function" || data == "random_function") {
+      if (data == "swap_fn" || data == "random_fn") {
         this.style_swapFunction(board, data, arrow_target);
       }
-      if (data == "squareroot_function") {
+      if (data == "sq_fn") {
         this.style_squareRootFunction(board, data, arrow_target);
-      }
-      if (data == "text_string" || data == "text_array" || data == "text_int") {
-        this.style_text(board, data);
-      }
-      if (data == "variable_drop") {
-        this.style_variable(board, data);
-      }
-      if (
-        data == "op_calculate" ||
-        data == "op_equal" ||
-        data == "op_compare" ||
-        data == "op_connect"
-      ) {
-        this.style_operator(board, data);
       }
     },
 
@@ -402,7 +401,7 @@ export default {
 
       this.terminator += 1;
       var div = document.createElement("div");
-      div.id = "terminator" + this.terminator;
+      div.id = "end" + this.terminator;
       if (nextElement == null) {
         board.appendChild(div);
       } else {
@@ -411,7 +410,8 @@ export default {
       var div1 = document.createElement("div");
       div1.id = "div1_" + this.terminator;
       div.appendChild(div1);
-      document.getElementById(div1.id).classList.add("terminator-f");
+      div1.classList.add("terminator-f");
+      div1.classList.add("not-select");
 
       var div2 = document.createElement("div");
       div2.id = "text";
@@ -491,14 +491,16 @@ export default {
         div5.innerHTML = "&#8221";
         document.getElementById(div5.id).classList.add("text-declare-after-f");
       }
+
+      // Dropdown
       var drop1 = document.createElement("div");
       drop1.id = "drop1_" + data + temp;
       div1.appendChild(drop1);
       document.getElementById(drop1.id).classList.add("custom-select-f");
+      this.dropFuncObject(drop1);
 
       var select = document.createElement("select");
       select.id = "select" + data + temp;
-
       for (const val of this.variable) {
         var option = document.createElement("option");
         option.value = val;
@@ -669,6 +671,7 @@ export default {
       divTextarea.appendChild(div5);
       div5.innerHTML = aText;
       document.getElementById(div5.id).classList.add("text-declare-after-f");
+      document.getElementById(div5.id).classList.add("box-inlne");
 
       this.style_arrow(board, div);
     },
@@ -727,6 +730,11 @@ export default {
       document.getElementById(div.id).classList.add("square-box-long-f");
       document.getElementById(div.id).style.background = "#6181F3";
       document.getElementById(div.id).style.zIndex = "1";
+      div.draggable = "true";
+      div.ondragstart = function(event) {
+        var arrow_object = div.nextElementSibling.id;
+        this.dragStart(event, arrow_object);
+      }.bind(this);
 
       if (data == "assign_array") {
         var store = document.createElement("div");
@@ -740,6 +748,7 @@ export default {
       drop1.id = "dropOne_" + data + temp;
       div.appendChild(drop1);
       document.getElementById(drop1.id).classList.add("custom-select-f");
+      document.getElementById(drop1.id).classList.add("box-inline");
       this.dropFuncObject(drop1);
 
       var select = document.createElement("select");
@@ -764,11 +773,18 @@ export default {
         div.appendChild(divTextarea_array);
         document
           .getElementById(divTextarea_array.id)
+          .classList.add("box-inline");
+
+        var container_array = document.createElement("div");
+        container_array.id = "container_array_" + data + temp;
+        divTextarea_array.appendChild(container_array);
+        document
+          .getElementById(container_array.id)
           .classList.add("textbox-variable-f");
 
         var before = document.createElement("div");
         before.id = "beforeA_" + data + temp;
-        divTextarea_array.appendChild(before);
+        container_array.appendChild(before);
         before.innerHTML = bText;
         document
           .getElementById(before.id)
@@ -776,7 +792,7 @@ export default {
 
         var textarea = document.createElement("textarea");
         textarea.id = "textarea_" + data + temp;
-        divTextarea_array.appendChild(textarea);
+        container_array.appendChild(textarea);
         document.getElementById(textarea.id).classList.add("textarea-array");
         document.getElementById(textarea.id).contentEditable = "true";
         textarea.maxLength = "9";
@@ -788,7 +804,7 @@ export default {
 
         var after = document.createElement("div");
         after.id = "afterA_" + data + temp;
-        divTextarea_array.appendChild(after);
+        container_array.appendChild(after);
         after.innerHTML = aText;
         document.getElementById(after.id).classList.add("text-declare-after-f");
 
@@ -803,7 +819,9 @@ export default {
       document
         .getElementById(equal.id)
         .classList.add("square-round-box-short-f");
-      this.dropFuncObject(equal);
+      this.dropFuncObject(equal, "assign");
+
+  
 
       // InputBox
       if (data == "assign_int" || data == "assign_string") {
@@ -842,15 +860,21 @@ export default {
           .getElementById(afterI.id)
           .classList.add("text-declare-after-f");
       } else {
-        var textarea2 = document.createElement("textarea");
-        textarea2.id = "textareaAA_" + data + temp;
-        div.appendChild(textarea2);
-        document.getElementById(textarea2.id).classList.add("textarea");
-        document.getElementById(textarea2.id).contentEditable = "true";
-        textarea2.placeholder = "Text";
-        textarea2.rows = "1";
-        this.dropFuncObject(textarea2);
-        textarea2.oninput = function(event) {
+        var divTextarea2 = document.createElement("div");
+        divTextarea2.id = "textareaAA_" + data + temp;
+        div.appendChild(divTextarea2);
+        document.getElementById(divTextarea2.id).classList.add("box-inline");
+        document.getElementById(divTextarea2.id).contentEditable = "true";
+        this.dropFuncObject(divTextarea2);
+
+        var textarea3 = document.createElement("textarea");
+        textarea3.id = "textareaInAA_" + data + temp;
+        divTextarea2.appendChild(textarea3);
+        document.getElementById(textarea3.id).classList.add("textarea");
+        document.getElementById(textarea3.id).contentEditable = "true";
+        textarea3.placeholder = "Text";
+        textarea3.rows = "1";
+        textarea3.oninput = function(event) {
           this.autosizeTextArea(event.target);
         }.bind(this);
       }
@@ -908,7 +932,8 @@ export default {
       var drop1 = document.createElement("div");
       drop1.id = "drop_" + data + this.condition;
       div2.appendChild(drop1);
-      document.getElementById(drop1.id).classList.add("custom-select-f");
+      drop1.classList.add("custom-select-f");
+      this.dropFuncObject(drop1);
 
       var select = document.createElement("select");
       select.id = "select_" + data + this.condition;
@@ -931,6 +956,7 @@ export default {
       drop2.id = "dropTwo_" + data + this.condition;
       div2.appendChild(drop2);
       document.getElementById(drop2.id).classList.add("custom-select-f");
+      this.dropFuncObject(drop2);
 
       var select2 = document.createElement("select");
       select2.id = "selectTwo_" + data + this.condition;
@@ -955,6 +981,8 @@ export default {
       document.getElementById(textarea.id).contentEditable = "true";
       textarea.rows = "1";
       textarea.placeholder = "Text";
+      this.dropFuncObject(textarea);
+
       // textarea.oninput = function(event) {
       //   this.autosizeTextArea(event.target);
       // }.bind(this);
@@ -1058,7 +1086,7 @@ export default {
       var temp = 0;
       var optionChoose = "";
 
-      if (data == "maxmin_function") {
+      if (data == "maxmin_fn") {
         this.maxminFunc += 1;
         temp = this.maxminFunc;
         optionChoose = op_maxmin;
@@ -1139,15 +1167,15 @@ export default {
       var temp = 0;
       var text = "";
 
-      if (data == "sort_function") {
+      if (data == "sort_fn") {
         this.sortFunc += 1;
         temp = this.sortFunc;
         text = "SORT";
-      } else if (data == "length_function") {
+      } else if (data == "length_fn") {
         this.lengthFunc += 1;
         temp = this.lengthFunc;
         text = "LENGTH";
-      } else if (data == "floor_function") {
+      } else if (data == "floor_fn") {
         this.floorFunc += 1;
         temp = this.floorFunc;
         text = "FLOOR";
@@ -1209,7 +1237,7 @@ export default {
       var text = "";
       var text2 = "";
 
-      if (data == "swap_function") {
+      if (data == "swap_fn") {
         this.swapFunc += 1;
         temp = this.swapFunc;
         text = "SWAP";
@@ -1242,7 +1270,7 @@ export default {
       div2.innerHTML = text;
       document.getElementById(div2.id).classList.add("text-f");
 
-      if (data == "swap_function") {
+      if (data == "swap_fn") {
         var drop1 = document.createElement("div");
         drop1.id = "drop1_" + data + temp;
         div.appendChild(drop1);
@@ -1279,7 +1307,7 @@ export default {
       div3.innerHTML = text2;
       document.getElementById(div3.id).classList.add("text-f");
 
-      if (data == "swap_function") {
+      if (data == "swap_fn") {
         var drop2 = document.createElement("div");
         drop2.id = "drop2_" + data + temp;
         div.appendChild(drop2);
@@ -1418,6 +1446,7 @@ export default {
       var div = document.createElement("div");
       div.id = "div_" + data + temp;
       parentOb.insertBefore(div, nextElement);
+      document.getElementById(div.id).classList.add("box-inline");
 
       var textBox = document.createElement("div");
       textBox.id = "textBox_" + data + temp;
@@ -1448,12 +1477,12 @@ export default {
       document.getElementById(after.id).classList.add("text-declare-after-f");
     },
 
-    style_variable(board, data) {
+    style_variable(data, parentOb, nextElement) {
       this.variableDrop += 1;
 
       var div = document.createElement("div");
       div.id = "div_" + data + this.variableDrop;
-      board.appendChild(div);
+      parentOb.insertBefore(div, nextElement);
 
       var drop1 = document.createElement("div");
       drop1.id = "drop1_" + data + this.variableDrop;
@@ -1476,7 +1505,8 @@ export default {
       drop1.appendChild(tri1);
       document.getElementById(tri1.id).classList.add("triangle-purple");
     },
-    style_operator(board, data) {
+
+    style_operator(data, parentOb, nextElement) {
       var temp = 0;
       var triColor = "";
       var op = "";
@@ -1503,7 +1533,7 @@ export default {
 
       var div = document.createElement("div");
       div.id = "div_" + data + temp;
-      board.appendChild(div);
+      parentOb.insertBefore(div, nextElement);
 
       if (data == "op_equal") {
         var equalBox = document.createElement("div");

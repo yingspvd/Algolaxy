@@ -1,3 +1,9 @@
+.not-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
 .popup {
   background-color: #000000;
   opacity: 0.5;
@@ -38,6 +44,7 @@
   text-align: center;
   font-weight: 500;
   margin: 0 5px;
+  display: inline-block;
 }
 
 .parallelogram-f {
@@ -210,8 +217,9 @@
   height: auto;
   background: #ffa05b;
   min-width: 180px;
-  /* max-width: 350px; */
-  display: flex;
+  max-width: 500px;
+  /* display: inline-block; */
+  vertical-align: middle;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -231,9 +239,10 @@
 .square-round-box-short-f {
   width: 40px;
   height: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: inline-block;
+  text-align: center;
+  /* justify-content: center;
+  align-items: center; */
   background: white;
   border-radius: 30px;
   margin: 0 5px;
@@ -241,6 +250,7 @@
 
 .text-declare-before-f {
   height: 100%;
+  display: inline-block;
   /* background-color: white; */
   padding: 0 10px 0 5px;
   margin: 0 -10px 0 5px;
@@ -249,15 +259,22 @@
 
 .text-declare-after-f {
   height: 100%;
+  display: inline-block;
   /* background-color: white; */
   padding: 0 5px 0 10px;
   margin: 0 5px 0 -10px;
   border-radius: 0 3px 3px 0;
 }
 
+.box-inline {
+  /* box-sizing: border-box; */
+  display: inline-block;
+}
+
 .textbox-variable-f {
-  display: flex;
-  align-items: top;
+  display: inline-block;
+  /* align-items: top; */
+  text-align: center;
   margin: 0 5px;
   background-color: white;
   border-radius: 3px;
@@ -289,14 +306,13 @@
   width: 100px;
   /* min-height: 30px; */
   min-height: 28px;
-  display: block;
   border: 0px;
   outline: none;
   z-index: 0;
   border-radius: 3px;
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  text-align: center;
+  text-align: center; */
 }
 
 .textarea-1-long-row {
@@ -317,15 +333,13 @@
 }
 
 .textarea-array {
-  display: flex;
-  justify-content: center;
+  display: inline-block;
   text-align: center;
   white-space: nowrap;
   resize: none;
   overflow-y: hidden;
   width: 30px;
   min-height: 28px;
-  display: block;
   border: 0px;
   outline: none;
   z-index: 0;
