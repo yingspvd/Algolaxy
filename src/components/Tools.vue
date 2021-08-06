@@ -492,7 +492,7 @@
                 <div class="square-box-short"></div>
               </div>
               <div
-                id="maxmin_function"
+                id="maxmin_fn"
                 draggable="true"
                 @dragstart="dragStart"
                 @dragover.stop
@@ -521,7 +521,7 @@
               </div>
 
               <div
-                id="sort_function"
+                id="sort_fn"
                 draggable="true"
                 @dragstart="dragStart"
                 @dragover.stop
@@ -541,7 +541,7 @@
               </div>
 
               <div
-                id="swap_function"
+                id="swap_fn"
                 draggable="true"
                 @dragstart="dragStart"
                 @dragover.stop
@@ -571,7 +571,7 @@
               </div>
 
               <div
-                id="length_function"
+                id="length_fn"
                 draggable="true"
                 @dragstart="dragStart"
                 @dragover.stop
@@ -649,7 +649,7 @@
               </div>
 
               <div
-                id="floor_function"
+                id="floor_fn"
                 draggable="true"
                 @dragstart="dragStart"
                 @dragover.stop
@@ -669,7 +669,7 @@
               </div>
 
               <div
-                id="round_function"
+                id="round_fn"
                 draggable="true"
                 @dragstart="dragStart"
                 @dragover.stop
@@ -689,7 +689,7 @@
               </div>
 
               <div
-                id="random_function"
+                id="random_fn"
                 draggable="true"
                 @dragstart="dragStart"
                 @dragover.stop
@@ -709,7 +709,7 @@
               </div>
 
               <div
-                id="squareroot_function"
+                id="sq_fn"
                 draggable="true"
                 @dragstart="dragStart"
                 @dragover.stop
