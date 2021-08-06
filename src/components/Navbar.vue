@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-dark bg-color">
-    <a class="navbar-brand" href="#" style=" letter-spacing: 5px;">
+    <a class="navbar-brand" href="/" style=" letter-spacing: 5px;">
       <img
         src="../assets/logo.svg"
         height="15px"
@@ -130,7 +130,7 @@ export default {
   background: var(--dark-blue-1);
   border-radius: 10px;
   margin-top: 10px;
-  border: 0px solid rgb(0 0 0 / 0%)
+  border: 0px solid rgb(0 0 0 / 0%);
 }
 
 .dropdown-item {
