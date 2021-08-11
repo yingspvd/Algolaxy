@@ -32,13 +32,18 @@
       <div class="side-toolbar-container" v-if="moveMode == false">
         <div class="side-toolbar">
           <a
-            @dragover.prevent
+            @dragover.prevent="isHover = true"
+            @dragleave="isHover = false"
             @drop.prevent="deleteObject"
-            style="cursor:pointer;"
+            style="padding-left: 50px"
           >
-            <i class="far fa-trash-alt"></i>
+            <i
+              id="trash"
+              class="far fa-trash-alt"
+              :class="{ trashHover: isHover }"
+            ></i>
           </a>
-          <a style="cursor:pointer; margin-top:15px">
+          <a style="cursor:pointer; margin-top:15px; padding-left: 50px">
             <i class="fas fa-file-export"></i>
           </a>
         </div>
@@ -46,9 +51,10 @@
       <div v-else class="side-toolbar-container" style="z-index:0;">
         <div class="side-toolbar">
           <a
-            @dragover.prevent
+            @dragover.prevent="isHover = true"
+            @dragleave="isHover = false"
             @drop.prevent="deleteObject"
-            style="cursor:pointer;"
+            style="padding-left: 50px"
           >
             <i class="far fa-trash-alt"></i>
           </a>
@@ -127,6 +133,7 @@ export default {
 
   data() {
     return {
+      isHover: false,
       moveMode: false,
       arrow: 1,
       variable: ["x", "y", "z"],
@@ -263,7 +270,6 @@ export default {
       var myArray = e.target.id.split(/([0-9]+)/);
       var ob_name = myArray[0];
 
-      console.log(target.id);
       while (i < elemObName.length) {
         if (ob_name == elemObName[i]) {
           ob_name = target.parentNode;
@@ -293,8 +299,15 @@ export default {
       }
     },
 
-    deleteObject() {
-      console.log("delete");
+    deleteObject(e) {
+      this.isHover = false;
+      var data = e.dataTransfer.getData("object_id");
+      var object = document.getElementById(data);
+      var board = document.getElementById("board");
+      var arrow = object.nextElementSibling;
+
+      board.removeChild(object);
+      board.removeChild(arrow);
     },
 
     style_arrow(board, object) {
@@ -821,8 +834,6 @@ export default {
         .classList.add("square-round-box-short-f");
       this.dropFuncObject(equal, "assign");
 
-  
-
       // InputBox
       if (data == "assign_int" || data == "assign_string") {
         var divTextarea = document.createElement("div");
@@ -872,6 +883,7 @@ export default {
         divTextarea2.appendChild(textarea3);
         document.getElementById(textarea3.id).classList.add("textarea");
         document.getElementById(textarea3.id).contentEditable = "true";
+        document.getElementById(textarea3.id).style.margin = "3px 3px";
         textarea3.placeholder = "Text";
         textarea3.rows = "1";
         textarea3.oninput = function(event) {
@@ -1035,7 +1047,7 @@ export default {
       } else {
         board.insertBefore(div, nextElement);
       }
-      document.getElementById(div.id).classList.add("square-box-long-f");
+      document.getElementById(div.id).classList.add("square-box-long-function-f");
       document.getElementById(div.id).style.background = "#B09CFF";
       document.getElementById(div.id).style.height = "35px";
       document.getElementById(div.id).style.justifyContent = "space-between";
@@ -1048,7 +1060,9 @@ export default {
       var div2 = document.createElement("div");
       div2.id = "div2_" + this.callFunc;
       div.appendChild(div2);
-      document.getElementById(div2.id).classList.add("square-box-short-f");
+      document
+        .getElementById(div2.id)
+        .classList.add("square-box-short-f");
 
       var drop = document.createElement("div");
       drop.id = "drop_" + data + this.callFunc;
@@ -1107,7 +1121,7 @@ export default {
       } else {
         board.insertBefore(div, nextElement);
       }
-      document.getElementById(div.id).classList.add("square-box-long-f");
+      document.getElementById(div.id).classList.add("square-box-long-function-f");
       document.getElementById(div.id).style.background = "#B09CFF";
       div.draggable = "true";
       div.ondragstart = function(event) {
@@ -1192,7 +1206,7 @@ export default {
       } else {
         board.insertBefore(div, nextElement);
       }
-      document.getElementById(div.id).classList.add("square-box-long-f");
+      document.getElementById(div.id).classList.add("square-box-long-function-f");
       document.getElementById(div.id).style.background = "#B09CFF";
       div.draggable = "true";
       div.ondragstart = function(event) {
@@ -1256,7 +1270,7 @@ export default {
       } else {
         board.insertBefore(div, nextElement);
       }
-      document.getElementById(div.id).classList.add("square-box-long-f");
+      document.getElementById(div.id).classList.add("square-box-long-function-f");
       document.getElementById(div.id).style.background = "#B09CFF";
       div.draggable = "true";
       div.ondragstart = function(event) {
@@ -1354,7 +1368,7 @@ export default {
       } else {
         board.insertBefore(div, nextElement);
       }
-      document.getElementById(div.id).classList.add("square-box-long-f");
+      document.getElementById(div.id).classList.add("square-box-long-function-f");
       document.getElementById(div.id).style.background = "#B09CFF";
       div.draggable = "true";
       div.ondragstart = function(event) {
@@ -1483,6 +1497,7 @@ export default {
       var div = document.createElement("div");
       div.id = "div_" + data + this.variableDrop;
       parentOb.insertBefore(div, nextElement);
+      document.getElementById(div.id).classList.add("box-inline");
 
       var drop1 = document.createElement("div");
       drop1.id = "drop1_" + data + this.variableDrop;
@@ -1534,12 +1549,13 @@ export default {
       var div = document.createElement("div");
       div.id = "div_" + data + temp;
       parentOb.insertBefore(div, nextElement);
+      document.getElementById(div.id).classList.add("box-inline");
 
       if (data == "op_equal") {
         var equalBox = document.createElement("div");
         equalBox.id = "equalBox_" + data + temp;
         div.appendChild(equalBox);
-        document.getElementById(equalBox.id).classList.add("dropdown-round-f");
+        document.getElementById(equalBox.id).classList.add("square-round-box-short-f");
         equalBox.innerHTML = "=";
       } else {
         var drop = document.createElement("div");
@@ -1579,7 +1595,7 @@ html {
   display: flex;
   flex-direction: column;
   width: 550px;
-  height: 650px;
+  height: 750px;
   /* margin-left: 65px; */
   border-radius: 5px;
   background-color: var(--white-gray);
@@ -1589,7 +1605,7 @@ html {
   display: flex;
   flex-direction: column;
   width: 550px;
-  height: 650px;
+  height: 750px;
   left: 0;
   /* margin-left: 65px; */
   border-radius: 5px;
@@ -1627,7 +1643,7 @@ html {
 .side-toolbar-container {
   position: absolute;
   top: 86%;
-  left: 92%;
+  left: 80.5%;
   z-index: 2;
 }
 .side-toolbar {
@@ -1692,7 +1708,7 @@ html {
   margin-right: 10px;
   font-size: 25px;
 }
-.fa-trash-alt:hover {
+.trashHover {
   color: red;
 }
 .fa-file-export:hover {
@@ -1751,7 +1767,7 @@ html {
     display: flex;
     flex-direction: column;
     width: 500px;
-    height: 625px;
+    height: 725px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
@@ -1762,7 +1778,7 @@ html {
     display: flex;
     flex-direction: column;
     width: 450px;
-    height: 600px;
+    height: 700px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
@@ -1773,7 +1789,7 @@ html {
     display: flex;
     flex-direction: column;
     width: 400px;
-    height: 575px;
+    height: 675px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
@@ -1784,7 +1800,7 @@ html {
     display: flex;
     flex-direction: column;
     width: 350px;
-    height: 550px;
+    height: 650px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
@@ -1795,7 +1811,7 @@ html {
     display: flex;
     flex-direction: column;
     width: 325px;
-    height: 550px;
+    height: 650px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
@@ -1806,7 +1822,7 @@ html {
     display: flex;
     flex-direction: column;
     width: 300px;
-    height: 550px;
+    height: 650px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }

@@ -65,7 +65,7 @@ export default {};
 <style scoped>
 #container {
   width: 500px;
-  height: 650px;
+  height: 750px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -117,7 +117,7 @@ export default {};
     flex-direction: column;
     align-items: center;
     width: 450px;
-    height: 625px;
+    height: 725px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
@@ -129,7 +129,7 @@ export default {};
     flex-direction: column;
     align-items: center;
     width: 400px;
-    height: 600px;
+    height: 700px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
@@ -141,7 +141,7 @@ export default {};
     flex-direction: column;
     align-items: center;
     width: 350px;
-    height: 575px;
+    height: 675px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
@@ -153,7 +153,7 @@ export default {};
     flex-direction: column;
     align-items: center;
     width: 300px;
-    height: 550px;
+    height: 650px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
@@ -165,7 +165,7 @@ export default {};
     flex-direction: column;
     align-items: center;
     width: 275px;
-    height: 550px;
+    height: 650px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }
@@ -177,7 +177,7 @@ export default {};
     flex-direction: column;
     align-items: center;
     width: 275px;
-    height: 550px;
+    height: 650px;
     border-radius: 5px;
     background-color: var(--white-gray);
   }

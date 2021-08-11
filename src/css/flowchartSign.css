@@ -62,18 +62,21 @@
 
 .custom-select-f {
   position: relative;
-  margin-right: 5px;
+  margin: 3px 3px;
 }
 
 .dropdown-round-f {
+  background: #ffffff;
   border-radius: 60px;
-  border-color: transparent transparent rgba(0, 0, 0, 0.1);
-  margin-left: 5px;
   appearance: none;
   padding: 0 20px 0 15px;
+  height: 30px;
   position: relative;
   outline: none;
+  border: 0px;
   min-width: 55px;
+  vertical-align: middle;
+  text-align: center;
 }
 
 /* .diamond-box {
@@ -132,11 +135,12 @@
 .dropdown-f {
   border-radius: 5px;
   border-color: transparent transparent rgba(0, 0, 0, 0.1);
-  margin-left: 5px;
   appearance: none;
   padding: 0 20px 0 10px;
   position: relative;
   outline: none;
+  vertical-align: middle;
+  height: 28px;
 }
 
 .label-dropdown-f {
@@ -152,7 +156,7 @@
   border-right: 3px solid transparent;
   border-top: 6px solid #584f84;
   top: 45%;
-  right: 10%;
+  right: 18%;
   pointer-events: none;
 }
 
@@ -164,7 +168,7 @@
   border-right: 3px solid transparent;
   border-top: 6px solid #5d9d83;
   top: 45%;
-  right: 10%;
+  right: 18%;
   pointer-events: none;
 }
 
@@ -176,7 +180,7 @@
   border-right: 3px solid transparent;
   border-top: 6px solid #e7b16b;
   top: 45%;
-  right: 10%;
+  right: 18%;
   pointer-events: none;
 }
 
@@ -188,7 +192,7 @@
   border-right: 3px solid transparent;
   border-top: 6px solid #5d83ca;
   top: 45%;
-  right: 10%;
+  right: 18%;
   pointer-events: none;
 }
 
@@ -200,7 +204,7 @@
   border-right: 3px solid transparent;
   border-top: 6px solid #da566e;
   top: 45%;
-  right: 10%;
+  right: 18%;
   pointer-events: none;
 }
 
@@ -230,6 +234,24 @@
   cursor: pointer;
 }
 
+.square-box-long-function-f {
+  width: auto;
+  height: auto;
+  background: #ffa05b;
+  min-width: 180px;
+  max-width: 500px;
+  display: flex;
+  vertical-align: middle;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  color: var(--dark-blue-2);
+  padding: 5px 5px;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
 .square-box-short-f {
   width: 3px;
   height: 35px;
@@ -237,15 +259,16 @@
 }
 
 .square-round-box-short-f {
-  width: 40px;
-  height: 25px;
+  width: 48px;
+  height: 30px;
   display: inline-block;
   text-align: center;
+  padding-top: 2px;
   /* justify-content: center;
   align-items: center; */
   background: white;
   border-radius: 30px;
-  margin: 0 5px;
+  margin: 3px 3px;
 }
 
 .text-declare-before-f {
@@ -255,6 +278,13 @@
   padding: 0 10px 0 5px;
   margin: 0 -10px 0 5px;
   border-radius: 3px 0 0 3px;
+  vertical-align: middle;
+}
+.text-declare-before-f::after {
+  height: 100%;
+  display: inline-block;
+  width: 0;
+  vertical-align: middle;
 }
 
 .text-declare-after-f {
@@ -264,6 +294,7 @@
   padding: 0 5px 0 10px;
   margin: 0 5px 0 -10px;
   border-radius: 0 3px 3px 0;
+  vertical-align: middle;
 }
 
 .box-inline {
@@ -275,9 +306,11 @@
   display: inline-block;
   /* align-items: top; */
   text-align: center;
-  margin: 0 5px;
+
   background-color: white;
   border-radius: 3px;
+  vertical-align: middle;
+  margin: 3px 3px;
 }
 
 .circle-f {
@@ -300,19 +333,19 @@
 }
 
 .textarea {
-  box-sizing: padding-box;
   overflow: auto;
   /* resize: none; */
   width: 100px;
-  /* min-height: 30px; */
   min-height: 28px;
   border: 0px;
   outline: none;
   z-index: 0;
   border-radius: 3px;
-  /* display: flex;
-  justify-content: center;
-  text-align: center; */
+  display: inline-block;
+  vertical-align: middle;
+  text-align: justify;
+  -moz-text-align-last: center;
+  text-align-last: center;
 }
 
 .textarea-1-long-row {
@@ -343,6 +376,7 @@
   border: 0px;
   outline: none;
   z-index: 0;
+  vertical-align: middle;
 }
 
 /* width */

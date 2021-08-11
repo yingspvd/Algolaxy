@@ -25,7 +25,7 @@
         id="sidebarBtn"
       />
     </a> -->
-    <Tools style="margin-top:120px" />
+    <Tools style="margin-top:80px" />
 
     <div class="workspace">
       <Board />
@@ -77,7 +77,7 @@ body {
   display: flex;
   width: 100%;
   justify-content: space-evenly;
-  margin-top: 120px;
+  margin-top: 80px;
 }
 #sidebarBtn,
 #astronaut {
