@@ -1,9 +1,9 @@
 <template>
   <div
     id="container"
-    style="box-shadow: 0px 5px 10px #91A0A5; background: var(--white-gray); resize: both;"
+    style="box-shadow: 0px 5px 10px #91A0A5; background: var(--white-gray);"
   >
-    <div class="tool-container">
+    <div id="tool-container" class="tool-container">
       <div class="top-toolbar">
         <div>
           <a style="cursor:pointer;">
@@ -106,6 +106,7 @@
 </template>
 
 <script>
+import * as boardScript from "../js/board.js";
 // const displayPic = require("../assets/sidebar/display-green.svg");
 const conditionPic = require("../assets/sidebar/condition.svg");
 const arrow = require("../assets/arrow.svg");
@@ -133,6 +134,7 @@ export default {
 
   data() {
     return {
+      boardScript,
       isHover: false,
       moveMode: false,
       arrow: 1,
@@ -171,10 +173,46 @@ export default {
       opEqual: 0,
       opCompare: 0,
       opConnect: 0,
+      m_pos: null,
     };
   },
 
+  mounted() {
+    const panel = document.getElementById("tool-container");
+    const BORDER_SIZE = 600;
+
+    panel.addEventListener(
+      "mousedown",
+      function(e) {
+        console.log("down", e.offsetX);
+        if (e.offsetX < BORDER_SIZE) {
+          this.m_pos = e.x;
+          console.log(this.m_pos);
+          document.addEventListener("mousemove", this.resize, false);
+        }
+      }.bind(this),
+      false
+    );
+
+    document.addEventListener(
+      "mouseup",
+      function() {
+        document.removeEventListener("mousemove", this.resize, false);
+      }.bind(this),
+      false
+    );
+  },
+
   methods: {
+    resize(e) {
+      console.log("resize");
+      const panel = document.getElementById("tool-container");
+      const dx = this.m_pos - e.x;
+      this.m_pos = e.x;
+      panel.style.width =
+        parseInt(getComputedStyle(panel, "").width) - dx + "px";
+    },
+
     clickMove() {
       this.moveMode = !this.moveMode;
       var board = document.getElementById("board");
@@ -1047,7 +1085,9 @@ export default {
       } else {
         board.insertBefore(div, nextElement);
       }
-      document.getElementById(div.id).classList.add("square-box-long-function-f");
+      document
+        .getElementById(div.id)
+        .classList.add("square-box-long-function-f");
       document.getElementById(div.id).style.background = "#B09CFF";
       document.getElementById(div.id).style.height = "35px";
       document.getElementById(div.id).style.justifyContent = "space-between";
@@ -1060,9 +1100,7 @@ export default {
       var div2 = document.createElement("div");
       div2.id = "div2_" + this.callFunc;
       div.appendChild(div2);
-      document
-        .getElementById(div2.id)
-        .classList.add("square-box-short-f");
+      document.getElementById(div2.id).classList.add("square-box-short-f");
 
       var drop = document.createElement("div");
       drop.id = "drop_" + data + this.callFunc;
@@ -1121,7 +1159,9 @@ export default {
       } else {
         board.insertBefore(div, nextElement);
       }
-      document.getElementById(div.id).classList.add("square-box-long-function-f");
+      document
+        .getElementById(div.id)
+        .classList.add("square-box-long-function-f");
       document.getElementById(div.id).style.background = "#B09CFF";
       div.draggable = "true";
       div.ondragstart = function(event) {
@@ -1206,7 +1246,9 @@ export default {
       } else {
         board.insertBefore(div, nextElement);
       }
-      document.getElementById(div.id).classList.add("square-box-long-function-f");
+      document
+        .getElementById(div.id)
+        .classList.add("square-box-long-function-f");
       document.getElementById(div.id).style.background = "#B09CFF";
       div.draggable = "true";
       div.ondragstart = function(event) {
@@ -1270,7 +1312,9 @@ export default {
       } else {
         board.insertBefore(div, nextElement);
       }
-      document.getElementById(div.id).classList.add("square-box-long-function-f");
+      document
+        .getElementById(div.id)
+        .classList.add("square-box-long-function-f");
       document.getElementById(div.id).style.background = "#B09CFF";
       div.draggable = "true";
       div.ondragstart = function(event) {
@@ -1368,7 +1412,9 @@ export default {
       } else {
         board.insertBefore(div, nextElement);
       }
-      document.getElementById(div.id).classList.add("square-box-long-function-f");
+      document
+        .getElementById(div.id)
+        .classList.add("square-box-long-function-f");
       document.getElementById(div.id).style.background = "#B09CFF";
       div.draggable = "true";
       div.ondragstart = function(event) {
@@ -1461,6 +1507,12 @@ export default {
       div.id = "div_" + data + temp;
       parentOb.insertBefore(div, nextElement);
       document.getElementById(div.id).classList.add("box-inline");
+      if (this.moveMode) {
+        div.draggable = "true";
+        div.ondragstart = function(e) {
+          console.log(e.target.id);
+        }.bind(this);
+      }
 
       var textBox = document.createElement("div");
       textBox.id = "textBox_" + data + temp;
@@ -1555,7 +1607,9 @@ export default {
         var equalBox = document.createElement("div");
         equalBox.id = "equalBox_" + data + temp;
         div.appendChild(equalBox);
-        document.getElementById(equalBox.id).classList.add("square-round-box-short-f");
+        document
+          .getElementById(equalBox.id)
+          .classList.add("square-round-box-short-f");
         equalBox.innerHTML = "=";
       } else {
         var drop = document.createElement("div");
@@ -1596,22 +1650,12 @@ html {
   flex-direction: column;
   width: 550px;
   height: 750px;
-  /* margin-left: 65px; */
+  margin-right: 65px;
   border-radius: 5px;
   background-color: var(--white-gray);
   right: 0;
 }
-#container::after {
-  display: flex;
-  flex-direction: column;
-  width: 550px;
-  height: 750px;
-  left: 0;
-  /* margin-left: 65px; */
-  border-radius: 5px;
-  background-color: var(--white-gray);
-  cursor: ew-resize;
-}
+
 .tool-container {
   width: 100%;
   height: 100%;
@@ -1621,6 +1665,18 @@ html {
   align-items: flex-start;
   position: relative;
 }
+
+.tool-container::after {
+  position: absolute;
+  content: "";
+  width: 4px;
+  height: 100%;
+  right: 0;
+  border-radius: 5px;
+  background-color: black;
+  cursor: ew-resize;
+}
+
 .move-element {
   cursor: pointer;
   position: absolute;
