@@ -1,5 +1,5 @@
 <template>
-  <div id="container">
+  <div id="containerTool">
     <a @click="closeSidebar()">
       <img
         :src="require(`../assets/sidebar/${btnColor}.svg`)"
@@ -803,7 +803,7 @@ main {
   overflow-x: auto;
   overflow-y: hidden;
 }
-#container {
+#containerTool {
   display: flex;
   position: relative;
 }

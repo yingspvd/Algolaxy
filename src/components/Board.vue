@@ -1,8 +1,11 @@
 <template>
+
   <div
     id="container"
+    
     style="box-shadow: 0px 5px 10px #91A0A5; background: var(--white-gray);"
   >
+  
     <div id="tool-container" class="tool-container">
       <div class="top-toolbar">
         <div>
@@ -178,8 +181,8 @@ export default {
   },
 
   mounted() {
-    const panel = document.getElementById("tool-container");
-    const BORDER_SIZE = 600;
+    const panel = document.getElementById("container");
+    const BORDER_SIZE = 1000;
 
     panel.addEventListener(
       "mousedown",
@@ -206,7 +209,7 @@ export default {
   methods: {
     resize(e) {
       console.log("resize");
-      const panel = document.getElementById("tool-container");
+      const panel = document.getElementById("container");
       const dx = this.m_pos - e.x;
       this.m_pos = e.x;
       panel.style.width =
@@ -1653,7 +1656,19 @@ html {
   margin-right: 65px;
   border-radius: 5px;
   background-color: var(--white-gray);
+  left: 0;
+  padding-right: 1px;
+  position: relative;
+}
+
+#container::after{
+  position: absolute;
+  content: "";
+  width: 4px;
+  height: 100%;
   right: 0;
+  border-radius: 5px;
+  cursor: ew-resize;
 }
 
 .tool-container {
@@ -1666,7 +1681,7 @@ html {
   position: relative;
 }
 
-.tool-container::after {
+/* .tool-container::after {
   position: absolute;
   content: "";
   width: 4px;
@@ -1675,7 +1690,7 @@ html {
   border-radius: 5px;
   background-color: black;
   cursor: ew-resize;
-}
+} */
 
 .move-element {
   cursor: pointer;
