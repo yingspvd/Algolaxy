@@ -76,7 +76,7 @@ body {
 .workspace {
   display: flex;
   width: 100%;
-  justify-content: space-evenly;
+  justify-content: center;
   margin-top: 80px;
 }
 #sidebarBtn,

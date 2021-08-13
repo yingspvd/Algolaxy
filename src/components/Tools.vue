@@ -4,7 +4,7 @@
       <img
         :src="require(`../assets/sidebar/${btnColor}.svg`)"
         height="65px"
-        style="cursor:pointer; position:absolute; top:6.5%; left: 107.5%;"
+        style="cursor:pointer; position:absolute; top:6.5%; left: 91%;"
         id="sidebarBtn"
       />
     </a>
@@ -803,13 +803,14 @@ main {
   overflow-x: auto;
   overflow-y: hidden;
 }
+
 #containerTool {
   display: flex;
   position: relative;
 }
 .flex-shrink-0 {
   overflow: auto;
-  /* width: 280px; */
+  width: 280px;
   border-radius: 0 30px 0 0;
   background-color: var(--dark-blue-2);
   transition: 0.5s;
@@ -1043,11 +1044,15 @@ main {
 
 img {
   cursor: pointer;
-  }
+}
 
-/* @media screen and (max-width: 1220px) {
+@media screen and (max-width: 1050px) {
   #sidebar {
-    width: 250px
+    width: 75px !important;
   }
-} */
+  #sidebarBtn {
+    left: 65% !important;
+    transition: 0.8s !important;
+  }
+}
 </style>
