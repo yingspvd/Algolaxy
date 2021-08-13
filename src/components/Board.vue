@@ -1,11 +1,8 @@
 <template>
-
   <div
     id="container"
-    
     style="box-shadow: 0px 5px 10px #91A0A5; background: var(--white-gray);"
   >
-  
     <div id="tool-container" class="tool-container">
       <div class="top-toolbar">
         <div>
@@ -24,9 +21,11 @@
         </select>
 
         <div>
-          <a style="cursor:pointer;">
-            <i class="fas fa-compress"></i>
-            <i class="fas fa-expand"></i>
+          <a v-if="this.expand == false" style="cursor:pointer;">
+            <i @click="clickExpand" class="fas fa-expand"></i>
+          </a>
+          <a v-else style="cursor:pointer;">
+            <i @click="clickExpand" class="fas fa-compress"></i>
           </a>
         </div>
       </div>
@@ -113,7 +112,7 @@ import * as boardScript from "../js/board.js";
 // const displayPic = require("../assets/sidebar/display-green.svg");
 const conditionPic = require("../assets/sidebar/condition.svg");
 const arrow = require("../assets/arrow.svg");
-// const arrowLong = require("../assets/arrowLong.svg");
+const arrowLong = require("../assets/arrowLong.svg");
 
 const op_calculate = ["+", "-", "*", "/", "%", "^"];
 const op_compare = ["==", "<", ">", "!="];
@@ -140,6 +139,7 @@ export default {
       boardScript,
       isHover: false,
       moveMode: false,
+      expand: false,
       arrow: 1,
       variable: ["x", "y", "z"],
       test: ["main"],
@@ -181,16 +181,16 @@ export default {
   },
 
   mounted() {
+    // Resize Board
     const panel = document.getElementById("container");
-    const BORDER_SIZE = 1000;
 
     panel.addEventListener(
       "mousedown",
       function(e) {
-        console.log("down", e.offsetX);
-        if (e.offsetX < BORDER_SIZE) {
+        var BORDER_SIZE = document.getElementById("container").offsetWidth;
+
+        if (e.offsetX > BORDER_SIZE - 4) {
           this.m_pos = e.x;
-          console.log(this.m_pos);
           document.addEventListener("mousemove", this.resize, false);
         }
       }.bind(this),
@@ -208,7 +208,6 @@ export default {
 
   methods: {
     resize(e) {
-      console.log("resize");
       const panel = document.getElementById("container");
       const dx = this.m_pos - e.x;
       this.m_pos = e.x;
@@ -230,6 +229,23 @@ export default {
       } else {
         var popUpBlack = document.getElementById("popup");
         board.removeChild(popUpBlack);
+      }
+    },
+    clickExpand() {
+      this.expand = !this.expand;
+    },
+
+    moveElement(element, type) {
+      if (this.moveMode) {
+        element.draggable = true;
+        if (type == "dropdown") {
+          element.disabled = true;
+        }
+      } else {
+        element.draggable = false;
+        if (type == "dropdown") {
+          element.disabled = false;
+        }
       }
     },
 
@@ -378,6 +394,36 @@ export default {
       img.id = "arrow" + this.arrow;
       img.src = arrow;
       img.setAttribute("height", "30px");
+
+      div.appendChild(img);
+    },
+    style_arrowlong(board, object) {
+      var nextElement = object.nextElementSibling;
+
+      this.arrow += 1;
+      var div = document.createElement("div");
+      div.id = "arrowSet" + this.arrow;
+      if (nextElement == null) {
+        board.appendChild(div);
+      } else {
+        board.insertBefore(div, nextElement);
+      }
+
+      div.classList.add("arrow-container-f");
+      div.classList.add("not-select");
+
+      div.ondragover = function(event) {
+        event.preventDefault();
+      };
+      div.ondrop = function(event) {
+        event.preventDefault();
+        this.dropOnArrow(event);
+      }.bind(this);
+
+      var img = document.createElement("img");
+      img.id = "arrowLong" + this.arrow;
+      img.src = arrowLong;
+      img.setAttribute("height", "65px");
 
       div.appendChild(img);
     },
@@ -803,7 +849,6 @@ export default {
       div.appendChild(drop1);
       document.getElementById(drop1.id).classList.add("custom-select-f");
       document.getElementById(drop1.id).classList.add("box-inline");
-      this.dropFuncObject(drop1);
 
       var select = document.createElement("select");
       select.id = "select_" + data + temp;
@@ -861,8 +906,6 @@ export default {
         container_array.appendChild(after);
         after.innerHTML = aText;
         document.getElementById(after.id).classList.add("text-declare-after-f");
-
-        this.dropFuncObject(divTextarea_array);
       }
 
       // Equal Sign
@@ -873,7 +916,7 @@ export default {
       document
         .getElementById(equal.id)
         .classList.add("square-round-box-short-f");
-      this.dropFuncObject(equal, "assign");
+      this.dropFuncObject(equal);
 
       // InputBox
       if (data == "assign_int" || data == "assign_string") {
@@ -884,6 +927,13 @@ export default {
           .getElementById(divTextarea.id)
           .classList.add("textbox-variable-f");
         this.dropFuncObject(divTextarea);
+        divTextarea.addEventListener(
+          "mousedown",
+          function() {
+            this.moveElement(divTextarea, "text");
+          }.bind(this),
+          false
+        );
 
         var beforeI = document.createElement("div");
         beforeI.id = "beforeI_" + data + temp;
@@ -947,7 +997,7 @@ export default {
       } else {
         board.insertBefore(div, nextElement);
       }
-      document.getElementById(div.id).classList.add("display-f");
+      document.getElementById(div.id).classList.add("diamond-img-f");
       div.draggable = "true";
       div.ondragstart = function(event) {
         var arrow_object = div.nextElementSibling.id;
@@ -960,11 +1010,19 @@ export default {
       // img.setAttribute("width", "250px");
       // div.appendChild(img);
       // document.getElementById(img.id).classList.add("diamond-img-f");
+
       var diamondDiv = document.createElement("div");
       diamondDiv.id = "diamondDiv_" + data + this.condition;
       div.appendChild(diamondDiv);
       document.getElementById(diamondDiv.id).classList.add("diamond-box");
       document.getElementById(diamondDiv.id).style.zIndex = "1";
+
+      var img = document.createElement("img");
+      img.id = "arrowLong" + this.arrow;
+      img.src = arrowLong;
+      img.setAttribute("height", "65px");
+      div.appendChild(img);
+      document.getElementById(img.id).classList.add("diamond-long-arrow");
 
       var diamondAll = document.createElement("div");
       diamondAll.id = "diamondAll_" + data + this.condition;
@@ -1036,9 +1094,13 @@ export default {
       textarea.placeholder = "Text";
       this.dropFuncObject(textarea);
 
-      // textarea.oninput = function(event) {
-      //   this.autosizeTextArea(event.target);
-      // }.bind(this);
+      textarea.addEventListener(
+        "mousedown",
+        function() {
+          this.moveElement(textarea, "text");
+        }.bind(this),
+        false
+      );
 
       this.style_arrow(board, div);
     },
@@ -1510,12 +1572,13 @@ export default {
       div.id = "div_" + data + temp;
       parentOb.insertBefore(div, nextElement);
       document.getElementById(div.id).classList.add("box-inline");
-      if (this.moveMode) {
-        div.draggable = "true";
-        div.ondragstart = function(e) {
-          console.log(e.target.id);
-        }.bind(this);
-      }
+      div.addEventListener(
+        "mousedown",
+        function() {
+          this.moveElement(div, "text");
+        }.bind(this),
+        false
+      );
 
       var textBox = document.createElement("div");
       textBox.id = "textBox_" + data + temp;
@@ -1569,6 +1632,13 @@ export default {
       }
       document.getElementById(drop1.id).appendChild(select1);
       document.getElementById(select1.id).classList.add("dropdown-f");
+      div.addEventListener(
+        "mousedown",
+        function() {
+          this.moveElement(select1, "dropdown");
+        }.bind(this),
+        false
+      );
 
       var tri1 = document.createElement("div");
       tri1.id = "tri1_" + data + this.variableDrop;
@@ -1630,6 +1700,13 @@ export default {
         }
         document.getElementById(drop.id).appendChild(select);
         document.getElementById(select.id).classList.add("dropdown-round-f");
+        select.addEventListener(
+          "mousedown",
+          function() {
+            this.moveElement(select, "dropdown");
+          }.bind(this),
+          false
+        );
 
         var tri = document.createElement("div");
         tri.id = "tri_" + data + temp;
@@ -1653,7 +1730,8 @@ html {
   flex-direction: column;
   width: 550px;
   height: 750px;
-  margin-right: 65px;
+  min-width: 250px;
+  margin-right: 60px;
   border-radius: 5px;
   background-color: var(--white-gray);
   left: 0;
@@ -1661,7 +1739,7 @@ html {
   position: relative;
 }
 
-#container::after{
+#container::after {
   position: absolute;
   content: "";
   width: 4px;
@@ -1696,7 +1774,7 @@ html {
   cursor: pointer;
   position: absolute;
   top: 10%;
-  right: 3%;
+  right: 2%;
   z-index: 2;
 }
 
@@ -1714,7 +1792,7 @@ html {
 .side-toolbar-container {
   position: absolute;
   top: 86%;
-  left: 80.5%;
+  right: 0.5%;
   z-index: 2;
 }
 .side-toolbar {
