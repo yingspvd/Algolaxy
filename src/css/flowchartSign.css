@@ -93,8 +93,8 @@
 } */
 
 .diamond-box {
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 300px;
 }
 
 .diamond-all {
@@ -109,8 +109,7 @@
 .diamond-item-f {
   display: flex;
   align-items: center;
-  margin: 70px 10px;
-  height: 60px;
+  margin: 80px 10px;  
   overflow: auto;
   /* position: absolute; */
   /* transform: rotateZ(-45deg) rotateY(45deg); */
@@ -133,11 +132,11 @@
   flex-direction: row;
   align-items: center;
   cursor: pointer;
-  margin-left: 338px;
+  
 }
 
 .diamond-long-arrow{
-  margin: 60px 0 0 40px;
+  margin: 60px 0 0 0;
 }
 
 .dropdown-f {
@@ -230,7 +229,6 @@
   background: #ffa05b;
   min-width: 180px;
   max-width: 500px;
-  /* display: inline-block; */
   vertical-align: middle;
   flex-direction: row;
   justify-content: center;
@@ -286,12 +284,6 @@
   padding: 0 10px 0 5px;
   margin: 0 -10px 0 5px;
   border-radius: 3px 0 0 3px;
-  vertical-align: middle;
-}
-.text-declare-before-f::after {
-  height: 100%;
-  display: inline-block;
-  width: 0;
   vertical-align: middle;
 }
 

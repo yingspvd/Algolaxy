@@ -82,25 +82,27 @@
       </div>
 
       <!-- Board -->
-      <div
-        id="board"
-        @dragover.prevent
-        @drop.prevent="dropOnBoard"
-        class="board scrollarea"
-      >
-        <div>
-          <div class="terminator-f" style="margin:10px 0 0 0">
-            <div class="text-f not-select">START</div>
-          </div>
-        </div>
-
+      <div id="divboard" class="board-box scrollarea">
         <div
+          id="board"
           @dragover.prevent
-          @drop.prevent="dropOnArrow"
-          id="arrowSet1"
-          class="arrow-container"
+          @drop.prevent="dropOnBoard"
+          class="board "
         >
-          <img src="../assets/arrow.svg" height="30px" />
+          <div>
+            <div class="terminator-f" style="margin:10px 0 0 0">
+              <div class="text-f not-select">START</div>
+            </div>
+          </div>
+
+          <div
+            @dragover.prevent
+            @drop.prevent="dropOnArrow"
+            id="arrowSet1"
+            class="arrow-container"
+          >
+            <img src="../assets/arrow.svg" height="30px" />
+          </div>
         </div>
       </div>
     </div>
@@ -113,6 +115,7 @@ import * as boardScript from "../js/board.js";
 const conditionPic = require("../assets/sidebar/condition.svg");
 const arrow = require("../assets/arrow.svg");
 const arrowLong = require("../assets/arrowLong.svg");
+const arrowLongLeft = require("../assets/arrowLongLeft.svg");
 
 const op_calculate = ["+", "-", "*", "/", "%", "^"];
 const op_compare = ["==", "<", ">", "!="];
@@ -122,13 +125,24 @@ const op_pushpop = ["Push", "Pop"];
 const op_queue = ["Enqueue", "dequeue"];
 
 const elemObName = [
+  "select_condition",
+  "selectTwo_condition",
+  "textareacondition",
   "select_assign_int",
   "textareaI_assign_int",
   "select_assign_string",
   "select_assign_array",
   "textarea_assign_array",
+  "textareaI_assign_string",
   "beforeA_assign_array",
   "afterA_assign_array",
+  "textareaInAA_assign_array",
+  "before_text_string",
+  "textarea_text_string",
+  "after_text_string",
+  "before_text_array",
+  "textarea_text_array",
+  "after_text_array",
 ];
 
 export default {
@@ -207,6 +221,15 @@ export default {
   },
 
   methods: {
+    scrollLeft() {
+      const board = document.getElementById("board");
+      let translate = 0;
+      translate += 400;
+      board.style.transform = "translateX(" + translate + "px" + ")";
+
+      board.scrollIntoView({ block: "center" });
+    },
+
     resize(e) {
       const panel = document.getElementById("container");
       const dx = this.m_pos - e.x;
@@ -235,7 +258,7 @@ export default {
       this.expand = !this.expand;
     },
 
-    moveElement(element, type) {
+    enableMove(element, type) {
       if (this.moveMode) {
         element.draggable = true;
         if (type == "dropdown") {
@@ -322,11 +345,12 @@ export default {
     dropOnObject(e) {
       var i = 0;
       var check = false;
-      var target = document.getElementById(e.target.id);
       var data = e.dataTransfer.getData("object_id");
-      var myArray = e.target.id.split(/([0-9]+)/);
-      var ob_name = myArray[0];
-
+      var myData = data.split(/([0-9]+)/);
+      var target = document.getElementById(e.target.id);
+      var myTarget = e.target.id.split(/([0-9]+)/);
+      var ob_name = myTarget[0];
+      console.log("onOb", ob_name);
       while (i < elemObName.length) {
         if (ob_name == elemObName[i]) {
           ob_name = target.parentNode;
@@ -343,6 +367,15 @@ export default {
       var parentOb = ob_name.parentNode;
       var nextElement = ob_name.nextElementSibling;
 
+      // From sidebar
+      if (myData.length == 1) {
+        this.create_style_element(data, parentOb, nextElement);
+      } else {
+        this.moveElement(e);
+      }
+    },
+
+    create_style_element(data, parentOb, nextElement) {
       if (data == "text_int" || data == "text_string" || data == "text_array") {
         this.style_text(data, parentOb, nextElement);
       } else if (data == "variable_drop") {
@@ -365,6 +398,21 @@ export default {
 
       board.removeChild(object);
       board.removeChild(arrow);
+    },
+
+    dropFuncObject(object) {
+      object.ondragover = function(e) {
+        e.preventDefault();
+      };
+
+      object.ondrop = function(e) {
+        e.preventDefault();
+        this.dropOnObject(e);
+      }.bind(this);
+    },
+
+    moveElement(e) {
+      console.log("move", e.target.id);
     },
 
     style_arrow(board, object) {
@@ -394,36 +442,6 @@ export default {
       img.id = "arrow" + this.arrow;
       img.src = arrow;
       img.setAttribute("height", "30px");
-
-      div.appendChild(img);
-    },
-    style_arrowlong(board, object) {
-      var nextElement = object.nextElementSibling;
-
-      this.arrow += 1;
-      var div = document.createElement("div");
-      div.id = "arrowSet" + this.arrow;
-      if (nextElement == null) {
-        board.appendChild(div);
-      } else {
-        board.insertBefore(div, nextElement);
-      }
-
-      div.classList.add("arrow-container-f");
-      div.classList.add("not-select");
-
-      div.ondragover = function(event) {
-        event.preventDefault();
-      };
-      div.ondrop = function(event) {
-        event.preventDefault();
-        this.dropOnArrow(event);
-      }.bind(this);
-
-      var img = document.createElement("img");
-      img.id = "arrowLong" + this.arrow;
-      img.src = arrowLong;
-      img.setAttribute("height", "65px");
 
       div.appendChild(img);
     },
@@ -776,24 +794,6 @@ export default {
       this.style_arrow(board, div);
     },
 
-    dropFuncObject(div) {
-      div.ondragover = function(e) {
-        e.preventDefault();
-      };
-
-      div.ondrop = function(e) {
-        e.preventDefault();
-        this.dropOnObject(e);
-      }.bind(this);
-    },
-
-    stopPropagation(object) {
-      object.ondrop = function(e) {
-        e.stopPropagation();
-        console.log("555");
-      }.bind(this);
-    },
-
     style_assign(board, data, arrow) {
       var arrow_target = document.getElementById(arrow);
       var nextElement = arrow_target.nextElementSibling;
@@ -930,7 +930,7 @@ export default {
         divTextarea.addEventListener(
           "mousedown",
           function() {
-            this.moveElement(divTextarea, "text");
+            this.enableMove(divTextarea, "text");
           }.bind(this),
           false
         );
@@ -1011,11 +1011,19 @@ export default {
       // div.appendChild(img);
       // document.getElementById(img.id).classList.add("diamond-img-f");
 
+      var imgLeft = document.createElement("img");
+      imgLeft.id = "arrowLongLeft" + this.arrow;
+      imgLeft.src = arrowLongLeft;
+      imgLeft.setAttribute("height", "65px");
+      div.appendChild(imgLeft);
+      document.getElementById(imgLeft.id).classList.add("diamond-long-arrow");
+      document.getElementById(imgLeft.id).style.marginLeft = "200px";
+
       var diamondDiv = document.createElement("div");
       diamondDiv.id = "diamondDiv_" + data + this.condition;
       div.appendChild(diamondDiv);
       document.getElementById(diamondDiv.id).classList.add("diamond-box");
-      document.getElementById(diamondDiv.id).style.zIndex = "1";
+      // document.getElementById(diamondDiv.id).style.zIndex = "1";
 
       var img = document.createElement("img");
       img.id = "arrowLong" + this.arrow;
@@ -1023,6 +1031,7 @@ export default {
       img.setAttribute("height", "65px");
       div.appendChild(img);
       document.getElementById(img.id).classList.add("diamond-long-arrow");
+      document.getElementById(img.id).style.marginRight = "200px";
 
       var diamondAll = document.createElement("div");
       diamondAll.id = "diamondAll_" + data + this.condition;
@@ -1033,6 +1042,7 @@ export default {
       condition.id = "condition_" + data + this.condition;
       diamondAll.appendChild(condition);
       document.getElementById(condition.id).classList.add("diamond-square-box");
+      document.getElementById(condition.id).style.zIndex = "-1";
 
       var div2 = document.createElement("div");
       div2.id = "item_" + this.condition;
@@ -1044,6 +1054,7 @@ export default {
       drop1.id = "drop_" + data + this.condition;
       div2.appendChild(drop1);
       drop1.classList.add("custom-select-f");
+      drop1.classList.add("box-inline");
       this.dropFuncObject(drop1);
 
       var select = document.createElement("select");
@@ -1067,6 +1078,7 @@ export default {
       drop2.id = "dropTwo_" + data + this.condition;
       div2.appendChild(drop2);
       document.getElementById(drop2.id).classList.add("custom-select-f");
+      document.getElementById(drop2.id).classList.add("box-inline");
       this.dropFuncObject(drop2);
 
       var select2 = document.createElement("select");
@@ -1085,24 +1097,35 @@ export default {
       drop2.appendChild(tri2);
       document.getElementById(tri2.id).classList.add("triangle-green");
 
+      var divTextarea = document.createElement("div");
+      divTextarea.id = "textareaAA_" + data + this.condition;
+      div2.appendChild(divTextarea);
+      document.getElementById(divTextarea.id).classList.add("box-inline");
+      document.getElementById(divTextarea.id).contentEditable = "true";
+      document.getElementById(divTextarea.id).style.zIndex = "1";
+      document.getElementById(divTextarea.id).style.marginLeft = "5px";
+      this.dropFuncObject(divTextarea);
+
       var textarea = document.createElement("textarea");
       textarea.id = "textarea" + data + this.condition;
-      div2.appendChild(textarea);
+      divTextarea.appendChild(textarea);
       document.getElementById(textarea.id).classList.add("textarea");
       document.getElementById(textarea.id).contentEditable = "true";
       textarea.rows = "1";
       textarea.placeholder = "Text";
-      this.dropFuncObject(textarea);
 
       textarea.addEventListener(
         "mousedown",
         function() {
-          this.moveElement(textarea, "text");
+          this.enableMove(textarea, "text");
         }.bind(this),
         false
       );
+      var overflowSize = document.getElementById("board").scrollWidth;
+      console.log("overflow", overflowSize);
 
       this.style_arrow(board, div);
+      this.scrollLeft();
     },
 
     style_function(board, data, arrow) {
@@ -1575,10 +1598,11 @@ export default {
       div.addEventListener(
         "mousedown",
         function() {
-          this.moveElement(div, "text");
+          this.enableMove(div, "text");
         }.bind(this),
         false
       );
+      this.dropFuncObject(div);
 
       var textBox = document.createElement("div");
       textBox.id = "textBox_" + data + temp;
@@ -1635,7 +1659,7 @@ export default {
       div.addEventListener(
         "mousedown",
         function() {
-          this.moveElement(select1, "dropdown");
+          this.enableMove(select1, "dropdown");
         }.bind(this),
         false
       );
@@ -1684,6 +1708,14 @@ export default {
           .getElementById(equalBox.id)
           .classList.add("square-round-box-short-f");
         equalBox.innerHTML = "=";
+
+        div.addEventListener(
+          "mousedown",
+          function() {
+            this.enableMove(equalBox, "text");
+          }.bind(this),
+          false
+        );
       } else {
         var drop = document.createElement("div");
         drop.id = "drop_" + data + temp;
@@ -1700,10 +1732,10 @@ export default {
         }
         document.getElementById(drop.id).appendChild(select);
         document.getElementById(select.id).classList.add("dropdown-round-f");
-        select.addEventListener(
+        div.addEventListener(
           "mousedown",
           function() {
-            this.moveElement(select, "dropdown");
+            this.enableMove(select, "dropdown");
           }.bind(this),
           false
         );
@@ -1817,6 +1849,17 @@ html {
   padding-bottom: 50px;
   position: relative;
   z-index: 1;
+  /* overflow-y: scroll;
+  overflow-x: scroll; */
+}
+.board-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  /* overflow-y: scroll;
+  overflow-x: scroll; */
 }
 
 .arrow-container {
