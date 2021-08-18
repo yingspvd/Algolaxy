@@ -93,8 +93,8 @@
 } */
 
 .diamond-box {
-  width: 300px;
-  height: 300px;
+  width: 240px;
+  height: 240px;
 }
 
 .diamond-all {
@@ -107,11 +107,15 @@
 }
 
 .diamond-item-f {
-  display: flex;
+  vertical-align: middle;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  margin: 80px 10px;  
-  overflow: auto;
-  /* position: absolute; */
+  margin: 100px 10px;  
+  overflow-y: scroll;
+  max-width: 300px;
+  max-height: 60px;
+  position: absolute;
   /* transform: rotateZ(-45deg) rotateY(45deg); */
 }
 
@@ -124,6 +128,7 @@
   align-items: center;
   justify-content: space-evenly;
   position: absolute;
+  z-index: 0;
 }
 
 .diamond-img-f {
@@ -300,6 +305,7 @@
 .box-inline {
   /* box-sizing: border-box; */
   display: inline-block;
+  z-index: 1;
 }
 
 .textbox-variable-f {

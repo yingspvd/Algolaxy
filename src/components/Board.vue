@@ -342,15 +342,31 @@ export default {
       }
     },
 
+    dropFuncObject(object, type) {
+      object.ondragstart = function(e) {
+        e.dataTransfer.setData("type", type);
+      }.bind(this);
+
+      object.ondragover = function(e) {
+        e.preventDefault();
+      };
+
+      object.ondrop = function(e) {
+        e.preventDefault();
+        this.dropOnObject(e);
+      }.bind(this);
+    },
+
     dropOnObject(e) {
       var i = 0;
       var check = false;
+      var type = e.dataTransfer.getData("type");
       var data = e.dataTransfer.getData("object_id");
       var myData = data.split(/([0-9]+)/);
       var target = document.getElementById(e.target.id);
       var myTarget = e.target.id.split(/([0-9]+)/);
       var ob_name = myTarget[0];
-      console.log("onOb", ob_name);
+
       while (i < elemObName.length) {
         if (ob_name == elemObName[i]) {
           ob_name = target.parentNode;
@@ -370,8 +386,10 @@ export default {
       // From sidebar
       if (myData.length == 1) {
         this.create_style_element(data, parentOb, nextElement);
-      } else {
-        this.moveElement(e);
+      }
+      // Swap Element
+      else {
+        this.moveElement(type, data, parentOb, nextElement);
       }
     },
 
@@ -389,6 +407,21 @@ export default {
       }
     },
 
+    moveElement(type, data, parentOb, nextElement) {
+      var object = document.getElementById(data);
+
+      if (type == "dropdown") {
+        object = object.parentNode;
+      }
+
+      console.log(object);
+      if (nextElement == null) {
+        parentOb.appendChild(object);
+      } else if (object.id != nextElement.id) {
+        parentOb.insertBefore(object, nextElement);
+      }
+    },
+
     deleteObject(e) {
       this.isHover = false;
       var data = e.dataTransfer.getData("object_id");
@@ -398,21 +431,6 @@ export default {
 
       board.removeChild(object);
       board.removeChild(arrow);
-    },
-
-    dropFuncObject(object) {
-      object.ondragover = function(e) {
-        e.preventDefault();
-      };
-
-      object.ondrop = function(e) {
-        e.preventDefault();
-        this.dropOnObject(e);
-      }.bind(this);
-    },
-
-    moveElement(e) {
-      console.log("move", e.target.id);
     },
 
     style_arrow(board, object) {
@@ -615,7 +633,7 @@ export default {
       drop1.id = "drop1_" + data + temp;
       div1.appendChild(drop1);
       document.getElementById(drop1.id).classList.add("custom-select-f");
-      this.dropFuncObject(drop1);
+      this.dropFuncObject(drop1, "dropdown");
 
       var select = document.createElement("select");
       select.id = "select" + data + temp;
@@ -916,7 +934,7 @@ export default {
       document
         .getElementById(equal.id)
         .classList.add("square-round-box-short-f");
-      this.dropFuncObject(equal);
+      this.dropFuncObject(equal, "text");
 
       // InputBox
       if (data == "assign_int" || data == "assign_string") {
@@ -926,7 +944,7 @@ export default {
         document
           .getElementById(divTextarea.id)
           .classList.add("textbox-variable-f");
-        this.dropFuncObject(divTextarea);
+        this.dropFuncObject(divTextarea, "text");
         divTextarea.addEventListener(
           "mousedown",
           function() {
@@ -967,7 +985,14 @@ export default {
         div.appendChild(divTextarea2);
         document.getElementById(divTextarea2.id).classList.add("box-inline");
         document.getElementById(divTextarea2.id).contentEditable = "true";
-        this.dropFuncObject(divTextarea2);
+        this.dropFuncObject(divTextarea2, "text");
+        divTextarea2.addEventListener(
+          "mousedown",
+          function() {
+            this.enableMove(divTextarea2, "text");
+          }.bind(this),
+          false
+        );
 
         var textarea3 = document.createElement("textarea");
         textarea3.id = "textareaInAA_" + data + temp;
@@ -1042,7 +1067,6 @@ export default {
       condition.id = "condition_" + data + this.condition;
       diamondAll.appendChild(condition);
       document.getElementById(condition.id).classList.add("diamond-square-box");
-      document.getElementById(condition.id).style.zIndex = "-1";
 
       var div2 = document.createElement("div");
       div2.id = "item_" + this.condition;
@@ -1055,7 +1079,7 @@ export default {
       div2.appendChild(drop1);
       drop1.classList.add("custom-select-f");
       drop1.classList.add("box-inline");
-      this.dropFuncObject(drop1);
+      this.dropFuncObject(drop1, "dropdown");
 
       var select = document.createElement("select");
       select.id = "select_" + data + this.condition;
@@ -1079,7 +1103,7 @@ export default {
       div2.appendChild(drop2);
       document.getElementById(drop2.id).classList.add("custom-select-f");
       document.getElementById(drop2.id).classList.add("box-inline");
-      this.dropFuncObject(drop2);
+      this.dropFuncObject(drop2, "dropdown");
 
       var select2 = document.createElement("select");
       select2.id = "selectTwo_" + data + this.condition;
@@ -1104,7 +1128,7 @@ export default {
       document.getElementById(divTextarea.id).contentEditable = "true";
       document.getElementById(divTextarea.id).style.zIndex = "1";
       document.getElementById(divTextarea.id).style.marginLeft = "5px";
-      this.dropFuncObject(divTextarea);
+      this.dropFuncObject(divTextarea, "text");
 
       var textarea = document.createElement("textarea");
       textarea.id = "textarea" + data + this.condition;
@@ -1602,7 +1626,7 @@ export default {
         }.bind(this),
         false
       );
-      this.dropFuncObject(div);
+      this.dropFuncObject(div, "text");
 
       var textBox = document.createElement("div");
       textBox.id = "textBox_" + data + temp;
@@ -1636,15 +1660,16 @@ export default {
     style_variable(data, parentOb, nextElement) {
       this.variableDrop += 1;
 
-      var div = document.createElement("div");
-      div.id = "div_" + data + this.variableDrop;
-      parentOb.insertBefore(div, nextElement);
-      document.getElementById(div.id).classList.add("box-inline");
+      // var div = document.createElement("div");
+      // div.id = "div_" + data + this.variableDrop;
+      // parentOb.insertBefore(div, nextElement);
+      // document.getElementById(div.id).classList.add("box-inline");
 
       var drop1 = document.createElement("div");
       drop1.id = "drop1_" + data + this.variableDrop;
-      div.appendChild(drop1);
+      parentOb.insertBefore(drop1, nextElement);
       document.getElementById(drop1.id).classList.add("custom-select-f");
+      document.getElementById(drop1.id).classList.add("box-inline");
 
       var select1 = document.createElement("select");
       select1.id = "select1_" + data + this.variableDrop;
@@ -1656,7 +1681,8 @@ export default {
       }
       document.getElementById(drop1.id).appendChild(select1);
       document.getElementById(select1.id).classList.add("dropdown-f");
-      div.addEventListener(
+      this.dropFuncObject(select1, "dropdown");
+      drop1.addEventListener(
         "mousedown",
         function() {
           this.enableMove(select1, "dropdown");
@@ -1695,12 +1721,12 @@ export default {
         temp = this.opEqual;
       }
 
-      var div = document.createElement("div");
-      div.id = "div_" + data + temp;
-      parentOb.insertBefore(div, nextElement);
-      document.getElementById(div.id).classList.add("box-inline");
-
       if (data == "op_equal") {
+        var div = document.createElement("div");
+        div.id = "div_" + data + temp;
+        parentOb.insertBefore(div, nextElement);
+        document.getElementById(div.id).classList.add("box-inline");
+
         var equalBox = document.createElement("div");
         equalBox.id = "equalBox_" + data + temp;
         div.appendChild(equalBox);
@@ -1719,8 +1745,9 @@ export default {
       } else {
         var drop = document.createElement("div");
         drop.id = "drop_" + data + temp;
-        div.appendChild(drop);
+        parentOb.insertBefore(drop, nextElement);
         document.getElementById(drop.id).classList.add("custom-select-f");
+        document.getElementById(drop.id).classList.add("box-inline");
 
         var select = document.createElement("select");
         select.id = "select_" + data + temp;
@@ -1732,7 +1759,8 @@ export default {
         }
         document.getElementById(drop.id).appendChild(select);
         document.getElementById(select.id).classList.add("dropdown-round-f");
-        div.addEventListener(
+        this.dropFuncObject(select, "dropdown");
+        drop.addEventListener(
           "mousedown",
           function() {
             this.enableMove(select, "dropdown");
@@ -1914,7 +1942,7 @@ html {
 .dropdown-function {
   background: var(--dark-blue-1);
   border-radius: 10px;
-  border: 0px solid rgb(0 0 0 / 0%);
+  border: 0px;
   color: white;
   outline: none;
 }
