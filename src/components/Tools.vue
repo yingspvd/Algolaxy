@@ -807,6 +807,7 @@ main {
 #containerTool {
   display: flex;
   position: relative;
+  margin-right: 30px;
 }
 .flex-shrink-0 {
   overflow: auto;

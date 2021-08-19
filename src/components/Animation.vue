@@ -64,8 +64,9 @@ export default {};
 
 <style scoped>
 #container {
-  width: 500px;
-  height: 750px;
+  /* width: 500px; */
+  width: 35vw;
+  height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -111,7 +112,7 @@ export default {};
   margin-right: 60px;
 }
 
-@media screen and (max-width: 1500px) {
+/* @media screen and (max-width: 1500px) {
   #container {
     display: flex;
     flex-direction: column;
@@ -181,5 +182,5 @@ export default {};
     border-radius: 5px;
     background-color: var(--white-gray);
   }
-}
+} */
 </style>
