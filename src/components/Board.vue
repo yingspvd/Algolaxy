@@ -14,11 +14,14 @@
           </a>
         </div>
 
-        <select class="dropdown-function">
-          <option class="dropdown-item" v-for="(test, i) in test" :key="i">{{
-            test
-          }}</option>
-        </select>
+        <div style="display:flex; align-items:center; margin-right:25px">
+            <select class="dropdown-function">
+              <option class="dropdown-item " v-for="(test, i) in test" :key="i">{{
+                test
+              }}</option>
+            </select>
+          <div class="triangle-down"></div>
+        </div>
 
         <div>
           <a v-if="this.expand == false" style="cursor:pointer;">
@@ -50,15 +53,20 @@
           </a>
         </div>
       </div>
-      <div v-else class="side-toolbar-container" style="z-index:0;">
+      <!-- On Move Mode -->
+      <div v-else class="side-toolbar-container" style="z-index:2;">
         <div class="side-toolbar">
           <a
             @dragover.prevent="isHover = true"
             @dragleave="isHover = false"
-            @drop.prevent="deleteObject"
+            @drop.prevent="deleteElement"
             style="padding-left: 50px"
           >
-            <i class="far fa-trash-alt"></i>
+            <i
+              id="trash"
+              class="far fa-trash-alt"
+              :class="{ trashHover: isHover }"
+            ></i>
           </a>
           <a style="cursor:pointer; margin-top:15px">
             <i class="fas fa-file-export"></i>
@@ -82,7 +90,7 @@
       </div>
 
       <!-- Board -->
-      <div id="divboard" class="board-box scrollarea">
+      <div id="divboard" class="board-box scrollarea ">
         <div
           id="board"
           @dragover.prevent
@@ -128,6 +136,7 @@ const elemObName = [
   "select_condition",
   "selectTwo_condition",
   "textareacondition",
+  "textarea_text_int",
   "select_assign_int",
   "textareaI_assign_int",
   "select_assign_string",
@@ -143,6 +152,10 @@ const elemObName = [
   "before_text_array",
   "textarea_text_array",
   "after_text_array",
+  "selectv_variable_drop",
+  "select_op_calculate",
+  "select_op_connect",
+  "select_op_compare",
 ];
 
 export default {
@@ -156,7 +169,7 @@ export default {
       expand: false,
       arrow: 1,
       variable: ["x", "y", "z"],
-      test: ["main"],
+      test: ["main","function", "function"],
       function: ["function", "function", "function"],
       terminator: 1,
       read: 0,
@@ -247,8 +260,8 @@ export default {
         board.appendChild(popUp);
         popUp.classList.add("popup");
         popUp.id = "popup";
-        popUp.style.cssText = "height:auto; padding:0";
         popUp.style.cssText = "height:" + board.scrollHeight + "px";
+        popUp.style.width = board.scrollWidth + 460 + "px";
       } else {
         var popUpBlack = document.getElementById("popup");
         board.removeChild(popUpBlack);
@@ -353,6 +366,7 @@ export default {
 
       object.ondrop = function(e) {
         e.preventDefault();
+        console.log(e.target);
         this.dropOnObject(e);
       }.bind(this);
     },
@@ -366,7 +380,7 @@ export default {
       var target = document.getElementById(e.target.id);
       var myTarget = e.target.id.split(/([0-9]+)/);
       var ob_name = myTarget[0];
-
+      console.log(ob_name);
       while (i < elemObName.length) {
         if (ob_name == elemObName[i]) {
           ob_name = target.parentNode;
@@ -414,7 +428,6 @@ export default {
         object = object.parentNode;
       }
 
-      console.log(object);
       if (nextElement == null) {
         parentOb.appendChild(object);
       } else if (object.id != nextElement.id) {
@@ -431,6 +444,15 @@ export default {
 
       board.removeChild(object);
       board.removeChild(arrow);
+    },
+
+    deleteElement(e) {
+      this.isHover = false;
+      var data = e.dataTransfer.getData("object_id");
+      var object = document.getElementById(data);
+      var parent = object.parentNode;
+
+      parent.removeChild(object);
     },
 
     style_arrow(board, object) {
@@ -1619,6 +1641,8 @@ export default {
       div.id = "div_" + data + temp;
       parentOb.insertBefore(div, nextElement);
       document.getElementById(div.id).classList.add("box-inline");
+      document.getElementById(div.id).classList.add("textbox-variable-f");
+      this.dropFuncObject(div, "text");
       div.addEventListener(
         "mousedown",
         function() {
@@ -1626,22 +1650,16 @@ export default {
         }.bind(this),
         false
       );
-      this.dropFuncObject(div, "text");
-
-      var textBox = document.createElement("div");
-      textBox.id = "textBox_" + data + temp;
-      div.appendChild(textBox);
-      document.getElementById(textBox.id).classList.add("textbox-variable-f");
 
       var before = document.createElement("div");
       before.id = "before_" + data + temp;
-      textBox.appendChild(before);
+      div.appendChild(before);
       before.innerHTML = bText;
       document.getElementById(before.id).classList.add("text-declare-before-f");
 
       var textarea = document.createElement("textarea");
       textarea.id = "textarea_" + data + temp;
-      textBox.appendChild(textarea);
+      div.appendChild(textarea);
       document.getElementById(textarea.id).classList.add("textarea");
       document.getElementById(textarea.id).contentEditable = "true";
       textarea.placeholder = text;
@@ -1652,7 +1670,7 @@ export default {
 
       var after = document.createElement("div");
       after.id = "after_" + data + temp;
-      textBox.appendChild(after);
+      div.appendChild(after);
       after.innerHTML = aText;
       document.getElementById(after.id).classList.add("text-declare-after-f");
     },
@@ -1666,13 +1684,13 @@ export default {
       // document.getElementById(div.id).classList.add("box-inline");
 
       var drop1 = document.createElement("div");
-      drop1.id = "drop1_" + data + this.variableDrop;
+      drop1.id = "dropd_" + data + this.variableDrop;
       parentOb.insertBefore(drop1, nextElement);
       document.getElementById(drop1.id).classList.add("custom-select-f");
       document.getElementById(drop1.id).classList.add("box-inline");
 
       var select1 = document.createElement("select");
-      select1.id = "select1_" + data + this.variableDrop;
+      select1.id = "selectv_" + data + this.variableDrop;
       for (const val of this.variable) {
         var option1 = document.createElement("option");
         option1.value = val;
@@ -1788,10 +1806,11 @@ html {
 #container {
   display: flex;
   flex-direction: column;
-  width: 550px;
-  height: 750px;
+  /* width: 550px; */
+  width: 42vw;
+  height: 90vh;
   min-width: 250px;
-  margin-right: 60px;
+  margin-right: 10px;
   border-radius: 5px;
   background-color: var(--white-gray);
   left: 0;
@@ -1818,17 +1837,6 @@ html {
   align-items: flex-start;
   position: relative;
 }
-
-/* .tool-container::after {
-  position: absolute;
-  content: "";
-  width: 4px;
-  height: 100%;
-  right: 0;
-  border-radius: 5px;
-  background-color: black;
-  cursor: ew-resize;
-} */
 
 .move-element {
   cursor: pointer;
@@ -1870,15 +1878,10 @@ html {
   align-items: center;
   width: 100%;
   height: 100%;
-  /* border-radius: 10px; */
-  /* background-color: var(--white-gray); */
   background-color: rgba(0, 0, 0, 0);
-  /* opacity: 60%; */
   padding-bottom: 50px;
   position: relative;
   z-index: 1;
-  /* overflow-y: scroll;
-  overflow-x: scroll; */
 }
 .board-box {
   display: flex;
@@ -1886,8 +1889,6 @@ html {
   align-items: center;
   width: 100%;
   height: 100%;
-  /* overflow-y: scroll;
-  overflow-x: scroll; */
 }
 
 .arrow-container {
@@ -1945,7 +1946,24 @@ html {
   border: 0px;
   color: white;
   outline: none;
+  -webkit-appearance: none;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
+
+.tri-function {
+  width: 0;
+  height: 0;
+  position: absolute;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 6px solid #5d9d83;
+  top: 45%;
+  right: 10%;
+  pointer-events: none;
+}
+
 .dropdown-item {
   color: #ffffff;
   font-weight: 500;
@@ -1982,7 +2000,7 @@ html {
   line-height: 1.25;
 }
 
-@media screen and (max-width: 1500px) {
+/* @media screen and (max-width: 1500px) {
   #container {
     display: flex;
     flex-direction: column;
@@ -2046,5 +2064,5 @@ html {
     border-radius: 5px;
     background-color: var(--white-gray);
   }
-}
+} */
 </style>

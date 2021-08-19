@@ -116,6 +116,7 @@
   max-width: 300px;
   max-height: 60px;
   position: absolute;
+  z-index: 1;
   /* transform: rotateZ(-45deg) rotateY(45deg); */
 }
 
@@ -128,7 +129,7 @@
   align-items: center;
   justify-content: space-evenly;
   position: absolute;
-  z-index: 0;
+  z-index: 1;
 }
 
 .diamond-img-f {
@@ -158,6 +159,16 @@
 .label-dropdown-f {
   position: absolute;
   padding-top: 8px;
+}
+
+.triangle-down {
+  width: 0;
+  height: 0;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 6px solid white;
+  pointer-events: none;
+  margin-left: 5px;
 }
 
 .triangle-purple {
@@ -275,8 +286,6 @@
   display: inline-block;
   text-align: center;
   padding-top: 2px;
-  /* justify-content: center;
-  align-items: center; */
   background: white;
   border-radius: 30px;
   margin: 3px 3px;
@@ -285,7 +294,6 @@
 .text-declare-before-f {
   height: 100%;
   display: inline-block;
-  /* background-color: white; */
   padding: 0 10px 0 5px;
   margin: 0 -10px 0 5px;
   border-radius: 3px 0 0 3px;
@@ -295,7 +303,6 @@
 .text-declare-after-f {
   height: 100%;
   display: inline-block;
-  /* background-color: white; */
   padding: 0 5px 0 10px;
   margin: 0 5px 0 -10px;
   border-radius: 0 3px 3px 0;
@@ -303,14 +310,12 @@
 }
 
 .box-inline {
-  /* box-sizing: border-box; */
   display: inline-block;
   z-index: 1;
 }
 
 .textbox-variable-f {
   display: inline-block;
-  /* align-items: top; */
   text-align: center;
 
   background-color: white;
